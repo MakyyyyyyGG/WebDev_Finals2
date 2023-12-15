@@ -92,32 +92,34 @@
 			Button with data-bs-target
 		  </button> -->
 
-		  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+		<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample"
+			aria-labelledby="offcanvasExampleLabel">
 			<div class="offcanvas-header">
 				<h5 class="offcanvas-title" id="offcanvasExampleLabel">Cart</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 			</div>
 			<div class="offcanvas-body">
 				<form action="" id="form_cart">
-		
+
 					<div id="cart_container">
-		
+
 					</div>
-					
+
 					<div class="checkout-container">
 						<div class="checkout">
-						<div class="row">
-							<div class="col">
-								<span>Total</span>
-								<div id="totalPrice"></div>
-							</div>
-							<div class="col">
-								<div class="btn btn-success" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Checkout</div>
+							<div class="row">
+								<div class="col">
+									<span>Total</span>
+									<div id="totalPrice"></div>
+								</div>
+								<div class="col">
+									<div class="btn btn-success" data-bs-target="#exampleModalToggle"
+										data-bs-toggle="modal">Checkout</div>
+								</div>
 							</div>
 						</div>
 					</div>
-					</div>
-					
+
 				</form>
 			</div>
 		</div>
@@ -353,198 +355,284 @@
 		</svg></div>
 
 
-
 	<script type="module">
 		// Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
-import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
-import { getStorage } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-storage.js";
+		import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+		import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+		import { getStorage } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-storage.js";
+		import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
 
-// Your Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyDs1lfKYOB5--BiDaVHBWu9baIM8GHAnlo",
-    authDomain: "sample-42d4a.firebaseapp.com",
-    projectId: "sample-42d4a",
-    storageBucket: "sample-42d4a.appspot.com",
-    messagingSenderId: "508468942956",
-    appId: "1:508468942956:web:65600c02f26dfd1b1f2049"
-};
+		// Your Firebase configuration
+		const firebaseConfig = {
+			apiKey: "AIzaSyDs1lfKYOB5--BiDaVHBWu9baIM8GHAnlo",
+			authDomain: "sample-42d4a.firebaseapp.com",
+			projectId: "sample-42d4a",
+			storageBucket: "sample-42d4a.appspot.com",
+			messagingSenderId: "508468942956",
+			appId: "1:508468942956:web:65600c02f26dfd1b1f2049"
+		};
 
-// Initialize Firebase app
-const app = initializeApp(firebaseConfig);
-const db = getDatabase();
-const storage = getStorage(app);
-const productsRef = ref(db, 'Products');
+		// Initialize Firebase app
+		const app = initializeApp(firebaseConfig);
+		const db = getDatabase();
+		const storage = getStorage(app);
+		const productsRef = ref(db, 'Products');
 
-// Retrieve user information from session storage
-let userCredentials = JSON.parse(sessionStorage.getItem("user-credentials"));
-let userInfo = JSON.parse(sessionStorage.getItem("user-info"));
+		// Retrieve user information from session storage
+		let userCredentials = JSON.parse(sessionStorage.getItem("user-credentials"));
 
-// Get DOM elements
-const totalPriceElement = document.getElementById('totalPrice');
-const prodListContainer = document.getElementById('prodList');
-const cartContainer = document.getElementById('cart_container');
+		// Get DOM elements
+		const totalPriceElement = document.getElementById('totalPrice');
+		const prodListContainer = document.getElementById('prodList');
+		const cartContainer = document.getElementById('cart_container');
+		const checkoutButton = document.getElementById('checkout_btn');
 
-let cartItems = {};
-let totalPrice = 0;
+		// Initialize Firebase Authentication
+		const auth = getAuth();
 
-// Function to update the total price displayed
-const updateTotalPrice = () => {
-    totalPriceElement.innerHTML = `${totalPrice.toFixed(2)}`;
-};
+		let cartItems = {};
+		let totalPrice = 0;
 
-// Function to update the cart counter
-const updateCartCounter = () => {
-    let itemCount = Object.values(cartItems).reduce((total, item) => total + item.quantity, 0);
-    itemCount = Math.max(itemCount, 0);
-    document.getElementById('cart_count').innerHTML = `[${itemCount}]`;
-};
+		// Function to update the total price displayed
+		const updateTotalPrice = () => {
+			totalPriceElement.innerHTML = `${totalPrice.toFixed(2)}`;
+		};
 
-// Function to remove item from cart
-const removeFromCart = (productId, cartItemId) => {
-    const removedQuantity = cartItems[productId].quantity;
-    const removedPrice = parseFloat(cartItems[productId].productData.price) * removedQuantity;
+		// Function to update the cart counter
+		const updateCartCounter = () => {
+			let itemCount = Object.values(cartItems).reduce((total, item) => total + item.quantity, 0);
+			itemCount = Math.max(itemCount, 0);
+			document.getElementById('cart_count').innerHTML = `[${itemCount}]`;
+		};
 
-    // Remove the item from the cartItems object
-    delete cartItems[productId];
+		// Function to remove item from cart
+		const removeFromCart = (productId, cartItemId) => {
+			const removedQuantity = cartItems[productId].quantity;
+			const removedPrice = parseFloat(cartItems[productId].productData.price) * removedQuantity;
 
-    // Remove the item's DOM element from the cartContainer
-    const cartItemElement = document.getElementById(cartItemId);
-    cartContainer.removeChild(cartItemElement);
+			// Create a reference to the user's cart item in the database
+			const userCartRef = ref(db, `UserAuthList/${userCredentials.uid}/cart/${productId}`);
 
-    // Update total price and cart counter
-    totalPrice -= removedPrice;
-    updateTotalPrice();
-    updateCartCounter();
-};
+			// Remove the item from the database
+			set(userCartRef, null)
+				.then(() => {
+					// Remove the item from the cartItems object
+					delete cartItems[productId];
 
-// Function to add item to cart
-const addToCart = (productId, productData) => {
-    const cartItemId = `${productId}_cart_item`;
+					// Save the updated cart to localStorage for persistence
+					localStorage.setItem('cartItems', JSON.stringify(cartItems));
 
-    if (cartItems[productId]) {
-        // If the product is already in the cart, update the quantity
-        cartItems[productId].quantity += 1;
-        const quantityInput = document.getElementById(`${cartItemId}_quantity`);
-        quantityInput.value = cartItems[productId].quantity; // Update the quantity input
-    } else {
-        // If the product is not in the cart, add it
-        cartItems[productId] = { productData, quantity: 1 };
-        const cartItem = document.createElement('div');
-        cartItem.classList.add('col', 'addedToCart', 'border', 'border-primary');
-        cartItem.id = cartItemId;
-        cartItem.innerHTML = `
-        <div class="row">
-            <div class="col" id="cart_prod_img">
-                <img src="${productData.image}" alt="" width="100%" height="100%" style="object-fit:contain;">
-            </div>
-            <div class="col">
-                <div class="" id="">${productData.productName}</div>
-                <div class="" id="price_${cartItemId}">${parseFloat(productData.price).toFixed(2)}</div>
-                <div class="input-group input-group-sm mb-3">
-                    <span class="input-group-text" id="itemQuantity">Quantity</span>
-                    <input id='${cartItemId}_quantity' type="number" min='0' value='1' class="form-control"
-                           aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                    <button type="button" class='_remove-cart rounded btn-danger mt-3' data-product-id='${productId}'>Remove</button>
-                </div>
-            </div>
-        </div>
-        `;
+					// Remove the item's DOM element from the cartContainer
+					const cartItemElement = document.getElementById(cartItemId);
+					cartContainer.removeChild(cartItemElement);
 
-        cartContainer.appendChild(cartItem);
+					// Update total price and cart counter
+					totalPrice -= removedPrice;
+					updateTotalPrice();
+					updateCartCounter();
+				})
+				.catch((error) => {
+					console.error("Error removing item from the database:", error);
+				});
+		};
 
-        // Attach an event listener to update the total price when quantity changes
-        const quantityInput = document.getElementById(`${cartItemId}_quantity`);
-        quantityInput.addEventListener('input', () => {
-            const quantity = parseInt(quantityInput.value, 10);
-            cartItems[productId].quantity = quantity; // Update the quantity in the cartItems object
-            const updatedPrice = quantity * parseFloat(productData.price);
-            document.getElementById(`price_${cartItemId}`).innerHTML = updatedPrice.toFixed(2);
-            // You might want to update the total price here as well
-        });
-    }
+		// Function to add item to cart
+		const addToCart = (productId, productData) => {
+			const cartItemId = `${productId}_cart_item`;
 
-    updateCartCounter();
-    totalPrice += parseFloat(productData.price);
-    updateTotalPrice();
+			// Create a reference to the user's cart in the database
+			const userCartRef = ref(db, `UserAuthList/${userCredentials.uid}/cart/${productId}`);
 
-    alert('Item Added to Cart');
-};
+			if (cartItems[productId]) {
+				// If the product is already in the cart, update the quantity in the database
+				const updatedQuantity = cartItems[productId].quantity + 1;
+				set(userCartRef, { productData, quantity: updatedQuantity })
+					.then(() => {
+						// Update the quantity locally
+						cartItems[productId].quantity = updatedQuantity;
 
-// Function to render product data
-const renderProductData = (productId, productData) => {
-    // Create a new product element
-    const productElement = document.createElement('div');
-    productElement.classList.add('col-md-6', 'col-lg-3');
-    productElement.innerHTML = `
-    <div class="product">
-        <a href="shop.html" class="img-prod"><img class="img-fluid" src="${productData.image}" alt="${productData.productName}">
-            <div class="overlay"></div>
-        </a>
-        <div class="text py-3 pb-4 px-3 text-center">
-            <h3><a href="#" id="${productId}">${productData.productName}</a></h3>
-            <div class="d-flex">
-                <div class="pricing">
-                    <p class="price"><span>$</span><span id="prod_${productId}_price">${productData.price}</span></p>
-                </div>
-            </div>
-            <div class="bottom-area d-flex px-3">
-                <div class="m-auto d-flex">
-                    <a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-                        <span><i class="ion-ios-menu"></i></span>
-                    </a>
-                    <a data-bs-toggle="offcanvas" href="" role="button" aria-controls="offcanvasExample"
-                        class="add-to-cart d-flex justify-content-center align-items-center text-center mx-1"
-                        id="${productId}_add_cart">
-                        <span><i class="ion-ios-cart"></i></span>
-                    </a>
-                    <a href="#" class="heart d-flex justify-content-center align-items-center ">
-                        <span><i class="ion-ios-heart"></i></span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    `;
+						// Update the quantity input
+						const quantityInput = document.getElementById(`${cartItemId}_quantity`);
+						quantityInput.value = updatedQuantity;
 
-    // Append the product element to the container
-    prodListContainer.appendChild(productElement);
+						// Update total price and cart counter
+						totalPrice += parseFloat(productData.price);
+						updateTotalPrice();
+						updateCartCounter();
+					})
+					.catch((error) => {
+						console.error("Error updating quantity in the database:", error);
+					});
+			} else {
+				// If the product is not in the cart, add it to the database
+				set(userCartRef, { productData, quantity: 1 })
+					.then(() => {
+						// Update the quantity locally
+						cartItems[productId] = { productData, quantity: 1 };
 
-    const addToCartButton = document.getElementById(`${productId}_add_cart`);
+						// Create a new cart item in the DOM
+						const cartItem = document.createElement('div');
+						cartItem.classList.add('col', 'addedToCart', 'border', 'border-primary');
+						cartItem.id = cartItemId;
+						cartItem.innerHTML = `
+					<div class="row">
+						<div class="col" id="cart_prod_img">
+						<img src="${productData.image}" alt="" width="100%" height="100%" style="object-fit:contain;">
+						</div>
+						<div class="col">
+						<div class="" id="">${productData.productName}</div>
+						<div class="" id="price_${cartItemId}">${parseFloat(productData.price).toFixed(2)}</div>
+						<div class="input-group input-group-sm mb-3">
+							<span class="input-group-text" id="itemQuantity">Quantity</span>
+							<input id='${cartItemId}_quantity' type="number" min='0' value='1' class="form-control"
+							aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+							<button type="button" class='_remove-cart rounded btn-danger mt-3' data-product-id='${productId}'>Remove</button>
+						</div>
+						</div>
+					</div>
+					`;
 
-    addToCartButton.addEventListener('click', () => {
-        addToCart(productId, productData);
-    });
-};
+						// Append the cart item to the cart container
+						cartContainer.appendChild(cartItem);
 
-// Function to fetch product data
-const fetchProductData = () => {
-    onValue(productsRef, (snapshot) => {
-        const products = snapshot.val();
+						// Attach an event listener to update the total price when quantity changes
+						const quantityInput = document.getElementById(`${cartItemId}_quantity`);
+						quantityInput.addEventListener('input', () => {
+							const quantity = parseInt(quantityInput.value, 10);
+							cartItems[productId].quantity = quantity;
+							const updatedPrice = quantity * parseFloat(productData.price);
+							document.getElementById(`price_${cartItemId}`).innerHTML = updatedPrice.toFixed(2);
+							// You might want to update the total price here as well
+						});
 
-        prodListContainer.innerHTML = '';
+						// Update total price and cart counter
+						totalPrice += parseFloat(productData.price);
+						updateTotalPrice();
+						updateCartCounter();
+					})
+					.catch((error) => {
+						console.error("Error adding item to the database:", error);
+					});
+			}
 
-        for (const productId in products) {
-            renderProductData(productId, products[productId]);
-        }
-    });
-};
+			alert('Item Added to Cart');
+		};
 
-// Initialize Firebase and fetch product data on DOMContentLoaded
-document.addEventListener('DOMContentLoaded', () => {
-    fetchProductData();
+		// Function to render product data
+		const renderProductData = (productId, productData) => {
+			// Create a new product element
+			const productElement = document.createElement('div');
+			productElement.classList.add('col-md-6', 'col-lg-3');
+			productElement.innerHTML = `
+				<div class="product">
+				<a href="shop.html" class="img-prod"><img class="img-fluid" src="${productData.image}" alt="${productData.productName}">
+					<div class="overlay"></div>
+				</a>
+				<div class="text py-3 pb-4 px-3 text-center">
+					<h3><a href="#" id="${productId}">${productData.productName}</a></h3>
+					<div class="d-flex">
+					<div class="pricing">
+						<p class="price"><span>$</span><span id="prod_${productId}_price">${productData.price}</span></p>
+					</div>
+					</div>
+					<div class="bottom-area d-flex px-3">
+					<div class="m-auto d-flex">
+						<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
+						<span><i class="ion-ios-menu"></i></span>
+						</a>
+						<a data-bs-toggle="offcanvas" href="" role="button" aria-controls="offcanvasExample"
+						class="add-to-cart d-flex justify-content-center align-items-center text-center mx-1"
+						id="${productId}_add_cart">
+						<span><i class="ion-ios-cart"></i></span>
+						</a>
+						<a href="#" class="heart d-flex justify-content-center align-items-center ">
+						<span><i class="ion-ios-heart"></i></span>
+						</a>
+					</div>
+					</div>
+				</div>
+				</div>
+			`;
 
-    // Event delegation for remove item buttons
-    cartContainer.addEventListener('click', (event) => {
-        const target = event.target;
-        if (target.classList.contains('_remove-cart')) {
-            const productId = target.dataset.productId;
-            const cartItemId = `${productId}_cart_item`;
-            removeFromCart(productId, cartItemId);
-        }
-    });
-});
+			// Append the product element to the container
+			prodListContainer.appendChild(productElement);
+
+			const addToCartButton = document.getElementById(`${productId}_add_cart`);
+
+			addToCartButton.addEventListener('click', () => {
+				addToCart(productId, productData);
+			});
+		};
+
+		// Function to render cart items
+		const renderCartItems = () => {
+			for (const productId in cartItems) {
+				const productData = cartItems[productId].productData;
+				addToCart(productId, productData);
+			}
+		};
+
+		// Function to fetch product data
+		const fetchProductData = () => {
+			onValue(productsRef, (snapshot) => {
+				const products = snapshot.val();
+
+				prodListContainer.innerHTML = '';
+
+				for (const productId in products) {
+					renderProductData(productId, products[productId]);
+				}
+			});
+		};
+
+		// Initialize Firebase and fetch product data on DOMContentLoaded
+		document.addEventListener('DOMContentLoaded', () => {
+			fetchProductData();
+
+			// Event delegation for remove item buttons
+			cartContainer.addEventListener('click', (event) => {
+				const target = event.target;
+				if (target.classList.contains('_remove-cart')) {
+					const productId = target.dataset.productId;
+					const cartItemId = `${productId}_cart_item`;
+					removeFromCart(productId, cartItemId);
+				}
+			});
+
+			// Event listener for checkout button
+			checkoutButton.addEventListener('click', () => {
+				// Implement the checkout logic here
+				alert('Checkout button clicked. Implement your checkout logic.');
+			});
+
+			// Check if the user is logged in
+			onAuthStateChanged(auth, (user) => {
+				if (user) {
+					// User is logged in, retrieve and load the cart from the database
+					const userCartRef = ref(db, `UserAuthList/${user.uid}/cart`);
+					onValue(userCartRef, (cartSnapshot) => {
+						const userCart = cartSnapshot.val();
+						if (userCart) {
+							cartItems = userCart;
+							// Save the cart to localStorage for persistence
+							localStorage.setItem('cartItems', JSON.stringify(cartItems));
+							// Render the cart items
+							renderCartItems();
+						}
+					});
+				} else {
+					// User is not logged in, try to load cart from localStorage
+					const storedCartItems = JSON.parse(localStorage.getItem('cartItems'));
+					if (storedCartItems) {
+						cartItems = storedCartItems;
+						renderCartItems();
+					}
+				}
+			});
+		});
+
 	</script>
+
 
 
 
@@ -561,9 +649,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	<script src="js/jquery.animateNumber.min.js"></script>
 	<script src="js/bootstrap-datepicker.js"></script>
 	<script src="js/scrollax.min.js"></script>
-	<script
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-	<script src="js/google-map.js"></script>
+
 	<script src="js/main.js"></script>
 
 </body>

@@ -117,10 +117,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
         import { getDatabase, get, ref, child } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
         import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
-
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
-
+    
         // Your web app's Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDs1lfKYOB5--BiDaVHBWu9baIM8GHAnlo",
@@ -130,85 +127,74 @@
             messagingSenderId: "508468942956",
             appId: "1:508468942956:web:65600c02f26dfd1b1f2049"
         };
-
+    
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getDatabase();
         const auth = getAuth(app);
-        const dbref = ref(db);
-
-        //let username = document.getElementById('username');
-        let email = document.getElementById('email');
-        let password = document.getElementById('password');
-        let signin_form = document.getElementById('signin_form');
-
+    
+        // Select the appropriate user path based on whether the user is an admin or not
+        function getUserRef(uid, isAdmin) {
+            return ref(db, isAdmin ? `Admin/${uid}` : `UserAuthList/${uid}`);
+        }
+    
+        // Handle user login
         let loginUser = evt => {
             evt.preventDefault();
-            const isAdmin = true;
-            //checks email and pw   
-            const userRef = isAdmin ? 'Admin/' : 'UserAuthList';
-
+    
             signInWithEmailAndPassword(auth, email.value, password.value)
                 .then((credentials) => {
-                    alert("Login Success");
-                    //creae an object when user login and save in in session storage then convert object into a string 
-                        get(child(dbref, `${userRef}` + credentials.user.uid)).then((snapshot)=>{
-                            if(snapshot.exists){
-                                sessionStorage.setItem("user-info", JSON.stringify({
-                                    username: snapshot.val().username
-                                }))
-                                sessionStorage.setItem("user-credentials", JSON.stringify(credentials.user));
-                                window.location.href = "index.html";
-                            }
-                        })
+                    const uid = credentials.user.uid;
+    
+                    // Check if the user is an admin
+                    const adminRef = getUserRef(uid, true);
+    
+                    get(adminRef).then((adminSnapshot) => {
+                        if (adminSnapshot.exists()) {
+                            // User is an admin
+                            console.log("Admin login");
+                            handleLoginSuccess(adminSnapshot.val().username, true, credentials.user);
+                        } else {
+                            // User is not an admin (assume regular user)
+                            const userRef = getUserRef(uid, false);
+    
+                            get(userRef).then((userSnapshot) => {
+                                if (userSnapshot.exists()) {
+                                    // Regular user login
+                                    console.log("Regular user login");
+                                    handleLoginSuccess(userSnapshot.val().username, false, credentials.user);
+                                } else {
+                                    console.log(error.message);
+                                    console.log(error.code);
+                                    console.log("User data not found");
+                                }
+                            });
+                        }
+                    });
                 })
-                .catch((error)=>{
-                    console.log("wrong pw/email");
+                .catch((error) => {
+                    console.log("Wrong password or email");
                     alert(error.message);
                     console.log(error.message);
                     console.log(error.code);
-                })
-                
+                });
+        };
+    
+        // Handle the common logic for a successful login
+        function handleLoginSuccess(username, isAdmin, userCredentials) {
+            sessionStorage.setItem("user-info", JSON.stringify({
+                username: username || "",  // Ensure a default value if username is null
+                isAdmin: isAdmin
+            }));
+            sessionStorage.setItem("user-credentials", JSON.stringify(userCredentials));
+            alert("Logged In Successfully");
+            window.location.href = "index.html";
         }
-
-
-        // let loginUser = evt => {
-        //         evt.preventDefault();
-        //         const isAdmin = true;
-
-        //         // Checks email and password
-        //         signInWithEmailAndPassword(auth, email.value, password.value)
-        //             .then((credentials) => {
-        //                 alert("Login Success");
-
-        //                 // Create an object when user login and save in session storage then convert object into a string
-        //                 const userRef = isAdmin ? 'UserAuthList/Admin' : 'UserAuthList';
-
-        //                 get(child(dbref, `${userRef}/${credentials.user.uid}`)).then((snapshot) => {
-        //                     if (snapshot.exists()) {
-        //                         const userData = snapshot.val();
-        //                         sessionStorage.setItem("user-info", JSON.stringify({
-        //                             username: userData.username,
-        //                             // Add other user data properties as needed
-        //                         }));
-        //                         sessionStorage.setItem("user-credentials", JSON.stringify(credentials.user));
-        //                         window.location.href = "index2.html";
-        //                     }
-        //                 }).catch((error) => {
-        //                     console.error('Error fetching user details:', error.message);
-        //                 });
-        //             })
-        //             .catch((error) => {
-        //                 console.log("Wrong email/password");
-        //                 alert(error.message);
-        //                 console.log(error.message);
-        //                 console.log(error.code);
-        //             });
-        //     }
-
-
+    
+        // Set up the event listener
         signin_form.addEventListener('submit', loginUser);
     </script>
+    
 
 
 

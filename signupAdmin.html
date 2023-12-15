@@ -147,14 +147,6 @@
                     evt.preventDefault();
                     //regsiter user to db
                     createUserWithEmailAndPassword(auth, email.value, password.value)
-                        // .then((credentials)=>{
-                        //     set(ref(db, 'Admin/' + credentials.user.uid),{
-                        //         username: uname.value
-                        //     })
-                        //     console.log(uname.value);
-                        //     alert("Create Account Success");
-                        //     //  window.location.href = 'login.html'
-                        // })
 
                         .then((credentials) => {
                             // Check if uname.value is accessible and not undefined
