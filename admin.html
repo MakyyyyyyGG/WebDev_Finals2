@@ -131,7 +131,7 @@
       <!-- ---------- Modal End -------------- -->
       <!-- Add this HTML code where you want the product list and edit form to appear -->
 
-      
+
       <!-- Modal -->
       <div class="editFormContainer">
         <div class="modal fade" id="updateProduct" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -172,9 +172,9 @@
           </div>
         </div>
       </div>
-      
-      
-      
+
+
+
 
       <div id="editFormContainer" style="display: none;">
         <h2>Edit Product</h2>
@@ -340,8 +340,12 @@
     let inputImage = document.getElementById('inputImage');
     let productForm = document.getElementById('productForm');
 
+    let userCredentials = JSON.parse(sessionStorage.getItem("user-credentials"));
+    let userInfo = JSON.parse(sessionStorage.getItem("user-info"));
+
     // Function to add a product
     let addProduct = evt => {
+
       evt.preventDefault();
 
       // Add your product data retrieval logic here
@@ -439,22 +443,51 @@
         editFormContainer.style.display = 'block';
 
         // Handle form submission for editing
-        editProductForm.addEventListener('submit', (evt) => {
+        editProductForm.addEventListener('submit', async (evt) => {
           evt.preventDefault();
 
-          // Update product data
-          update(productRef, {
-            productName: editProdName.value,
-            price: editPrice.value,
-          })
-            .then(() => {
+          // Get the selected image file
+          const newImage = editImage.files[0];
+
+          // Check if a new image is selected
+          if (newImage) {
+            // Get a reference to the Firebase Storage location for the new image
+            const storageRef = sRef(storage, `product_images/${productId}/${newImage.name}`);
+
+            try {
+              // Upload the new image to Firebase Storage
+              await uploadBytes(storageRef, newImage);
+
+              // Get the download URL of the uploaded image
+              const downloadURL = await getDownloadURL(storageRef);
+
+              // Update product data with the new image URL
+              await update(productRef, {
+                productName: editProdName.value,
+                price: editPrice.value,
+                image: downloadURL,
+              });
+
+              alert('Product updated successfully with a new image');
+            } catch (error) {
+              alert('Error updating product image: ' + error.message);
+            }
+          } else {
+            // Update product data without changing the image
+            try {
+              await update(productRef, {
+                productName: editProdName.value,
+                price: editPrice.value,
+              });
+
               alert('Product updated successfully');
-              // Hide the edit form
-              editFormContainer.style.display = 'none';
-            })
-            .catch((error) => {
+            } catch (error) {
               alert('Error updating product: ' + error.message);
-            });
+            }
+          }
+
+          // Hide the edit form
+          editFormContainer.style.display = 'none';
         });
       });
     };

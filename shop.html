@@ -92,28 +92,32 @@
 			Button with data-bs-target
 		  </button> -->
 
-		<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample"
-			aria-labelledby="offcanvasExampleLabel">
+		  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
 			<div class="offcanvas-header">
 				<h5 class="offcanvas-title" id="offcanvasExampleLabel">Cart</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 			</div>
 			<div class="offcanvas-body">
 				<form action="" id="form_cart">
+		
 					<div id="cart_container">
+		
+					</div>
+					
+					<div class="checkout-container">
 						<div class="checkout">
-							<div class="row">
-								<div class="col">
-									<span>Total</span>
-									<div id="totalPrice"></div>
-								</div>
-								<div class="col">
-									<div class="btn btn-success" data-bs-target="#exampleModalToggle"
-										data-bs-toggle="modal">Checkout</div>
-								</div>
+						<div class="row">
+							<div class="col">
+								<span>Total</span>
+								<div id="totalPrice"></div>
+							</div>
+							<div class="col">
+								<div class="btn btn-success" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Checkout</div>
 							</div>
 						</div>
 					</div>
+					</div>
+					
 				</form>
 			</div>
 		</div>
@@ -127,7 +131,7 @@
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div class="modal-body">
-						<div class="cart_container">
+						<div class="">
 
 						</div>
 						<form>
@@ -188,7 +192,7 @@
 					</ul>
 				</div>
 			</div>
-			<div class="row">
+			<div class="row" id="prodList">
 				<div class="col-md-6 col-lg-3 ftco-animate">
 					<div class="product">
 						<a href="shop.html" class="img-prod"><img class="img-fluid" src="" id="prod1_img"
@@ -213,234 +217,6 @@
 									<a data-bs-toggle="offcanvas" href="" role="button" aria-controls="offcanvasExample"
 										class="add-to-cart d-flex justify-content-center align-items-center text-center mx-1"
 										id="prod1_add_cart">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="shop.html" class="img-prod"><img class="img-fluid" src="" id="prod2_img"
-								alt="Colorlib Template">
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="cart.html" id="prod2_name"></a></h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span>$</span><span id="prod2_price"></span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a data-bs-toggle="offcanvas" href="" role="button" aria-controls="offcanvasExample"
-										class="buy-now d-flex justify-content-center align-items-center mx-1"
-										id="prod2_add_cart">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="shop.html" class="img-prod"><img class="img-fluid" src="" id="prod3_img"
-								alt="Colorlib Template">
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#" id="prod3_name"></a></h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span>$</span><span id="prod3_price"></span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"
-										aria-controls="offcanvasExample"
-										class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="shop.html" class="img-prod"><img class="img-fluid" src="" id="prod4_img"
-								alt="Colorlib Template">
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#" id="prod4_name"></a></h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span>$</span><span id="prod4_price"></span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"
-										aria-controls="offcanvasExample"
-										class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="shop.html" class="img-prod"><img class="img-fluid" src="" id="prod5_img"
-								alt="Colorlib Template">
-							<span class="status">30%</span>
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#" id="prod5_name"></a></h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span class="mr-2 price-dc">$120.00</span><span>$</span><span
-											class="price-sale" id="prod5_price"></span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"
-										aria-controls="offcanvasExample"
-										class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="shop.html" class="img-prod"><img class="img-fluid" src="" id="prod6_img"
-								alt="Colorlib Template">
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#" id="prod6_name"></a></h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span>$</span><span id="prod6_price"></span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"
-										aria-controls="offcanvasExample"
-										class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="shop.html" class="img-prod"><img class="img-fluid" src="" id="prod7_img"
-								alt="Colorlib Template">
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#" id="prod7_name"></a></h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span>$</span><span id="prod7_price"></span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"
-										aria-controls="offcanvasExample"
-										class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="shop.html" class="img-prod"><img class="img-fluid" src="" id="prod8_img"
-								alt="Colorlib Template">
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#" id="prod8_name"></a></h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span>$</span><span id="prod8_price"></span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"
-										aria-controls="offcanvasExample"
-										class="buy-now d-flex justify-content-center align-items-center mx-1">
 										<span><i class="ion-ios-cart"></i></span>
 									</a>
 									<a href="#" class="heart d-flex justify-content-center align-items-center ">
@@ -579,216 +355,195 @@
 
 
 	<script type="module">
-		// Import Firebase modules
-		import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
-		import { getDatabase, get, ref, child } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
-		import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
+		// Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+import { getStorage } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-storage.js";
 
-		// Your web app's Firebase configuration
-		const firebaseConfig = {
-			apiKey: "AIzaSyDs1lfKYOB5--BiDaVHBWu9baIM8GHAnlo",
-			authDomain: "sample-42d4a.firebaseapp.com",
-			projectId: "sample-42d4a",
-			storageBucket: "sample-42d4a.appspot.com",
-			messagingSenderId: "508468942956",
-			appId: "1:508468942956:web:65600c02f26dfd1b1f2049"
-		};
+// Your Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyDs1lfKYOB5--BiDaVHBWu9baIM8GHAnlo",
+    authDomain: "sample-42d4a.firebaseapp.com",
+    projectId: "sample-42d4a",
+    storageBucket: "sample-42d4a.appspot.com",
+    messagingSenderId: "508468942956",
+    appId: "1:508468942956:web:65600c02f26dfd1b1f2049"
+};
 
-		// Initialize Firebase
-		const app = initializeApp(firebaseConfig);
-		const db = getDatabase();
-		const auth = getAuth(app);
-		const dbref = ref(db);
+// Initialize Firebase app
+const app = initializeApp(firebaseConfig);
+const db = getDatabase();
+const storage = getStorage(app);
+const productsRef = ref(db, 'Products');
 
-		// Retrieve user information from session storage
-		let userCredentials = JSON.parse(sessionStorage.getItem("user-credentials"));
-		let userInfo = JSON.parse(sessionStorage.getItem("user-info"));
+// Retrieve user information from session storage
+let userCredentials = JSON.parse(sessionStorage.getItem("user-credentials"));
+let userInfo = JSON.parse(sessionStorage.getItem("user-info"));
 
-		// DOM elements
-		let formCart = document.getElementById('form_cart');
-		let totalPriceElement = document.getElementById('totalPrice');
-		let cartContainer = document.getElementById('cart_container');
-		let cartCounter = document.getElementById('cart_count');
-		let greet = document.getElementById("greet");
-		let signOutButton = document.getElementById("sign_out");
+// Get DOM elements
+const totalPriceElement = document.getElementById('totalPrice');
+const prodListContainer = document.getElementById('prodList');
+const cartContainer = document.getElementById('cart_container');
 
-		// Sign out function
-		let signOut = () => {
-			sessionStorage.removeItem("user-info");
-			sessionStorage.removeItem("user-credentials");
-			window.location.href = "login.html";
-		};
+let cartItems = {};
+let totalPrice = 0;
 
-		// Total price variable
-		let totalPrice = 0;
+// Function to update the total price displayed
+const updateTotalPrice = () => {
+    totalPriceElement.innerHTML = `${totalPrice.toFixed(2)}`;
+};
 
-		// Update total price displayed on the page
-		const updateTotalPrice = () => {
-			totalPriceElement.innerHTML = `${totalPrice.toFixed(2)}`;
-		};
+// Function to update the cart counter
+const updateCartCounter = () => {
+    let itemCount = Object.values(cartItems).reduce((total, item) => total + item.quantity, 0);
+    itemCount = Math.max(itemCount, 0);
+    document.getElementById('cart_count').innerHTML = `[${itemCount}]`;
+};
 
-		// Update the cart counter displayed on the page
-		const updateCartCounter = (change = 0) => {
-			let itemCount = parseInt(cartCounter.innerHTML.replace(/\D/g, ''), 10) || 0;
-			itemCount += change;
-			itemCount = Math.max(itemCount, 0);
-			cartCounter.innerHTML = `[${itemCount}]`;
-		};
+// Function to remove item from cart
+const removeFromCart = (productId, cartItemId) => {
+    const removedQuantity = cartItems[productId].quantity;
+    const removedPrice = parseFloat(cartItems[productId].productData.price) * removedQuantity;
 
-		const cartItems = {};
+    // Remove the item from the cartItems object
+    delete cartItems[productId];
 
-		const addToCart = (productId, productData) => {
-			let cartItemId = `${productId}_cart_item`;
-			let existingCartItem = document.getElementById(cartItemId);
+    // Remove the item's DOM element from the cartContainer
+    const cartItemElement = document.getElementById(cartItemId);
+    cartContainer.removeChild(cartItemElement);
 
-			if (existingCartItem) {
-				let itemQuantityElement = existingCartItem.querySelector('.form-control');
-				let currentQuantity = parseInt(itemQuantityElement.value, 10) || 0;
-				itemQuantityElement.value = currentQuantity + 1;
+    // Update total price and cart counter
+    totalPrice -= removedPrice;
+    updateTotalPrice();
+    updateCartCounter();
+};
 
-				updateCartCounter(1);
-				totalPrice += parseFloat(productData.Price);
-				updateTotalPrice();
-				cartItems[productId].quantity += 1;
-			} else {
-				const cartItem = document.createElement('div');
-				cartItem.classList.add('addedToCart', 'row', 'border', 'border-primary');
-				cartItem.id = cartItemId;
-				cartItem.innerHTML = `
+// Function to add item to cart
+const addToCart = (productId, productData) => {
+    const cartItemId = `${productId}_cart_item`;
+
+    if (cartItems[productId]) {
+        // If the product is already in the cart, update the quantity
+        cartItems[productId].quantity += 1;
+        const quantityInput = document.getElementById(`${cartItemId}_quantity`);
+        quantityInput.value = cartItems[productId].quantity; // Update the quantity input
+    } else {
+        // If the product is not in the cart, add it
+        cartItems[productId] = { productData, quantity: 1 };
+        const cartItem = document.createElement('div');
+        cartItem.classList.add('col', 'addedToCart', 'border', 'border-primary');
+        cartItem.id = cartItemId;
+        cartItem.innerHTML = `
+        <div class="row">
             <div class="col" id="cart_prod_img">
-                <img src="${productData.prodImg}" alt="" width="100px">
+                <img src="${productData.image}" alt="" width="100%" height="100%" style="object-fit:contain;">
             </div>
             <div class="col">
-                <div class="" id="">${productData.Name}</div>
-                <div class="" id="">${productData.Price.toFixed(2)}</div>
+                <div class="" id="">${productData.productName}</div>
+                <div class="" id="price_${cartItemId}">${parseFloat(productData.price).toFixed(2)}</div>
                 <div class="input-group input-group-sm mb-3">
                     <span class="input-group-text" id="itemQuantity">Quantity</span>
-                    <input id='${cartItemId}_quantity' type="number" min='0' value='1' class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                    <button type="button" class='${productId}_remove-cart rounded btn-danger mt-3'>Remove</button>
+                    <input id='${cartItemId}_quantity' type="number" min='0' value='1' class="form-control"
+                           aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                    <button type="button" class='_remove-cart rounded btn-danger mt-3' data-product-id='${productId}'>Remove</button>
                 </div>
             </div>
+        </div>
         `;
 
-				cartContainer.appendChild(cartItem);
+        cartContainer.appendChild(cartItem);
 
-				const updateCartCounter = (change = 0) => {
-					let itemCount = parseInt(cartCounter.innerHTML.replace(/\D/g, ''), 10) || 0;
-					itemCount += change;
-					itemCount = Math.max(itemCount, 0);
-					cartCounter.innerHTML = `[${itemCount}]`;
-				};
+        // Attach an event listener to update the total price when quantity changes
+        const quantityInput = document.getElementById(`${cartItemId}_quantity`);
+        quantityInput.addEventListener('input', () => {
+            const quantity = parseInt(quantityInput.value, 10);
+            cartItems[productId].quantity = quantity; // Update the quantity in the cartItems object
+            const updatedPrice = quantity * parseFloat(productData.price);
+            document.getElementById(`price_${cartItemId}`).innerHTML = updatedPrice.toFixed(2);
+            // You might want to update the total price here as well
+        });
+    }
 
-				const removeItem = cartContainer.querySelector(`.${productId}_remove-cart`);
+    updateCartCounter();
+    totalPrice += parseFloat(productData.price);
+    updateTotalPrice();
 
-				const removeFromCart = () => {
-					let cartItemToRemove = document.getElementById(cartItemId);
-					if (cartItemToRemove) {
-						const quantity = cartItems[productId].quantity;
-						cartItemToRemove.remove();
-						updateCartCounter(-quantity);
-						totalPrice -= parseFloat(productData.Price) * quantity;
-						updateTotalPrice();
-						delete cartItems[productId];
-					}
-				};
+    alert('Item Added to Cart');
+};
 
-				cartContainer.addEventListener('click', (event) => {
-					if (event.target.classList.contains(`${productId}_remove-cart`)) {
-						removeFromCart();
-					}
-				});
+// Function to render product data
+const renderProductData = (productId, productData) => {
+    // Create a new product element
+    const productElement = document.createElement('div');
+    productElement.classList.add('col-md-6', 'col-lg-3');
+    productElement.innerHTML = `
+    <div class="product">
+        <a href="shop.html" class="img-prod"><img class="img-fluid" src="${productData.image}" alt="${productData.productName}">
+            <div class="overlay"></div>
+        </a>
+        <div class="text py-3 pb-4 px-3 text-center">
+            <h3><a href="#" id="${productId}">${productData.productName}</a></h3>
+            <div class="d-flex">
+                <div class="pricing">
+                    <p class="price"><span>$</span><span id="prod_${productId}_price">${productData.price}</span></p>
+                </div>
+            </div>
+            <div class="bottom-area d-flex px-3">
+                <div class="m-auto d-flex">
+                    <a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
+                        <span><i class="ion-ios-menu"></i></span>
+                    </a>
+                    <a data-bs-toggle="offcanvas" href="" role="button" aria-controls="offcanvasExample"
+                        class="add-to-cart d-flex justify-content-center align-items-center text-center mx-1"
+                        id="${productId}_add_cart">
+                        <span><i class="ion-ios-cart"></i></span>
+                    </a>
+                    <a href="#" class="heart d-flex justify-content-center align-items-center ">
+                        <span><i class="ion-ios-heart"></i></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    `;
 
-				removeItem.addEventListener('click', () => {
-					updateCartCounter(-1);
-				});
+    // Append the product element to the container
+    prodListContainer.appendChild(productElement);
 
-				updateCartCounter(1);
-				totalPrice += parseFloat(productData.Price);
-				updateTotalPrice();
+    const addToCartButton = document.getElementById(`${productId}_add_cart`);
 
-				// Store the cart item and its quantity
-				cartItems[productId] = { productData, quantity: 1 };
-			}
-			alert('Item Added to Cart');
-		};
+    addToCartButton.addEventListener('click', () => {
+        addToCart(productId, productData);
+    });
+};
 
+// Function to fetch product data
+const fetchProductData = () => {
+    onValue(productsRef, (snapshot) => {
+        const products = snapshot.val();
 
-		// Fetch product details from Firebase
-		const getProductDetails = async () => {
-			try {
-				const productIdsSnapshot = await get(child(dbref, 'Products'));
-				const productIds = Object.keys(productIdsSnapshot.val());
+        prodListContainer.innerHTML = '';
 
-				if (productIds && Array.isArray(productIds)) {
-					for (const productId of productIds) {
-						const productRef = child(dbref, `Products/${productId}`);
-						const productSnapshot = await get(productRef);
+        for (const productId in products) {
+            renderProductData(productId, products[productId]);
+        }
+    });
+};
 
-						if (productSnapshot.exists()) {
-							const productData = productSnapshot.val();
+// Initialize Firebase and fetch product data on DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => {
+    fetchProductData();
 
-							const productNameElement = document.getElementById(`${productId}_name`);
-							const productPriceElement = document.getElementById(`${productId}_price`);
-							const prodImgElement = document.getElementById(`${productId}_img`);
-
-							if (productNameElement && productPriceElement && prodImgElement) {
-								productNameElement.innerHTML = `${productData.Name}`;
-								productPriceElement.innerHTML = `${productData.Price}`;
-								prodImgElement.src = `${productData.prodImg}`;
-
-								let addCartButton = document.getElementById(`${productId}_add_cart`);
-
-								if (addCartButton) {
-									addCartButton.addEventListener('click', () => {
-										addToCart(productId, productData);
-									});
-								} else {
-									console.log(`Add to Cart button for Product ${productId} not found`);
-								}
-							} else {
-								console.log(`HTML elements for Product ${productId} not found`);
-							}
-						} else {
-							console.log(`Product ${productId} not found`);
-						}
-					}
-				} else {
-					console.log("Product IDs not found or not an array");
-				}
-				// ... (code for fetching and displaying product details)
-			} catch (error) {
-				console.error("Error fetching product details:", error.message);
-			}
-		};
-
-		// Event listener when the page loads to fetch product details
-		window.addEventListener('load', () => {
-			getProductDetails();
-		});
-
-		// Event listener for the 'Remove' button in the cart
-		formCart.addEventListener('click', (event) => {
-			if (event.target.classList.contains('_remove-cart')) {
-				const cartItemToRemove = event.target.closest('.addedToCart');
-				if (cartItemToRemove) {
-					const productId = cartItemToRemove.id.split('_')[0];
-					removeFromCart(productId, cartItemToRemove);
-				}
-			}
-		});
-
-	
-		const removeFromCart = (productId, cartItem) => {
-			if (cartItem) {
-				const quantity = cartItems[productId].quantity;
-				cartItem.remove();
-				updateCartCounter(-quantity);
-				totalPrice -= parseFloat(cartItems[productId].productData.Price) * quantity;
-				updateTotalPrice();
-				delete cartItems[productId];
-			}
-		};
-
+    // Event delegation for remove item buttons
+    cartContainer.addEventListener('click', (event) => {
+        const target = event.target;
+        if (target.classList.contains('_remove-cart')) {
+            const productId = target.dataset.productId;
+            const cartItemId = `${productId}_cart_item`;
+            removeFromCart(productId, cartItemId);
+        }
+    });
+});
 	</script>
 
 

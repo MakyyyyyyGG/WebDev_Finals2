@@ -14414,9 +14414,6 @@ textarea.form-control {
   }
 }
 
-.checkout{
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  
+.checkout-container{
+  margin-top: 20px;
 }
