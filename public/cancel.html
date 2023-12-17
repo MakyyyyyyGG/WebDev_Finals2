@@ -1,11 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap"
+		rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
+
+    <style>
+        :root{
+            --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Poppins;
+            min-height: 100vh;
+            background: rgb(175, 154, 132);
+        }
+    
+        .trigger_popup {
+            cursor: pointer;
+            font-size: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            color: white;
+            padding: 20px;
+        }
+
+        #success_trigger {
+            background: #ff3636;
+            position: fixed;
+            
+        }
+
+        #error_trigger {
+            background: #ff3636;
+            position: fixed;
+        
+        }
+
+        #success {
+            position: fixed;
+        
+        }
+
+        #error {
+            position: fixed;
+    
+        }
+
+        .popup-content {
+            padding: 1rem;
+            /* display: block; */
+            width: 500px;
+            background: white;
+            box-shadow: 4px 4px 70px 10px rgb(0 0 0/11%);
+            border-radius: 25px;
+        }
+
+        .imgbox {
+            text-align: center;
+        }
+
+        .img {
+            width: 112px;
+            margin-top: 40px;
+        }
+
+        .title {
+            font-weight: 500;
+            font-size: 24px;
+            letter-spacing: 0.05em;
+            text-align: center;
+            margin: auto;
+        }
+
+        #success .title {
+            color: #ff3636;
+        }
+
+        #error .title {
+            color: #ff3636;
+        }
+
+        .para {
+            font-weight: 500;
+            width: 80%;
+            font-size: 18px;
+            line-height: 30px;
+            letter-spacing: 0.05em;
+            text-align: justify;
+            margin: auto;
+        }
+
+        .button {
+            width: 50%;
+            display: block;
+            margin: 20px auto;
+            border-radius: 25px;
+            padding: 10px;
+            text-decoration: none;
+            color: white;
+            text-align: center;
+            letter-spacing: 0.05em;
+        }
+
+        #s_button {
+            background: #ff3636;
+        }
+
+        #e_button {
+            background: #ff3636;
+        }
+    </style>
 </head>
+
 <body>
-    cancel
+    <div class="popup" id="success">
+        <div class="popup-content">
+            <div class="imgbox">
+                <img src="/images/cancel.png" alt="" class="img">
+            </div>
+            <div class="title">
+                <h3>Order Cancelled!</h3>
+            </div>
+            <p class="para">Thank you for your recent order with our online store. We regret to inform you that, due to unforeseen circumstances, we are unable to fulfill your purchase at this time.</p>
+            <form action="">
+                <a href="/index.html" class="button" id="s_button">OKAY</a>
+            </form>
+        </div>
+    </div>
+
 </body>
+
 </html>

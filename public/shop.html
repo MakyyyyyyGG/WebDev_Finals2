@@ -434,9 +434,9 @@
 		let totalPrice = 0;
 
 		const resetCart = () => {
-				Object.keys(cartItems).forEach(key => delete cartItems[key]);
-				updateCartUI();
-			};
+			Object.keys(cartItems).forEach(key => delete cartItems[key]);
+			updateCartUI();
+		};
 
 
 		const updateTotalPrice = () => {
@@ -675,49 +675,56 @@
 
 
 		document.addEventListener('DOMContentLoaded', () => {
-    fetchProductData();
+			fetchProductData();
 
-    cartContainer.addEventListener('click', (event) => {
-        const target = event.target;
-        if (target.classList.contains('_remove-cart')) {
-            const productId = target.dataset.productId;
-            const cartItemId = `${productId}_cart_item`;
-            removeFromCart(productId, cartItemId);
-        }
-    });
+			cartContainer.addEventListener('click', (event) => {
+				const target = event.target;
+				if (target.classList.contains('_remove-cart')) {
+					const productId = target.dataset.productId;
+					const cartItemId = `${productId}_cart_item`;
+					removeFromCart(productId, cartItemId);
+				}
+			});
 
-    checkoutButton.addEventListener('click', async () => {
-            // Convert the cart items into an array of line items
-            const lineItems = Object.values(cartItems).map(item => ({
-                title: item.productData.productName,
-                price: item.productData.price,
-                quantity: item.quantity,
-                productImg: item.productData.image,
-            }));
+			checkoutButton.addEventListener('click', async () => {
+				// Convert the cart items into an array of line items
+				const lineItems = Object.values(cartItems).map(item => ({
+					title: item.productData.productName,
+					price: item.productData.price,
+					quantity: item.quantity,
+					productImg: item.productData.image,
+				}));
 
-            try {
-                // Send a POST request to the server with the line items in the request body
-                const response = await fetch('/stripe-checkout', {
-                    method: 'POST',
-                    headers: new Headers({
-                        'Content-Type': 'application/json',
-                    }),
-                    body: JSON.stringify({ items: lineItems }),
-                });
+				try {
+					// Add userId to the request body
+					const requestBody = {
+						items: lineItems,
+						userId: userCredentials.uid, // Assuming userCredentials has the userId
+					};
 
-                // Parse the response from the server, which is expected to contain a session URL
-                const sessionUrl = await response.json();
+					// Send a POST request to the server with the line items and userId in the request body
+					const response = await fetch('/stripe-checkout', {
+						method: 'POST',
+						headers: new Headers({
+							'Content-Type': 'application/json',
+						}),
+						body: JSON.stringify(requestBody),
+					});
 
-                // Redirect the user to the Stripe checkout session
-                window.location.href = sessionUrl.url;
 
-                // Move resetCart here after the redirection
-                resetCart();
-            } catch (error) {
-                console.error('Error during checkout:', error);
-            }
-        });
-});
+					// Parse the response from the server, which is expected to contain a session URL
+					const sessionUrl = await response.json();
+
+					// Redirect the user to the Stripe checkout session
+					window.location.href = sessionUrl.url;
+
+					// Move resetCart here after the redirection
+					resetCart();
+				} catch (error) {
+					console.error('Error during checkout:', error);
+				}
+			});
+		});
 
 
 	</script>
