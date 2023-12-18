@@ -49,6 +49,8 @@
       <div class="collapse navbar-collapse" id="ftco-nav">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item"><a href="admin_dashboard.html" class="nav-link">Dashboard</a></li>
+          <li class="nav-item"><a href="admin.html" class="nav-link active">Product Management</a></li>
+
           <li class="nav-item"><a href="index.html" class="nav-link ">Home</a></li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true"
@@ -60,7 +62,7 @@
             </div>
           </li>
           <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-          <li class="nav-item"><a href="contact.html" class="nav-link active">Contact</a></li>
+          <li class="nav-item"><a href="contact.html" class="nav-link ">Contact</a></li>
           <li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span
                 class="icon-shopping_cart"></span>[0]</a></li>
           <li class="nav-item cta cta-colored"><a href="user.html" class="nav-link"><span class="icon-user"></span></a>
@@ -76,7 +78,7 @@
     <div class="container">
       <div class="row no-gutters slider-text align-items-center justify-content-center">
         <div class="col-md-9 ftco-animate text-center">
-          <h1 class="mb-0 bread">Admin</h1>
+          <h1 class="mb-0 bread">Product Management</h1>
         </div>
       </div>
     </div>
@@ -313,94 +315,94 @@
 
   <script type="module">
     // Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
-import { getDatabase, set, ref, push, update, remove, onValue, get } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
-import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-storage.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+    import { getDatabase, set, ref, push, update, remove, onValue, get } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
+    import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-storage.js";
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyDs1lfKYOB5--BiDaVHBWu9baIM8GHAnlo",
-  authDomain: "sample-42d4a.firebaseapp.com",
-  projectId: "sample-42d4a",
-  storageBucket: "sample-42d4a.appspot.com",
-  messagingSenderId: "508468942956",
-  appId: "1:508468942956:web:65600c02f26dfd1b1f2049"
-};
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDs1lfKYOB5--BiDaVHBWu9baIM8GHAnlo",
+      authDomain: "sample-42d4a.firebaseapp.com",
+      projectId: "sample-42d4a",
+      storageBucket: "sample-42d4a.appspot.com",
+      messagingSenderId: "508468942956",
+      appId: "1:508468942956:web:65600c02f26dfd1b1f2049"
+    };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getDatabase();
-const auth = getAuth(app);
-const storage = getStorage(app); // Initialize Firebase Storage
-const productsRef = ref(db, 'Products');
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase();
+    const auth = getAuth(app);
+    const storage = getStorage(app); // Initialize Firebase Storage
+    const productsRef = ref(db, 'Products');
 
-// Initialize variables
-let inputProdName = document.getElementById('inputProdName');
-let inputPrice = document.getElementById('inputPrice');
-let inputImage = document.getElementById('inputImage');
-let productForm = document.getElementById('productForm');
+    // Initialize variables
+    let inputProdName = document.getElementById('inputProdName');
+    let inputPrice = document.getElementById('inputPrice');
+    let inputImage = document.getElementById('inputImage');
+    let productForm = document.getElementById('productForm');
 
-let userCredentials = JSON.parse(sessionStorage.getItem("user-credentials"));
-let userInfo = JSON.parse(sessionStorage.getItem("user-info"));
+    let userCredentials = JSON.parse(sessionStorage.getItem("user-credentials"));
+    let userInfo = JSON.parse(sessionStorage.getItem("user-info"));
 
-// Function to add a product
-let addProduct = evt => {
+    // Function to add a product
+    let addProduct = evt => {
 
-  evt.preventDefault();
+      evt.preventDefault();
 
-  // Add your product data retrieval logic here
-  let productName = inputProdName.value;
-  let price = inputPrice.value;
-  let image = inputImage.files[0]; // Get the selected file
+      // Add your product data retrieval logic here
+      let productName = inputProdName.value;
+      let price = inputPrice.value;
+      let image = inputImage.files[0]; // Get the selected file
 
-  // Check if a user is logged in
-  const user = auth.currentUser;
-  if (user) {
-    // Use push to automatically generate a unique ID
-    const newProductRef = push(ref(db, 'Products'));
+      // Check if a user is logged in
+      const user = auth.currentUser;
+      if (user) {
+        // Use push to automatically generate a unique ID
+        const newProductRef = push(ref(db, 'Products'));
 
-    // Get a reference to the Firebase Storage location
-    const storageRef = sRef(storage, 'product_images/' + newProductRef.key + '/' + image.name);
+        // Get a reference to the Firebase Storage location
+        const storageRef = sRef(storage, 'product_images/' + newProductRef.key + '/' + image.name);
 
-    // Upload the image to Firebase Storage
-    uploadBytes(storageRef, image)
-      .then(snapshot => {
-        // Get the download URL of the uploaded image
-        getDownloadURL(snapshot.ref).then((downloadURL) => {
-          // Add the product to the database with a randomized ID and the image URL
-          set(ref(db, 'Products/' + newProductRef.key), {
-            productName: productName,
-            price: price,
-            image: downloadURL // Store the download URL in the database
-          })
-            .then(() => {
-              alert("Product added successfully");
-              // Add any additional logic you need after a successful product addition
-            })
-            .catch((error) => {
-              alert("Error adding product: " + error.message);
+        // Upload the image to Firebase Storage
+        uploadBytes(storageRef, image)
+          .then(snapshot => {
+            // Get the download URL of the uploaded image
+            getDownloadURL(snapshot.ref).then((downloadURL) => {
+              // Add the product to the database with a randomized ID and the image URL
+              set(ref(db, 'Products/' + newProductRef.key), {
+                productName: productName,
+                price: price,
+                image: downloadURL // Store the download URL in the database
+              })
+                .then(() => {
+                  alert("Product added successfully");
+                  // Add any additional logic you need after a successful product addition
+                })
+                .catch((error) => {
+                  alert("Error adding product: " + error.message);
+                });
             });
-        });
-      })
-      .catch(error => {
-        alert("Error uploading image: " + error.message);
-      });
-  } else {
-    alert("User not logged in");
-    // Handle the case where the user is not logged in
-  }
-};
+          })
+          .catch(error => {
+            alert("Error uploading image: " + error.message);
+          });
+      } else {
+        alert("User not logged in");
+        // Handle the case where the user is not logged in
+      }
+    };
 
-// Trigger the function with the form submission
-productForm.addEventListener('submit', addProduct);
+    // Trigger the function with the form submission
+    productForm.addEventListener('submit', addProduct);
 
-// Function to render product data in the HTML table
-const renderProductData = (productId, productData) => {
-  const productList = document.getElementById('productList');
+    // Function to render product data in the HTML table
+    const renderProductData = (productId, productData) => {
+      const productList = document.getElementById('productList');
 
-  const row = document.createElement('tr');
-  row.innerHTML = `
+      const row = document.createElement('tr');
+      row.innerHTML = `
     <th scope="row" class="align-items-center" style="padding: 40px 10px;" id="prodId">${productId}</th>
     <td id="prodImg" class="editable"><img src="${productData.image}" alt="Product Image" style="max-width: 100px;"></td>
     <td class="editable" id="prodName">${productData.productName}</td>
@@ -413,133 +415,133 @@ const renderProductData = (productId, productData) => {
     </td>
   `;
 
-  productList.appendChild(row);
+      productList.appendChild(row);
 
-  // Add event listeners for edit and delete buttons
-  const editBtn = row.querySelector('.edit-btn');
-  const deleteBtn = row.querySelector('.delete-btn');
+      // Add event listeners for edit and delete buttons
+      const editBtn = row.querySelector('.edit-btn');
+      const deleteBtn = row.querySelector('.delete-btn');
 
-  editBtn.addEventListener('click', () => handleEditProduct(productId, row));
-  deleteBtn.addEventListener('click', () => handleDeleteProduct(productId, row));
-};
+      editBtn.addEventListener('click', () => handleEditProduct(productId, row));
+      deleteBtn.addEventListener('click', () => handleDeleteProduct(productId, row));
+    };
 
-// Function to handle edit button click
-const handleEditProduct = (productId, row) => {
-  const editFormContainer = document.getElementById('editFormContainer');
-  const editProdName = document.getElementById('editProdName');
-  const editPrice = document.getElementById('editPrice');
-  const editImage = document.getElementById('editImage');
-  const editProductForm = document.getElementById('editProductForm');
+    // Function to handle edit button click
+    const handleEditProduct = (productId, row) => {
+      const editFormContainer = document.getElementById('editFormContainer');
+      const editProdName = document.getElementById('editProdName');
+      const editPrice = document.getElementById('editPrice');
+      const editImage = document.getElementById('editImage');
+      const editProductForm = document.getElementById('editProductForm');
 
-  // Retrieve existing product data
-  const productRef = ref(db, `Products/${productId}`);
-  onValue(productRef, (snapshot) => {
-    const productData = snapshot.val();
+      // Retrieve existing product data
+      const productRef = ref(db, `Products/${productId}`);
+      onValue(productRef, (snapshot) => {
+        const productData = snapshot.val();
 
-    // Populate the edit form with existing data
-    editProdName.value = productData.productName;
-    editPrice.value = productData.price;
+        // Populate the edit form with existing data
+        editProdName.value = productData.productName;
+        editPrice.value = productData.price;
 
-    // Set the product ID as a data attribute for the form
-    editProductForm.setAttribute('data-product-id', productId);
+        // Set the product ID as a data attribute for the form
+        editProductForm.setAttribute('data-product-id', productId);
 
-    // Display the edit form
-    editFormContainer.style.display = 'block';
-  });
-};
-
-// Optimized function to handle delete product and remove the entire row
-const handleDeleteProduct = (productId, row) => {
-  if (confirm("Are you sure you want to delete this product?")) {
-    const productRef = ref(db, `Products/${productId}`);
-
-    // Delete the product data from the database
-    remove(productRef)
-      .then(() => {
-        alert("Product deleted successfully");
-        // Remove the corresponding row from the HTML table
-        row.remove();
-      })
-      .catch((error) => {
-        alert("Error deleting product: " + error.message);
+        // Display the edit form
+        editFormContainer.style.display = 'block';
       });
-  }
-};
+    };
 
-// Function to handle form submission for editing
-const editProductForm = document.getElementById('editProductForm');
-editProductForm.addEventListener('submit', async (evt) => {
-  evt.preventDefault();
+    // Optimized function to handle delete product and remove the entire row
+    const handleDeleteProduct = (productId, row) => {
+      if (confirm("Are you sure you want to delete this product?")) {
+        const productRef = ref(db, `Products/${productId}`);
 
-  // Get the selected image file
-  const newImage = editImage.files[0];
-  const productId = editProductForm.getAttribute('data-product-id');
+        // Delete the product data from the database
+        remove(productRef)
+          .then(() => {
+            alert("Product deleted successfully");
+            // Remove the corresponding row from the HTML table
+            row.remove();
+          })
+          .catch((error) => {
+            alert("Error deleting product: " + error.message);
+          });
+      }
+    };
 
-  // Retrieve existing product data
-  const productRef = ref(db, `Products/${productId}`);
-  const snapshot = await get(productRef);
-  const productData = snapshot.val();
+    // Function to handle form submission for editing
+    const editProductForm = document.getElementById('editProductForm');
+    editProductForm.addEventListener('submit', async (evt) => {
+      evt.preventDefault();
 
-  // Check if a new image is selected
-  if (newImage) {
-    // Get a reference to the Firebase Storage location for the new image
-    const storageRef = sRef(storage, `product_images/${productId}/${newImage.name}`);
+      // Get the selected image file
+      const newImage = editImage.files[0];
+      const productId = editProductForm.getAttribute('data-product-id');
 
-    try {
-      // Upload the new image to Firebase Storage
-      await uploadBytes(storageRef, newImage);
+      // Retrieve existing product data
+      const productRef = ref(db, `Products/${productId}`);
+      const snapshot = await get(productRef);
+      const productData = snapshot.val();
 
-      // Get the download URL of the uploaded image
-      const downloadURL = await getDownloadURL(storageRef);
+      // Check if a new image is selected
+      if (newImage) {
+        // Get a reference to the Firebase Storage location for the new image
+        const storageRef = sRef(storage, `product_images/${productId}/${newImage.name}`);
 
-      // Update product data with the new image URL
-      await update(productRef, {
-        productName: editProdName.value,
-        price: editPrice.value,
-        image: downloadURL,
+        try {
+          // Upload the new image to Firebase Storage
+          await uploadBytes(storageRef, newImage);
+
+          // Get the download URL of the uploaded image
+          const downloadURL = await getDownloadURL(storageRef);
+
+          // Update product data with the new image URL
+          await update(productRef, {
+            productName: editProdName.value,
+            price: editPrice.value,
+            image: downloadURL,
+          });
+
+          alert('Product updated successfully with a new image');
+        } catch (error) {
+          alert('Error updating product image: ' + error.message);
+        }
+      } else {
+        // Update product data without changing the image
+        try {
+          await update(productRef, {
+            productName: editProdName.value,
+            price: editPrice.value,
+          });
+          alert("Edit successful");
+        } catch (error) {
+          alert('Error updating product: ' + error.message);
+        }
+      }
+
+      // Hide the edit form
+      // editFormContainer.style.display = 'none';
+    });
+
+    // Function to retrieve product data from Firebase
+    const fetchProductData = () => {
+      // Listen for changes in the products node
+      onValue(productsRef, (snapshot) => {
+        const products = snapshot.val();
+
+        // Clear the existing table rows
+        document.getElementById('productList').innerHTML = '';
+
+        // Iterate through each product and render it in the table
+        for (const productId in products) {
+          renderProductData(productId, products[productId]);
+        }
       });
+    };
 
-      alert('Product updated successfully with a new image');
-    } catch (error) {
-      alert('Error updating product image: ' + error.message);
-    }
-  } else {
-    // Update product data without changing the image
-    try {
-      await update(productRef, {
-        productName: editProdName.value,
-        price: editPrice.value,
-      });
-      alert("Edit successful");
-    } catch (error) {
-      alert('Error updating product: ' + error.message);
-    }
-  }
-
-  // Hide the edit form
-  // editFormContainer.style.display = 'none';
-});
-
-// Function to retrieve product data from Firebase
-const fetchProductData = () => {
-  // Listen for changes in the products node
-  onValue(productsRef, (snapshot) => {
-    const products = snapshot.val();
-
-    // Clear the existing table rows
-    document.getElementById('productList').innerHTML = '';
-
-    // Iterate through each product and render it in the table
-    for (const productId in products) {
-      renderProductData(productId, products[productId]);
-    }
-  });
-};
-
-// Trigger the function to fetch and display product data
-window.addEventListener('load', () => {
-  fetchProductData();
-});
+    // Trigger the function to fetch and display product data
+    window.addEventListener('load', () => {
+      fetchProductData();
+    });
 
 
   </script>

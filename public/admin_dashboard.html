@@ -48,7 +48,8 @@
 
       <div class="collapse navbar-collapse" id="ftco-nav">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item"><a href="index.html" class="nav-link ">Dashboard</a></li>
+          <li class="nav-item"><a href="index.html" class="nav-link active ">Dashboard</a></li>
+          <li class="nav-item"><a href="admin.html" class="nav-link">Product Management</a></li>
           <li class="nav-item"><a href="index.html" class="nav-link ">Home</a></li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true"
@@ -76,35 +77,75 @@
     <div class="container">
       <div class="row no-gutters slider-text align-items-center justify-content-center">
         <div class="col-md-9 ftco-animate text-center">
-          <h1 class="mb-0 bread">Dashboard</h1>
+          <h1 class="mb-0 bread">Admin Dashboard</h1>
         </div>
       </div>
     </div>
   </div>
 
   <section class="ftco-section contact-section bg-light">
-    <div class="container">
-      <h1>Admin Dashboard</h1>
-      <div class="container text-center">
-        <div class="row g-2">
-          <div class="col-6 border border-secondary-subtle">
-            <div class="p-3">Total Revenue</div>
-            <!-- Add the following line with the ID balanceContainer -->
-            <div class="p-3" id="balanceContainer">Custom column padding</div>
-          </div>
-          <div class="col-6 border border-secondary-subtle">
-            <div class="p-3">Custom column padding</div>
-          </div>
-          <div class="col-6 border border-secondary-subtle">
-            <div class="p-3">Custom column padding</div>
-          </div>
-          <div class="col-6 border border-secondary-subtle">
-            <div class="p-3">Custom column padding</div>
-          </div>
+    <div class="container mt-5">
+        <h1>Shop Insight</h1>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Total Sales</h5>
+                        <p class="card-text text-center fs-1" id="totalSales"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Number of Customers</h5>
+                        <p class="card-text text-center fs-1" id="no_customers"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Number of Products Listed</h5>
+                        <p class="card-text text-center fs-1" id="no_products"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Number of Products Purchased</h5>
+                        <p class="card-text text-center fs-1" id="successfulTransactions"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Successful Transactions</h5>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Transaction ID</th>
+                                <th scope="col">Amount</th>
+                                <th scope="col">Customer Name</th>
+                                <th scope="col">Created At</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionTableBody"></tbody>
+                    </table>
+                    <button id="loadMoreButton" class="btn btn-primary mx-auto">Load More</button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </section>
+</section>
+
+  <table id="paymentsTableBody"></table>
+
+
+
+
 
 
   <footer class="ftco-footer ftco-section">
@@ -172,15 +213,14 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-12 text-center">
 
-          <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-            Copyright &copy;
-            <script>document.write(new Date().getFullYear());</script> All rights reserved | Clerigo & Gantan</a>
-            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-          </p>
-        </div>
+        <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+          Copyright &copy;
+          <script>document.write(new Date().getFullYear());</script> All rights reserved | Clerigo & Gantan</a>
+          <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+        </p>
       </div>
+    </div>
     </div>
   </footer>
 
@@ -197,9 +237,9 @@
   <script type="module">
     // Import the functions you need from the SDKs you need
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
-    import { getDatabase, set, ref, push, update, remove, onValue, get } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
-    import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-storage.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+    import { getAuth } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
+    import { getStorage } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-storage.js";
 
     // Your web app's Firebase configuration
     const firebaseConfig = {
@@ -227,27 +267,122 @@
     let userCredentials = JSON.parse(sessionStorage.getItem("user-credentials"));
     let userInfo = JSON.parse(sessionStorage.getItem("user-info"));
 
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Fetch the balance from your server
+      try {
+        const response = await fetch('/getBalance?userId=' + userCredentials.uid);
+        const data = await response.json();
 
-    // your_script.js
+        // Assuming data is an object containing balance information
+        const balanceAmount = data.available[0].amount / 100; // Convert from cents to dollars
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const stripePublicKey = 'pk_test_51ONeFdCH9Yb9ZLbwyfdqmjQ7sw2NxtL6BtwSzT3b95IZS8W8A9QMhXlK3BpMj99a8oSMrRaWMKap9bg8DeA8aDAj00gxdZjLSS';
+        const balanceContainer = document.getElementById('balanceContainer');
+        balanceContainer.innerHTML = `Your Stripe balance: $${balanceAmount.toFixed(2)}`;
+      } catch (error) {
+        console.error('Error fetching balance:', error);
+        // Handle errors as needed
+      }
 
-      fetch('/getBalance')
-        .then(response => response.json())
-        .then(data => {
-          // Assuming data is an object containing balance information
-          const balanceAmount = data.available[0].amount / 100; // Convert from cents to dollars
+      // Fetch the number of users from the database
+      try {
+        const usersSnapshot = await get(ref(db, 'UserAuthList'));
+        const numberOfUsers = Object.keys(usersSnapshot.val() || {}).length;
 
-          const balanceContainer = document.getElementById('balanceContainer');
-          balanceContainer.innerHTML = `Your Stripe balance: $${balanceAmount.toFixed(2)}`;
-        })
-        .catch(error => {
-          console.error('Error fetching balance:', error);
-          // Handle errors as needed
+        // Display the number of users in the HTML
+        const noCustomersElement = document.getElementById('no_customers');
+        noCustomersElement.textContent = numberOfUsers.toString();
+      } catch (error) {
+        console.error('Error fetching number of users:', error);
+        // Handle errors as needed
+      }
+
+      try {
+        // Fetch the number of listed products from the 'Products' node in the database
+        const productsSnapshot = await get(ref(db, 'Products'));
+        const numberOfProducts = Object.keys(productsSnapshot.val() || {}).length;
+
+        // Display the number of products in the HTML
+        const noProductsElement = document.getElementById('no_products');
+        noProductsElement.textContent = `${numberOfProducts}`;
+      } catch (error) {
+        console.error('Error fetching number of products:', error);
+        // Handle errors as needed
+      }
+
+      try {
+        const response = await fetch('/getBalance');
+        const data = await response.json();
+
+        const balanceAmount = data.balance; // Balance in dollars
+
+        // Display the balance in the HTML
+        const totalSalesElement = document.getElementById('totalSales');
+        totalSalesElement.textContent = `₱${(balanceAmount * 56).toFixed(2)}`;
+      } catch (error) {
+        console.error('Error fetching balance:', error);
+        // Handle errors as needed
+      }
+
+      try {
+        // Fetch the number of successful transactions from your server
+        const response = await fetch('/getSuccessfulTransactionsCount');
+        const data = await response.json();
+
+        const numberOfSuccessfulTransactions = data.numberOfSuccessfulTransactions;
+
+        // Display the number of successful transactions in the HTML
+        const successfulTransactionsElement = document.getElementById('successfulTransactions');
+        successfulTransactionsElement.textContent = numberOfSuccessfulTransactions.toString();
+      } catch (error) {
+        console.error('Error fetching number of successful transactions:', error);
+        // Handle errors as needed
+      }
+
+      try {
+        // Fetch the details of successful transactions from your server
+        const response = await fetch('/getSuccessfulTransactions');
+        const data = await response.json();
+
+        const successfulTransactions = data.successfulTransactions;
+
+        // Display the details in a table
+        const tableBody = document.getElementById('transactionTableBody');
+        successfulTransactions.slice(0, 5).forEach(transaction => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${transaction.id}</td>
+            <td>${transaction.amount} ${transaction.currency}</td>
+            <td>${transaction.customerEmail}</td>
+            <td>${transaction.createdAt}</td>
+          `;
+          tableBody.appendChild(row);
         });
+
+        // Add a "Load More" button
+        const loadMoreButton = document.getElementById('loadMoreButton');
+        loadMoreButton.addEventListener('click', () => {
+          // Display all transactions when the button is clicked
+          tableBody.innerHTML = ''; // Clear previous content
+          successfulTransactions.forEach(transaction => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${transaction.id}</td>
+              <td>${transaction.amount} ${transaction.currency}</td>
+              <td>${transaction.customerEmail}</td>
+              <td>${transaction.createdAt}</td>
+            `;
+            tableBody.appendChild(row);
+          });
+          // Hide the "Load More" button
+          loadMoreButton.style.display = 'none';
+        });
+      } catch (error) {
+        console.error('Error fetching successful transactions:', error);
+        // Handle errors as needed
+      }
     });
   </script>
+
 
 
 

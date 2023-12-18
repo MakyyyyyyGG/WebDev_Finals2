@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import stripe from "stripe";
+import balance  from "stripe";
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, remove } from "firebase/database";
 
@@ -61,6 +62,67 @@ app.get("/success", (req, res) => {
 app.get("/cancel", (req, res) => {
     res.sendFile("cancel.html", { root: "public" });
 });
+
+// Fetch Stripe account balance
+app.get("/getBalance", async (req, res) => {
+    try {
+        const balance = await stripeGateway.balance.retrieve();
+
+        res.json({ balance: balance.available[0].amount / 100 }); // Convert to dollars
+    } catch (error) {
+        console.error("Error fetching balance:", error);
+        res.status(500).json({ error: "Error fetching balance" });
+    }
+});
+
+// Update the server-side code
+app.get("/getSuccessfulTransactionsCount", async (req, res) => {
+    try {
+        const sessions = await stripeGateway.checkout.sessions.list({
+            limit: 100, // Adjust as needed
+        });
+
+        // Filter sessions to include only successful transactions
+        const successfulSessions = sessions.data.filter(session => session.payment_status === 'paid');
+        const numberOfSuccessfulTransactions = successfulSessions.length;
+
+        res.json({ numberOfSuccessfulTransactions });
+    } catch (error) {
+        console.error("Error fetching successful transactions count:", error);
+        res.status(500).json({ error: "Error fetching successful transactions count" });
+    }
+});
+
+// Update the server-side code
+app.get("/getSuccessfulTransactions", async (req, res) => {
+    try {
+        const sessions = await stripeGateway.checkout.sessions.list({
+            limit: 100, // Adjust as needed
+        });
+
+        // Filter sessions to include only successful transactions
+        const successfulSessions = sessions.data.filter(session => session.payment_status === 'paid');
+
+        // Extract relevant details for each successful transaction
+        const successfulTransactions = successfulSessions.map(session => ({
+            id: session.id,
+            amount: session.amount_total / 100, // Convert to dollars
+            currency: session.currency,
+            customerEmail: session.customer_email || 'Guest',
+            createdAt: new Date(session.created * 1000).toLocaleString(),
+        }));
+
+        res.json({ successfulTransactions });
+    } catch (error) {
+        console.error("Error fetching successful transactions:", error);
+        res.status(500).json({ error: "Error fetching successful transactions" });
+    }
+});
+
+
+
+
+
 
 const PORT = process.env.PORT || 3000;
 

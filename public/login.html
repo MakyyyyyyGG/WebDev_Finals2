@@ -180,17 +180,25 @@
                 });
         };
     
-        // Handle the common logic for a successful login
         function handleLoginSuccess(username, isAdmin, userCredentials) {
-            sessionStorage.setItem("user-info", JSON.stringify({
-                username: username || "",  // Ensure a default value if username is null
-                isAdmin: isAdmin
-            }));
-            sessionStorage.setItem("user-credentials", JSON.stringify(userCredentials));
-            alert("Logged In Successfully");
-            window.location.href = "index.html";
-        }
-    
+                sessionStorage.setItem("user-info", JSON.stringify({
+                    username: username || "",  // Ensure a default value if username is null
+                    isAdmin: isAdmin
+                }));
+                sessionStorage.setItem("user-credentials", JSON.stringify(userCredentials));
+
+                // Redirect based on user type
+                if (isAdmin) {
+                    // Admin user, redirect to admin page
+                    alert("Admin Logged In Successfully");
+                    window.location.href = "admin_dashboard.html"; // Replace "admin.html" with the actual admin page URL
+                } else {
+                    // Regular user, redirect to index.html
+                    alert("Regular User Logged In Successfully");
+                    window.location.href = "index.html";
+                }
+            }
+        
         // Set up the event listener
         signin_form.addEventListener('submit', loginUser);
     </script>
