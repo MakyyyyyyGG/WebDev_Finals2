@@ -50,15 +50,7 @@
 			<div class="collapse navbar-collapse" id="ftco-nav">
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item active"><a href="index.html" class="nav-link ">Home</a></li>
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown"
-							aria-haspopup="true" aria-expanded="false">Shop</a>
-						<div class="dropdown-menu" aria-labelledby="dropdown04">
-							<a class="dropdown-item active" href="shop.html">Products</a>
-							<a class="dropdown-item" href="cart.html">Cart</a>
-							<a class="dropdown-item" href="checkout.html">Checkout</a>
-						</div>
-					</li>
+					<li class="nav-item active"><a href="shop.html" class="nav-link active">Shop</a></li>
 					<li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
 					<li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
 
@@ -83,7 +75,7 @@
 		<div class="container">
 			<div class="row no-gutters slider-text align-items-center justify-content-center">
 				<div class="col-md-9 ftco-animate text-center">
-					<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Products</span>
+					<p class="breadcrumbs"><span>Shop</span>
 					</p>
 					<h1 class="mb-0 bread">Products</h1>
 				</div>
@@ -117,7 +109,7 @@
 							<div class="row">
 								<div class="col">
 									<span>Total</span>
-									<div id="totalPrice"></div>
+									<div id="totalPrice"></div>									
 								</div>
 								<div class="col">
 									<div class="btn btn-success" id="checkout_btn">Checkout</div>
@@ -130,111 +122,18 @@
 			</div>
 		</div>
 
-		<div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
-			tabindex="-1">
-			<div class="modal-dialog modal-dialog-centered modal-xl">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h1 class="modal-title fs-5" id="exampleModalToggleLabel">Modal 1</h1>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
-						<div class="">
-
-						</div>
-						<form>
-							<div class="row">
-								<div class="col">
-									<div class="mb-3">
-
-										<label for="recipient-name" class="col-form-label">Recipient:</label>
-										<input type="text" class="form-control" id="recipient-name">
-									</div>
-								</div>
-								<div class="col">
-									<div class="mb-3">
-										<label for="message-text" class="col-form-label">Message:</label>
-										<textarea class="form-control" id="message-text"></textarea>
-									</div>
-								</div>
-							</div>
-						</form>
-					</div>
-					<div class="modal-footer">
-						<button class="btn btn-primary" data-bs-target="#exampleModalToggle2"
-							data-bs-toggle="modal">Open second
-							modal</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2"
-			tabindex="-1">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h1 class="modal-title fs-5" id="exampleModalToggleLabel2">Modal 2</h1>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
-						Hide this modal and show the first with the button below.
-					</div>
-					<div class="modal-footer">
-						<button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Back
-							to
-							first</button>
-					</div>
-				</div>
-			</div>
-		</div>
+		
 
 		<div class="container">
 			<div class="row justify-content-center">
 				<div class="col-md-10 mb-5 text-center">
 					<ul class="product-category">
-						<li><a href="#" class="active">All</a></li>
-						<li><a href="#">Vase</a></li>
-						<li><a href="#">Lamp</a></li>
-						<li><a href="#">Souvenirs</a></li>
-						<li><a href="#">Custom</a></li>
+						<h1>All Products</h1>
 					</ul>
 				</div>
 			</div>
 			<div class="row" id="prodList">
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="shop.html" class="img-prod"><img class="img-fluid" src="" id="prod1_img"
-								alt="Colorlib Template">
-							<span class="status">30%</span>
-							<div class="overlay"></div>
-						</a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3><a href="#" id="prod1_name"></a></h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price"><span class=" mr-2 price-dc">$120.00</span><span>$</span><span
-											id="prod1_price"></span></p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a>
-									<a data-bs-toggle="offcanvas" href="" role="button" aria-controls="offcanvasExample"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center mx-1"
-										id="prod1_add_cart">
-										<span><i class="ion-ios-cart"></i></span>
-									</a>
-									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+				
 
 				<div class="row mt-5">
 					<div class="col text-center">
@@ -289,7 +188,7 @@
 						<p>“Crafting Memories, One Piece at a Time.”</p>
 						<ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
 							<li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
-							<li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+							<li class="ftco-animate"><a href="https://web.facebook.com/profile.php?id=100064010023532"><span class="icon-facebook"></span></a></li>
 							<li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
 						</ul>
 					</div>
@@ -298,10 +197,10 @@
 					<div class="ftco-footer-widget mb-4 ml-md-5">
 						<h2 class="ftco-heading-2">Menu</h2>
 						<ul class="list-unstyled">
-							<li><a href="#" class="py-2 d-block">Shop</a></li>
-							<li><a href="#" class="py-2 d-block">About</a></li>
-							<li><a href="#" class="py-2 d-block">Journal</a></li>
-							<li><a href="#" class="py-2 d-block">Contact Us</a></li>
+							<li><a href="index.html" class="py-2 d-block">Home</a></li>
+							<li><a href="shop.html" class="py-2 d-block">Shop</a></li>
+							<li><a href="about.html" class="py-2 d-block">About</a></li>
+							<li><a href="contact.html" class="py-2 d-block">Contact</a></li>
 						</ul>
 					</div>
 				</div>
@@ -343,8 +242,7 @@
 
 					<p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
 						Copyright &copy;
-						<script>document.write(new Date().getFullYear());</script> All rights reserved | Clerigo &
-						Gantan</a>
+						<script>document.write(new Date().getFullYear());</script> All rights reserved | Mark Clerigo</a>
 						<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
 					</p>
 				</div>
@@ -614,22 +512,18 @@
 								<h3><a href="#" id="${productId}">${productData.productName}</a></h3>
 								<div class="d-flex">
 									<div class="pricing">
-										<p class="price"><span>$</span><span id="prod_${productId}_price">${productData.price}</span></p>
+										<p class="price"><span>₱</span><span id="prod_${productId}_price">${productData.price}</span></p>
 									</div>
 								</div>
 								<div class="bottom-area d-flex px-3">
 									<div class="m-auto d-flex">
-										<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
-											<span><i class="ion-ios-menu"></i></span>
-										</a>
+										
 										<a role="button"
-											class="add-to-cart d-flex justify-content-center align-items-center text-center mx-1"
+											class="add-to-cart d-flex justify-content-center align-items-center text-center "
 											id="${productId}_add_cart">
 											<span><i class="ion-ios-cart"></i></span>
 										</a>
-										<a href="#" class="heart d-flex justify-content-center align-items-center ">
-											<span><i class="ion-ios-heart"></i></span>
-										</a>
+										
 									</div>
 								</div>
 							</div>
