@@ -433,10 +433,7 @@
 		let cartItems = {};
 		let totalPrice = 0;
 
-		const resetCart = () => {
-			Object.keys(cartItems).forEach(key => delete cartItems[key]);
-			updateCartUI();
-		};
+		
 
 
 		const updateTotalPrice = () => {
@@ -480,61 +477,76 @@
 		};
 
 		const addToCart = (productId, productData) => {
-			const cartItemId = `${productId}_cart_item`;
+    const cartItemId = `${productId}_cart_item`;
 
-			if (!userCredentials) {
-				alert('Please sign in to add items to your cart.');
-				window.location.href = 'login.html';
-				return;
-			}
+    if (!userCredentials) {
+        alert('Please sign in to add items to your cart.');
+        window.location.href = 'login.html';
+        return;
+    }
 
-			const userCartRef = ref(db, `UserAuthList/${userCredentials.uid}/cart/${productId}`);
+    const userCartRef = ref(db, `UserAuthList/${userCredentials.uid}/cart/${productId}`);
 
-			if (cartItems[productId]) {
-				const updatedQuantity = cartItems[productId].quantity + 1;
-				set(userCartRef, { productData, quantity: updatedQuantity })
-					.then(() => {
-						cartItems[productId].quantity = updatedQuantity;
-						const quantityInput = document.getElementById(`${cartItemId}_quantity`);
-						quantityInput.value = updatedQuantity;
-						updateTotalPrice();
-						updateCartCounter();
-					})
-					.catch((error) => {
-						console.error("Error updating quantity in the database:", error);
-					});
-			} else {
-				set(userCartRef, { productId, productData, quantity: 1 })
-					.then(() => {
-						cartItems[productId] = { productData, quantity: 1 };
-						const cartItem = document.createElement('div');
-						cartItem.classList.add('col', 'addedToCart', 'border', 'border-primary');
-						cartItem.id = cartItemId;
-						cartContainer.appendChild(cartItem);
-						const quantityInput = document.getElementById(`${cartItemId}_quantity`);
-						quantityInput.addEventListener('input', () => {
-							const quantity = parseInt(quantityInput.value, 10);
-							cartItems[productId].quantity = quantity;
-							const updatedPrice = quantity * parseFloat(productData.price);
-							document.getElementById(`price_${cartItemId}`).innerHTML = updatedPrice.toFixed(2);
-							updateTotalPrice();
-						});
+    if (cartItems[productId]) {
+        const updatedQuantity = cartItems[productId].quantity + 1;
+        set(userCartRef, { productData, quantity: updatedQuantity })
+            .then(() => {
+                cartItems[productId].quantity = updatedQuantity;
+                const quantityInput = document.getElementById(`${cartItemId}_quantity`);
+                if (quantityInput) {
+                    quantityInput.value = updatedQuantity;
 
-						const removeButton = cartItem.querySelector('._remove-cart');
-						removeButton.addEventListener('click', () => {
-							removeFromCart(productId, cartItemId);
-						});
+                    // Check if quantityInput exists before adding the event listener
+                    quantityInput.addEventListener('input', () => {
+                        const quantity = parseInt(quantityInput.value, 10);
+                        cartItems[productId].quantity = quantity;
+                        const updatedPrice = quantity * parseFloat(productData.price);
+                        document.getElementById(`price_${cartItemId}`).innerHTML = updatedPrice.toFixed(2);
+                        updateTotalPrice();
+                    });
+                }
 
-						updateTotalPrice();
-						updateCartCounter();
-					})
-					.catch((error) => {
-						console.error("Error adding item to the database:", error);
-					});
-			}
+                updateTotalPrice();
+                updateCartCounter();
+            })
+            .catch((error) => {
+                console.error("Error updating quantity in the database:", error);
+            });
+    } else {
+        set(userCartRef, { productId, productData, quantity: 1 })
+            .then(() => {
+                cartItems[productId] = { productData, quantity: 1 };
+                const cartItem = document.createElement('div');
+                cartItem.classList.add('col', 'addedToCart', 'border', 'border-primary');
+                cartItem.id = cartItemId;
+                cartContainer.appendChild(cartItem);
+                const quantityInput = document.getElementById(`${cartItemId}_quantity`);
+                if (quantityInput) {
+                    quantityInput.addEventListener('input', () => {
+                        const quantity = parseInt(quantityInput.value, 10);
+                        cartItems[productId].quantity = quantity;
+                        const updatedPrice = quantity * parseFloat(productData.price);
+                        document.getElementById(`price_${cartItemId}`).innerHTML = updatedPrice.toFixed(2);
+                        updateTotalPrice();
+                    });
+                }
 
-			alert('Item Added to Cart');
-		};
+                const removeButton = cartItem.querySelector('._remove-cart');
+                removeButton.addEventListener('click', () => {
+                    removeFromCart(productId, cartItemId);
+                });
+
+                updateTotalPrice();
+                updateCartCounter();
+            })
+            .catch((error) => {
+                console.error("Error adding item to the database:", error);
+            });
+    }
+	console.log(productData);
+    alert('Item Added to Cart');
+};
+
 
 		const updateCartUI = () => {
 			cartContainer.innerHTML = '';
@@ -711,15 +723,12 @@
 						body: JSON.stringify(requestBody),
 					});
 
-
 					// Parse the response from the server, which is expected to contain a session URL
 					const sessionUrl = await response.json();
 
 					// Redirect the user to the Stripe checkout session
 					window.location.href = sessionUrl.url;
 
-					// Move resetCart here after the redirection
-					resetCart();
 				} catch (error) {
 					console.error('Error during checkout:', error);
 				}
@@ -749,4 +758,4 @@
 
 </body>
 
-</html>s
+</html>

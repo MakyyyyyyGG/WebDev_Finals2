@@ -48,25 +48,17 @@
 
       <div class="collapse navbar-collapse" id="ftco-nav">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item"><a href="admin_dashboard.html" class="nav-link">Dashboard</a></li>
-          <li class="nav-item"><a href="admin.html" class="nav-link active">Product Management</a></li>
+          <li class="nav-item "><a href="admin_dashboard.html" class="nav-link ">Admin Dashboard</a></li>
+          <li class="nav-item active"><a href="admin.html" class="nav-link active">Product Management</a></li>
 
-          <li class="nav-item"><a href="index.html" class="nav-link ">Home</a></li>
+          
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false">Shop</a>
-            <div class="dropdown-menu" aria-labelledby="dropdown04">
-              <a class="dropdown-item" href="shop.html">Products</a>
-              <a class="dropdown-item" href="cart.html">Cart</a>
-              <a class="dropdown-item" href="checkout.html">Checkout</a>
+              aria-expanded="false"><span class="icon-user"></span></a>
+            <div class="dropdown-menu" aria-labelledby="dropdown04" id="userDropdown">
             </div>
           </li>
-          <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-          <li class="nav-item"><a href="contact.html" class="nav-link ">Contact</a></li>
-          <li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span
-                class="icon-shopping_cart"></span>[0]</a></li>
-          <li class="nav-item cta cta-colored"><a href="user.html" class="nav-link"><span class="icon-user"></span></a>
-          </li>
+          <li class="nav-item"><a href="contact.html" class="nav-link" id="greet"></a></li>
 
         </ul>
       </div>
@@ -346,6 +338,46 @@
     let userCredentials = JSON.parse(sessionStorage.getItem("user-credentials"));
     let userInfo = JSON.parse(sessionStorage.getItem("user-info"));
 
+    let greet = document.getElementById("greet");
+    let signOutButton = document.getElementById("sign_out");
+
+    let signOut = () => {
+      sessionStorage.removeItem("user-info");
+      sessionStorage.removeItem("user-credentials");
+      window.location.href = "login.html";
+    };
+
+    let userDropdown = document.getElementById("userDropdown");
+
+    let updateDropdownMenu = () => {
+      if (userCredentials) {
+        userDropdown.innerHTML = `
+							<a class="dropdown-item" href="#" id="sign_out">Sign Out</a>`;
+        greet.innerHTML = `Welcome ${userInfo.username}!`;
+      } else {
+        userDropdown.innerHTML = `
+							<a class="dropdown-item" href="signup.html" id="sign_up">Sign Up</a>
+							<a class="dropdown-item" href="login.html" id="log_in">Log In</a>`;
+      }
+    };
+
+    let checkCred = () => {
+      updateDropdownMenu();
+    };
+
+    window.addEventListener('load', checkCred);
+    userDropdown.addEventListener('click', (event) => {
+      if (event.target.id === 'sign_out') {
+        signOut();
+      } else if (event.target.id === 'sign_up') {
+        window.location.href = 'signup.html';
+      } else if (event.target.id === 'log_in') {
+        window.location.href = 'Account_As.html';
+      }
+    });
+
+    
+
     // Function to add a product
     let addProduct = evt => {
 
@@ -540,6 +572,7 @@
 
     // Trigger the function to fetch and display product data
     window.addEventListener('load', () => {
+      
       fetchProductData();
     });
 

@@ -9,7 +9,7 @@ dotenv.config();
 
 const app = express();
 
-let cartItems = {};
+
 // Add CORS middleware to allow requests from any origin
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
@@ -129,27 +129,37 @@ const PORT = process.env.PORT || 3000;
 //stripe
 const stripeGateway = stripe(process.env.STRIPE_API);
 const DOMAIN = process.env.DOMAIN;
+let cartItems = {};
 
 app.post("/stripe-checkout", async (req, res) => {
-    const lineItems = req.body.items.map((item) => {
-        const unitAmount = parseInt(
-            (item.price || "0").replace(/[^0-9.-]+/g, "") * 100
-        );
-
-        return {
-            price_data: {
-                currency: "php",
-                product_data: {
-                    name: item.title,
-                    images: [item.productImg],
-                },
-                unit_amount: unitAmount,
-            },
-            quantity: item.quantity,
-        };
-    });
-
     try {
+        const lineItems = req.body.items.map((item) => {
+            const unitAmount = parseInt(
+                (item.price || "0").replace(/[^0-9.-]+/g, "") * 100
+            );
+
+            console.log("Item Title:", item.title);
+            console.log("Item ProductImg:", item.productImg);
+            console.log("Unit Amount:", unitAmount);
+
+            // Check for missing or invalid data
+            if (!item.title || !item.productImg || isNaN(unitAmount)) {
+                throw new Error("Invalid item data");
+            }
+
+            return {
+                price_data: {
+                    currency: "php",
+                    product_data: {
+                        name: item.title,
+                        images: [item.productImg],
+                    },
+                    unit_amount: unitAmount,
+                },
+                quantity: item.quantity,
+            };
+        });
+
         const session = await stripeGateway.checkout.sessions.create({
             payment_method_types: ["card"],
             mode: "payment",
