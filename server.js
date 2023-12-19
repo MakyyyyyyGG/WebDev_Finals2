@@ -181,6 +181,7 @@ app.post("/stripe-checkout", async (req, res) => {
         console.error("Error during checkout:", error);
         res.status(500).json({ error: "Error during checkout" });
     }
+    
 });
 
 app.listen(PORT, () => {
