@@ -109,7 +109,7 @@
 							<div class="row">
 								<div class="col">
 									<span>Total</span>
-									<div id="totalPrice"></div>									
+									<div id="totalPrice"></div>
 								</div>
 								<div class="col">
 									<div class="btn btn-success" id="checkout_btn">Checkout</div>
@@ -122,7 +122,7 @@
 			</div>
 		</div>
 
-		
+
 
 		<div class="container">
 			<div class="row justify-content-center">
@@ -133,7 +133,7 @@
 				</div>
 			</div>
 			<div class="row" id="prodList">
-				
+
 
 				<div class="row mt-5">
 					<div class="col text-center">
@@ -188,7 +188,9 @@
 						<p>“Crafting Memories, One Piece at a Time.”</p>
 						<ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
 							<li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
-							<li class="ftco-animate"><a href="https://web.facebook.com/profile.php?id=100064010023532"><span class="icon-facebook"></span></a></li>
+							<li class="ftco-animate"><a
+									href="https://web.facebook.com/profile.php?id=100064010023532"><span
+										class="icon-facebook"></span></a></li>
 							<li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
 						</ul>
 					</div>
@@ -242,7 +244,8 @@
 
 					<p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
 						Copyright &copy;
-						<script>document.write(new Date().getFullYear());</script> All rights reserved | Mark Clerigo</a>
+						<script>document.write(new Date().getFullYear());</script> All rights reserved | Mark
+						Clerigo</a>
 						<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
 					</p>
 				</div>
@@ -331,7 +334,7 @@
 		let cartItems = {};
 		let totalPrice = 0;
 
-		
+
 
 
 		const updateTotalPrice = () => {
@@ -375,75 +378,85 @@
 		};
 
 		const addToCart = (productId, productData) => {
-    const cartItemId = `${productId}_cart_item`;
+			const cartItemId = `${productId}_cart_item`;
 
-    if (!userCredentials) {
-        alert('Please sign in to add items to your cart.');
-        window.location.href = 'login.html';
-        return;
-    }
+			if (!userCredentials) {
+				alert('Please sign in to add items to your cart.');
+				window.location.href = 'login.html';
+				return;
+			}
 
-    const userCartRef = ref(db, `UserAuthList/${userCredentials.uid}/cart/${productId}`);
+			const userCartRef = ref(db, `UserAuthList/${userCredentials.uid}/cart/${productId}`);
 
-    if (cartItems[productId]) {
-        const updatedQuantity = cartItems[productId].quantity + 1;
-        set(userCartRef, { productData, quantity: updatedQuantity })
-            .then(() => {
-                cartItems[productId].quantity = updatedQuantity;
-                const quantityInput = document.getElementById(`${cartItemId}_quantity`);
-                if (quantityInput) {
-                    quantityInput.value = updatedQuantity;
+			if (cartItems[productId]) {
+				// Existing item in the cart, update quantity
+				const updatedQuantity = cartItems[productId].quantity + 1;
+				set(userCartRef, { productData, quantity: updatedQuantity })
+					.then(() => {
+						cartItems[productId].quantity = updatedQuantity;
+						const quantityInput = document.getElementById(`${cartItemId}_quantity`);
+						if (quantityInput) {
+							quantityInput.value = updatedQuantity;
 
-                    // Check if quantityInput exists before adding the event listener
-                    quantityInput.addEventListener('input', () => {
-                        const quantity = parseInt(quantityInput.value, 10);
-                        cartItems[productId].quantity = quantity;
-                        const updatedPrice = quantity * parseFloat(productData.price);
-                        document.getElementById(`price_${cartItemId}`).innerHTML = updatedPrice.toFixed(2);
-                        updateTotalPrice();
-                    });
-                }
+							// Check if quantityInput exists before adding the event listener
+							quantityInput.addEventListener('input', () => {
+								const quantity = parseInt(quantityInput.value, 10);
+								cartItems[productId].quantity = quantity;
+								const updatedPrice = quantity * parseFloat(productData.price);
+								document.getElementById(`price_${cartItemId}`).innerHTML = updatedPrice.toFixed(2);
+								updateTotalPrice();
+							});
+						}
 
-                updateTotalPrice();
-                updateCartCounter();
-            })
-            .catch((error) => {
-                console.error("Error updating quantity in the database:", error);
-            });
-    } else {
-        set(userCartRef, { productId, productData, quantity: 1 })
-            .then(() => {
-                cartItems[productId] = { productData, quantity: 1 };
-                const cartItem = document.createElement('div');
-                cartItem.classList.add('col', 'addedToCart', 'border', 'border-primary');
-                cartItem.id = cartItemId;
-                cartContainer.appendChild(cartItem);
-                const quantityInput = document.getElementById(`${cartItemId}_quantity`);
-                if (quantityInput) {
-                    quantityInput.addEventListener('input', () => {
-                        const quantity = parseInt(quantityInput.value, 10);
-                        cartItems[productId].quantity = quantity;
-                        const updatedPrice = quantity * parseFloat(productData.price);
-                        document.getElementById(`price_${cartItemId}`).innerHTML = updatedPrice.toFixed(2);
-                        updateTotalPrice();
-                    });
-                }
+						updateTotalPrice();
+						updateCartCounter();
+					})
+					.catch((error) => {
+						console.error("Error updating quantity in the database:", error);
+					});
+			} else {
+				// New item in the cart, create lineItem
+				const lineItem = {
+					title: productData.productName,
+					price: productData.price,
+					quantity: 1,
+					productImg: productData.image,
+				};
 
-                const removeButton = cartItem.querySelector('._remove-cart');
-                removeButton.addEventListener('click', () => {
-                    removeFromCart(productId, cartItemId);
-                });
+				// Add to cartItems
+				cartItems[productId] = { productData, quantity: 1 };
 
-                updateTotalPrice();
-                updateCartCounter();
-            })
-            .catch((error) => {
-                console.error("Error adding item to the database:", error);
-            });
-    }
-	console.log(productData);
-    alert('Item Added to Cart');
-};
+				// Add to the database
+				set(userCartRef, { productId, productData, quantity: 1 })
+					.then(() => {
+						const cartItem = document.createElement('div');
+						cartItem.classList.add('col', 'addedToCart', 'border', 'border-primary');
+						cartItem.id = cartItemId;
+						cartContainer.appendChild(cartItem);
+
+						// ... (rest of your code to create cart item UI)
+
+						updateTotalPrice();
+						updateCartCounter();
+					})
+					.catch((error) => {
+						console.error("Error adding item to the database:", error);
+					});
+			}
+
+			// Create lineItems after the update
+			const lineItems = Object.values(cartItems).map(item => ({
+				title: item.productData.productName,
+				price: item.productData.price,
+				quantity: item.quantity,
+				productImg: item.productData.image,
+			}));
+
+			console.log(lineItems);
+
+			alert('Item Added to Cart');
+		};
+
 
 
 		const updateCartUI = () => {
