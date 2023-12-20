@@ -50,7 +50,7 @@ app.get("/success", (req, res) => {
     const userCartRef = ref(db, `UserAuthList/${userId}/cart`);
     remove(userCartRef)
         .then(() => {
-            res.sendFile("success.html", { root: "public" });
+            res.sendFile("/success.html", { root: "public" });
         })
         .catch((error) => {
             console.error("Error removing items from the database:", error);
@@ -59,8 +59,8 @@ app.get("/success", (req, res) => {
 });
 
 //cancel
-app.get("/cancel", (req, res) => {
-    res.sendFile("cancel.html", { root: "public" });
+app.get("/cancel.html", (req, res) => {
+    res.sendFile("/cancel.html", { root: "public" });
 });
 
 // Fetch Stripe account balance
