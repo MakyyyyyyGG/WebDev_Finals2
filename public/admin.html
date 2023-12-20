@@ -121,7 +121,6 @@
                 <tr>
                   <th scope="col">Transaction ID</th>
                   <th scope="col">Amount</th>
-                  <th scope="col">Customer Name</th>
                   <th scope="col">Created At</th>
                 </tr>
               </thead>
@@ -392,7 +391,6 @@
             row.innerHTML = `
             <td>${transaction.id}</td>
             <td>${transaction.amount} ${transaction.currency}</td>
-            <td>${transaction.customerEmail}</td>
             <td>${transaction.createdAt}</td>
           `;
             tableBody.appendChild(row);

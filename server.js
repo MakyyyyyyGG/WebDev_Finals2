@@ -50,7 +50,7 @@ app.get("/success", (req, res) => {
     const userCartRef = ref(db, `UserAuthList/${userId}/cart`);
     remove(userCartRef)
         .then(() => {
-            res.sendFile("/success.html", { root: "public" });
+            res.sendFile("success.html", { root: "public" });
         })
         .catch((error) => {
             console.error("Error removing items from the database:", error);
@@ -59,8 +59,8 @@ app.get("/success", (req, res) => {
 });
 
 //cancel
-app.get("/cancel", (req, res) => {
-    res.sendFile("/cancel.html", { root: "public" });
+app.get("/cancel.html", (req, res) => {
+    res.sendFile("cancel.html", { root: "public" });
 });
 
 // Fetch Stripe account balance
@@ -96,18 +96,20 @@ app.get("/getSuccessfulTransactionsCount", async (req, res) => {
 // Update the server-side code
 app.get("/getSuccessfulTransactions", async (req, res) => {
     try {
-        const paymentIntents = await stripeGateway.paymentIntents.list({
-            limit: 100,
-            status: 'succeeded', // Filter by successful transactions
+        const sessions = await stripeGateway.checkout.sessions.list({
+            limit: 100, // Adjust as needed
         });
 
+        // Filter sessions to include only successful transactions
+        const successfulSessions = sessions.data.filter(session => session.payment_status === 'paid');
+
         // Extract relevant details for each successful transaction
-        const successfulTransactions = paymentIntents.data.map(paymentIntent => ({
-            id: paymentIntent.id,
-            amount: paymentIntent.amount_received / 100, // Convert to dollars
-            currency: paymentIntent.currency,
-            customerEmail: paymentIntent.customer_email || 'Guest',
-            createdAt: new Date(paymentIntent.created * 1000).toLocaleString(),
+        const successfulTransactions = successfulSessions.map(session => ({
+            id: session.id,
+            amount: session.amount_total / 100, // Convert to dollars
+            currency: session.currency,
+            customerEmail: session.customer_email || 'Guest',
+            createdAt: new Date(session.created * 1000).toLocaleString(),
         }));
 
         res.json({ successfulTransactions });
@@ -116,8 +118,6 @@ app.get("/getSuccessfulTransactions", async (req, res) => {
         res.status(500).json({ error: "Error fetching successful transactions" });
     }
 });
-
-
 
 
 
@@ -163,8 +163,8 @@ app.post("/stripe-checkout", async (req, res) => {
         const session = await stripeGateway.checkout.sessions.create({
             payment_method_types: ["card"],
             mode: "payment",
-            success_url: `https://webdev-finals.onrender.com/success`,
-            cancel_url: `https://webdev-finals.onrender.com/cancel`,
+            success_url: `${DOMAIN}/success`,
+            cancel_url: `${DOMAIN}/cancel`,
             line_items: lineItems,
             billing_address_collection: "required",
         });
@@ -186,4 +186,4 @@ app.post("/stripe-checkout", async (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
-});
+})
