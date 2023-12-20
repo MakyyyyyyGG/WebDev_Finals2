@@ -40,7 +40,7 @@
 <body class="goto-here">
   <nav class="navbar navbar-expand-lg  ftco_navbar  ftco-navbar-light" id="ftco-navbar">
     <div class="container">
-      <a class="navbar-brand" href="index.html">SCDES</a>
+      <a class="navbar-brand" href="index">SCDES</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
         aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="oi oi-menu"></span> Menu
@@ -48,8 +48,8 @@
 
       <div class="collapse navbar-collapse" id="ftco-nav">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item "><a href="admin.html" class="nav-link">Admin Dashboard</a></li>
-          <li class="nav-item active"><a href="product_management.html" class="nav-link active">Product Management</a></li>
+          <li class="nav-item "><a href="admin" class="nav-link">Admin Dashboard</a></li>
+          <li class="nav-item active"><a href="product_management" class="nav-link active">Product Management</a></li>
 
 
           <li class="nav-item dropdown">
@@ -58,7 +58,7 @@
             <div class="dropdown-menu" aria-labelledby="dropdown04" id="userDropdown">
             </div>
           </li>
-          <li class="nav-item"><a href="contact.html" class="nav-link" id="greet"></a></li>
+          <li class="nav-item"><a href="contact" class="nav-link" id="greet"></a></li>
 
         </ul>
       </div>
@@ -243,10 +243,10 @@
 					<div class="ftco-footer-widget mb-4 ml-md-5">
 						<h2 class="ftco-heading-2">Menu</h2>
 						<ul class="list-unstyled">
-							<li><a href="index.html" class="py-2 d-block">Home</a></li>
-							<li><a href="shop.html" class="py-2 d-block">Shop</a></li>
-							<li><a href="about.html" class="py-2 d-block">About</a></li>
-							<li><a href="contact.html" class="py-2 d-block">Contact</a></li>
+							<li><a href="index" class="py-2 d-block">Home</a></li>
+							<li><a href="shop" class="py-2 d-block">Shop</a></li>
+							<li><a href="about" class="py-2 d-block">About</a></li>
+							<li><a href="contact" class="py-2 d-block">Contact</a></li>
 						</ul>
 					</div>
 				</div>
@@ -345,7 +345,7 @@
     let signOut = () => {
       sessionStorage.removeItem("user-info");
       sessionStorage.removeItem("user-credentials");
-      window.location.href = "login.html";
+      window.location.href = "login";
     };
 
     let userDropdown = document.getElementById("userDropdown");
@@ -357,8 +357,8 @@
         greet.innerHTML = `Welcome ${userInfo.username}!`;
       } else {
         userDropdown.innerHTML = `
-							<a class="dropdown-item" href="signup.html" id="sign_up">Sign Up</a>
-							<a class="dropdown-item" href="login.html" id="log_in">Log In</a>`;
+							<a class="dropdown-item" href="signup" id="sign_up">Sign Up</a>
+							<a class="dropdown-item" href="login" id="log_in">Log In</a>`;
       }
     };
 
@@ -371,15 +371,15 @@
       if (event.target.id === 'sign_out') {
         signOut();
       } else if (event.target.id === 'sign_up') {
-        window.location.href = 'signup.html';
+        window.location.href = 'signup';
       } else if (event.target.id === 'log_in') {
-        window.location.href = 'Account_As.html';
+        window.location.href = 'Account_As';
       }
     });
 
     if (userInfo.isAdmin == false) {
       alert("User is not an Admin Account");
-      window.location.href = 'login.html'
+      window.location.href = 'login'
     }
 
 

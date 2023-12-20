@@ -36,7 +36,7 @@
 
   <nav class="navbar navbar-expand-lg  ftco_navbar  ftco-navbar-light" id="ftco-navbar">
     <div class="container">
-      <a class="navbar-brand" href="index.html">SCDES</a>
+      <a class="navbar-brand" href="index">SCDES</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
         aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="oi oi-menu"></span> Menu
@@ -44,10 +44,10 @@
 
       <div class="collapse navbar-collapse" id="ftco-nav">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item "><a href="index.html" class="nav-link ">Home</a></li>
-          <li class="nav-item "><a href="shop.html" class="nav-link ">Shop</a></li>
-          <li class="nav-item"><a href="about.html" class="nav-link active">About</a></li>
-          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+          <li class="nav-item "><a href="index" class="nav-link ">Home</a></li>
+          <li class="nav-item "><a href="shop" class="nav-link ">Shop</a></li>
+          <li class="nav-item"><a href="about" class="nav-link active">About</a></li>
+          <li class="nav-item"><a href="contact" class="nav-link">Contact</a></li>
           
           <li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true"
@@ -55,7 +55,7 @@
 						<div class="dropdown-menu" aria-labelledby="dropdown04" id="userDropdown">
 						</div>
 					</li>
-					<li class="nav-item"><a href="contact.html" class="nav-link" id="greet"></a></li>
+					<li class="nav-item"><a href="contact" class="nav-link" id="greet"></a></li>
 
         </ul>
       </div>
@@ -67,7 +67,7 @@
     <div class="container">
       <div class="row no-gutters slider-text align-items-center justify-content-center">
         <div class="col-md-9 ftco-animate text-center">
-          <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>About us</span></p>
+          <p class="breadcrumbs"><span class="mr-2"><a href="index">Home</a></span> <span>About us</span></p>
           <h1 class="mb-0 bread">About us</h1>
         </div>
       </div>
@@ -98,7 +98,7 @@
               elegant wedding giveaways such as little pots that has an engraved names of the bride and groom. This shop
               is open for made to order that ensures you in every piece is more than just crafted; it's manifestation of
               your desires, your vision, meticulously designed and brought to life in every customize creation.</p>
-            <p><a href="shop.html" class="btn btn-primary">Shop now</a></p>
+            <p><a href="shop" class="btn btn-primary">Shop now</a></p>
           </div>
         </div>
       </div>
@@ -278,10 +278,10 @@
 					<div class="ftco-footer-widget mb-4 ml-md-5">
 						<h2 class="ftco-heading-2">Menu</h2>
 						<ul class="list-unstyled">
-							<li><a href="index.html" class="py-2 d-block">Home</a></li>
-							<li><a href="shop.html" class="py-2 d-block">Shop</a></li>
-							<li><a href="about.html" class="py-2 d-block">About</a></li>
-							<li><a href="contact.html" class="py-2 d-block">Contact</a></li>
+							<li><a href="index" class="py-2 d-block">Home</a></li>
+							<li><a href="shop" class="py-2 d-block">Shop</a></li>
+							<li><a href="about" class="py-2 d-block">About</a></li>
+							<li><a href="contact" class="py-2 d-block">Contact</a></li>
 						</ul>
 					</div>
 				</div>
@@ -377,7 +377,7 @@
 		let signOut = () => {
 			sessionStorage.removeItem("user-info");
 			sessionStorage.removeItem("user-credentials");
-			window.location.href = "login.html";
+			window.location.href = "login";
 		}
 
 		//dynamic sign up, sign in, sign out
@@ -392,8 +392,8 @@
 			} else {
 				// No user is logged in
 				userDropdown.innerHTML = `
-		    <a class="dropdown-item" href="signup.html" id="sign_up">Sign Up</a>
-		    <a class="dropdown-item" href="login.html" id="log_in">Log In</a>`;
+		    <a class="dropdown-item" href="signup" id="sign_up">Sign Up</a>
+		    <a class="dropdown-item" href="login" id="log_in">Log In</a>`;
 			}
 		};
 
@@ -408,10 +408,10 @@
 			if (event.target.id === 'sign_out') {
 				signOut();
 			} else if (event.target.id === 'sign_up') {
-				window.location.href = 'signup.html'
+				window.location.href = 'signup'
 				console.log("Sign Up clicked");
 			} else if (event.target.id === 'log_in') {
-				window.location.href = 'Account_As.html'
+				window.location.href = 'Account_As'
 				console.log("Log In clicked");
 			}
 		});
