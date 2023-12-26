@@ -180,10 +180,11 @@
                 });
         };
     
-        function handleLoginSuccess(username, isAdmin, userCredentials) {
+        function handleLoginSuccess(username, isAdmin, userCredentials, city) {
                 sessionStorage.setItem("user-info", JSON.stringify({
                     username: username || "",  // Ensure a default value if username is null
-                    isAdmin: isAdmin
+                    isAdmin: isAdmin,
+                    city: city,
                 }));
                 sessionStorage.setItem("user-credentials", JSON.stringify(userCredentials));
 

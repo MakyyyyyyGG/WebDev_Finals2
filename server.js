@@ -1,15 +1,14 @@
 import express from "express";
 import dotenv from "dotenv";
 import stripe from "stripe";
-import balance  from "stripe";
+import { v4 as uuidv4 } from "uuid";
+import balance from "stripe";
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, remove } from "firebase/database";
+import { set, getDatabase, ref, remove, update} from "firebase/database";
 
 dotenv.config();
 
 const app = express();
-
-
 // Add CORS middleware to allow requests from any origin
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
@@ -76,53 +75,37 @@ app.get("/getBalance", async (req, res) => {
 });
 
 // Update the server-side code
-app.get("/getSuccessfulTransactionsCount", async (req, res) => {
-    try {
-        const sessions = await stripeGateway.checkout.sessions.list({
-            limit: 100, // Adjust as needed
-        });
-
-        // Filter sessions to include only successful transactions
-        const successfulSessions = sessions.data.filter(session => session.payment_status === 'paid');
-        const numberOfSuccessfulTransactions = successfulSessions.length;
-
-        res.json({ numberOfSuccessfulTransactions });
-    } catch (error) {
-        console.error("Error fetching successful transactions count:", error);
-        res.status(500).json({ error: "Error fetching successful transactions count" });
-    }
-});
-
-// Update the server-side code
 app.get("/getSuccessfulTransactions", async (req, res) => {
     try {
-        const sessions = await stripeGateway.checkout.sessions.list({
-            limit: 100, // Adjust as needed
-        });
+        const transactionsSnapshot = await get(ref(db, "TransactionHistory"));
+        const transactionsData = transactionsSnapshot.val();
 
-        // Filter sessions to include only successful transactions
-        const successfulSessions = sessions.data.filter(session => session.payment_status === 'paid');
+        if (transactionsData) {
+            // Extract relevant details for each successful transaction
+            const successfulTransactions = Object.values(transactionsData).map(
+                (transaction) => ({
+                    transactionId: transaction.transactionId,
+                    formattedDate: transaction.formattedDate,
+                    items: transaction.items,
+                    totalAmount: transaction.totalAmount,
+                    currency: "php", // Adjust as needed
+                    status: transaction.status, // Default to "pending" if not present
+                })
+            );
 
-        // Extract relevant details for each successful transaction
-        const successfulTransactions = successfulSessions.map(session => ({
-            id: session.id,
-            amount: session.amount_total / 100, // Convert to dollars
-            currency: session.currency,
-            customerEmail: session.customer_email || 'Guest',
-            createdAt: new Date(session.created * 1000).toLocaleString(),
-        }));
-
-        res.json({ successfulTransactions });
+            res.json({ successfulTransactions });
+        } else {
+            console.log("No transaction history found.");
+            res.json({ successfulTransactions: [] });
+        }
     } catch (error) {
         console.error("Error fetching successful transactions:", error);
         res.status(500).json({ error: "Error fetching successful transactions" });
     }
 });
 
-
-
-
-
+// Update the server-side code
+// Update the server-side cod
 
 const PORT = process.env.PORT || 3000;
 
@@ -160,30 +143,83 @@ app.post("/stripe-checkout", async (req, res) => {
             };
         });
 
-        const session = await stripeGateway.checkout.sessions.create({
-            payment_method_types: ["card"],
-            mode: "payment",
-            success_url: `${DOMAIN}/success`,
-            cancel_url: `${DOMAIN}/cancel`,
-            line_items: lineItems,
-            billing_address_collection: "required",
-        });
-
         // Assuming you have the user ID available
         const userId = req.body.userId; // Adjust this based on how you identify users
 
-        // Remove items from the database
+        // Generate a new transaction ID (UUID)
+        const transactionId = uuidv4();
+
+        // Create a Stripe Checkout Session
+        const session = await stripeGateway.checkout.sessions.create({
+            payment_method_types: ["card"],
+            line_items: lineItems,
+            mode: "payment",
+            success_url: `${DOMAIN}/success`, // Adjust this URL
+            cancel_url: `${DOMAIN}/cancel.html`, // Adjust this URL
+            metadata: {
+                transactionId: transactionId, // Include the transaction ID in the session metadata
+            },
+        });
+
+        // Save transaction details in the database with the new transaction ID
+        const transactionRef = ref(db, `TransactionHistory/${userId}/${transactionId}`);
+        const timestamp = new Date().toISOString();
+
+
+        // Convert the timestamp to a Date object
+        const date = new Date(timestamp);
+
+        // Format the date in the Philippines timezone
+        const options = { timeZone: "Asia/Manila" };
+        const formattedDate = date.toLocaleString("en-US", options);
+
+        const transactionDetails = {
+            transactionId: transactionId,
+            formattedDate,
+            items: lineItems,
+            totalAmount: req.body.totalAmount, // Add this if needed
+            status: 'Pending',
+            // Add more details as needed
+        };
+        
+
+        await set(transactionRef, transactionDetails);
+
+        // Reset the user's cart in the database
         const userCartRef = ref(db, `UserAuthList/${userId}/cart`);
         remove(userCartRef);
 
-        res.json({ url: session.url });
+        res.json({ url: session.url, transactionId: transactionId });
     } catch (error) {
         console.error("Error during checkout:", error);
         res.status(500).json({ error: "Error during checkout" });
     }
-    
 });
+
+app.post("/update-transaction-status", async (req, res) => {
+    try {
+        const userId = req.body.userId;
+        const transactionId = req.body.transactionId;
+        const newStatus = req.body.newStatus; // You can pass the new status from the client
+
+        const transactionRef = ref(db, `TransactionHistory/${userId}/${transactionId}`);
+
+        // Update the status in the database
+        await update(transactionRef, { status: newStatus });
+
+        res.json({ success: true, message: 'Transaction status updated successfully' });
+    } catch (error) {
+        console.error("Error updating transaction status:", error);
+        res.status(500).json({ error: "Error updating transaction status" });
+    }
+});
+
+
+
+
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
-})
+});
+

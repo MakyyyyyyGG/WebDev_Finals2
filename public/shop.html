@@ -60,8 +60,7 @@
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown"
 							aria-haspopup="true" aria-expanded="false"><span class="icon-user"></span></a>
-						<div class="dropdown-menu" aria-labelledby="dropdown04" id="userDropdown">
-						</div>
+						<div class="dropdown-menu" aria-labelledby="dropdown04" id="userDropdown"></div>
 					</li>
 					<li class="nav-item"><a href="contact.html" class="nav-link" id="greet"></a></li>
 
@@ -244,7 +243,8 @@
 
 					<p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
 						Copyright &copy;
-						<script>document.write(new Date().getFullYear());</script> All rights reserved | Mark Clerigo & Gantan</a>
+						<script>document.write(new Date().getFullYear());</script> All rights reserved | Mark Clerigo &
+						Gantan</a>
 
 						<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
 					</p>
@@ -302,8 +302,9 @@
 		let updateDropdownMenu = () => {
 			if (userCredentials) {
 				userDropdown.innerHTML = `
-							<a class="dropdown-item" href="#" id="sign_out">Sign Out</a>`;
-				greet.innerHTML = `Welcome ${userInfo.username}!`;
+							<a class="dropdown-item" href="account.html" id="account_info">Account Info</a>
+							<a class="dropdown-item" href="#" id="sign_out">Sign Out</a>`;		
+								greet.innerHTML = `Welcome ${userInfo.username}!`;
 			} else {
 				userDropdown.innerHTML = `
 							<a class="dropdown-item" href="signup.html" id="sign_up">Sign Up</a>
@@ -483,7 +484,7 @@
 										<div class="input-group input-group-sm mb-3">
 											<span class="input-group-text" id="itemQuantity">Quantity</span>
 											<input id='${cartItemId}_quantity' type="number" min='0' value='${cartItems[productId].quantity}' class="form-control"
-												aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+												aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" disabled>
 											<button type="button" class='_remove-cart rounded btn-danger mt-3' data-product-id='${productId}'>Remove</button>
 										</div>
 									</div>
@@ -615,13 +616,14 @@
 				}));
 
 				try {
-					// Add userId to the request body
+					// Add userId and totalAmount to the request body
 					const requestBody = {
 						items: lineItems,
-						userId: userCredentials.uid, // Assuming userCredentials has the userId
+						userId: userCredentials.uid,
+						totalAmount: totalPrice, // Use the correct variable here
 					};
 
-					// Send a POST request to the server with the line items and userId in the request body
+					// Send a POST request to the server with the line items, userId, and totalAmount in the request body
 					const response = await fetch('/stripe-checkout', {
 						method: 'POST',
 						headers: new Headers({
@@ -640,7 +642,12 @@
 					console.error('Error during checkout:', error);
 				}
 			});
+
 		});
+
+
+
+
 
 
 	</script>
