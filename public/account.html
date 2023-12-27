@@ -53,9 +53,6 @@
                     <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
                     <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
 
-                    <li class="nav-item cta cta-colored"><a class="nav-link" data-bs-toggle="offcanvas"
-                            href="#offcanvasExample" role="button" aria-controls="offcanvasExample"><span
-                                class="icon-shopping_cart"></span><span id="cart_count"></span></a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false"><span class="icon-user"></span></a>
@@ -341,8 +338,11 @@
                         const row = document.createElement('tr');
                         row.id = `transactionRow_${transaction.transactionId}`; // Set a unique ID for each row
 
-                        const productsInfo = transaction.items.map(item => `${item.price_data.product_data.name} <br> Quantity: ${item.quantity}`).join('<br>');
-
+                        const productsInfo = transaction.items.map(item => `
+                            <div style="border: 1px solid black; padding: 5px; margin: 5px;">
+                                ${item.price_data.product_data.name} Quantity: ${item.quantity}
+                            </div>
+                        `).join('');
                         row.innerHTML = `
                     <td>${transaction.transactionId}</td>
                     <td>₱${transaction.totalAmount}</td>
