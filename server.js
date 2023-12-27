@@ -38,7 +38,7 @@ app.get("/", (req, res) => {
 });
 
 //success
-app.get("/success", (req, res) => {
+app.get("/success.html", (req, res) => {
     // Assuming you have the user ID available
     const userId = req.body.userId; // Access userId from the request body
 
@@ -49,7 +49,7 @@ app.get("/success", (req, res) => {
     const userCartRef = ref(db, `UserAuthList/${userId}/cart`);
     remove(userCartRef)
         .then(() => {
-            res.sendFile("https://webdev-finals.onrender.com/success.html", { root: "public" });
+            res.sendFile("success.html", { root: "public" });
         })
         .catch((error) => {
             console.error("Error removing items from the database:", error);
@@ -163,8 +163,8 @@ app.post("/stripe-checkout", async (req, res) => {
             payment_method_types: ["card"],
             line_items: lineItems,
             mode: "payment",
-            success_url: `https://webdev-finals.onrender.com/success`, // Adjust this URL
-            cancel_url: `https://webdev-finals.onrender.com/cancel`, // Adjust this URL
+            success_url: `https://webdev-finals.onrender.com/success.html`, // Adjust this URL
+            cancel_url: `https://webdev-finals.onrender.com/cancel.html`, // Adjust this URL
             metadata: {
                 transactionId: transactionId, // Include the transaction ID in the session metadata
             },
