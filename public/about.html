@@ -387,6 +387,7 @@
 			if (userCredentials) {
 				// User is logged in
 				userDropdown.innerHTML = `
+        <a class="dropdown-item" href="account.html" id="account_info">Account Info</a>
 		    <a class="dropdown-item" href="#" id="sign_out">Sign Out</a>`;
 				greet.innerHTML = `Welcome ${userInfo.username}!`;
 			} else {

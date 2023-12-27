@@ -125,12 +125,12 @@
                   <th scope="col">City</th>
                   <th scope="col">Barangay</th>
                   <th scope="col">Phone</th>
+                  <th scope="col">Items</th>
                   <th scope="col">Status</th>
                 </tr>
               </thead>
               <tbody id="transactionTableBody"></tbody>
             </table>
-            <button id="loadMoreButton" class="btn btn-primary mx-auto">Load More</button>
           </div>
         </div>
       </div>
@@ -286,6 +286,7 @@
 							<a class="dropdown-item" href="signup.html" id="sign_up">Sign Up</a>
 							<a class="dropdown-item" href="login.html" id="log_in">Log In</a>`;
         alert("No Account signed in");
+        window.location.href = 'login.html';
       }
     };
 
@@ -334,23 +335,31 @@
 
                 userTransactions.slice(0, 5).forEach(transaction => {
                   console.log('Transaction details:', transaction);
+                  const productsInfo = transaction.items.map(item => `${item.price_data.product_data.name} <br> Quantity: ${item.quantity}`).join('<br>');
+
+                  
                   const row = document.createElement('tr');
                   row.innerHTML = `
                       <td>${transaction.transactionId}</td>
-                      <td>${transaction.totalAmount}</td>
+                      <td>₱${transaction.totalAmount}</td>
                       <td>${transaction.formattedDate}</td>
                       <td>${userData.city}</td>
                       <td>${userData.barangay}</td>
                       <td>${userData.phone}</td>
+                      <td>${productsInfo}</td>
                       <td>
-                          <button class="statusButton" data-transaction-id="${transaction.transactionId}" data-user-id="${userId}">
+                          <button class="statusButton"  data-transaction-id="${transaction.transactionId}" data-user-id="${userId}">
                               ${transaction.status}
                           </button>
                       </td>
                   `;
                   tableBody.appendChild(row);
                 });
-
+                if (successfulTransactions.length === 0) {
+                const noTransactionsRow = document.createElement('tr');
+                noTransactionsRow.innerHTML = '<td colspan="6">No transactions found.</td>';
+                transactionTableBody.appendChild(noTransactionsRow);
+            }
               } else {
                 console.log(`No transaction history found for user ${userId}.`);
               }
@@ -365,43 +374,60 @@
 
 
       document.addEventListener('DOMContentLoaded', async () => {
+        const updateTotalSales = async () => {
+          try {
+            // Fetch the updated total sales from the server
+            const totalSalesResponse = await fetch('/getSuccessfulTransactions');
+            const totalSalesData = await totalSalesResponse.json();
+
+            // Update the total sales element in your HTML
+            const totalSalesElement = document.getElementById('totalSales');
+            totalSalesElement.textContent = `₱${totalSalesData.totalAmount.toFixed(2)}`;
+          } catch (error) {
+            console.error('Error fetching total sales:', error);
+          }
+        };
+
         document.addEventListener('click', async (event) => {
-  if (event.target.classList.contains('statusButton')) {
-    const targetButton = event.target;
-    const transactionId = targetButton.dataset.transactionId;
-    const userId = targetButton.dataset.userId;
-    const newStatus = 'approved'; // Set the new status here
+          if (event.target.classList.contains('statusButton')) {
+            const targetButton = event.target;
+            const transactionId = targetButton.dataset.transactionId;
+            const userId = targetButton.dataset.userId;
+            const newStatus = 'approved'; // Set the new status here
 
-    // Update the UI
-    targetButton.textContent = newStatus;
+            // Update the UI
+            targetButton.textContent = newStatus;
+             // Determine the class and disable the button based on the statu
 
-    // Update the database
-    const updateStatusUrl = '/update-transaction-status';
+            // Update the database
+            const updateStatusUrl = '/update-transaction-status';
 
-    try {
-      // Send the status update request to the server
-      const response = await fetch(updateStatusUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId: userId,
-          transactionId: transactionId,
-          newStatus: newStatus,
-        }),
-      });
+            try {
+              // Send the status update request to the server
+              const response = await fetch(updateStatusUrl, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  userId: userId,
+                  transactionId: transactionId,
+                  newStatus: newStatus,
+                }),
+              });
 
-      const data = await response.json();
-      console.log(data); // Log the server response (optional)
-    } catch (error) {
-      console.error('Error updating transaction status:', error);
-    }
-  }
-});
+              const data = await response.json();
+              console.log(data); // Log the server response (optional)
+              await updateTotalSales();
+              await updateSuccessfulTransactionsCount();
+            } catch (error) {
+              console.error('Error updating transaction status:', error);
+            }
+          }
+        });
 
 
-      
+
         try {
           const response = await fetch('/getBalance?userId=' + userCredentials.uid);
           const data = await response.json();
@@ -431,13 +457,15 @@
         }
 
         try {
-          const response = await fetch('/getBalance');
-          const data = await response.json();
-          const balanceAmount = data.balance;
+          // Fetch the total sales from the server
+          const totalSalesResponse = await fetch('/getSuccessfulTransactions');
+          const totalSalesData = await totalSalesResponse.json();
+
+          // Update the total sales element in your HTML
           const totalSalesElement = document.getElementById('totalSales');
-          totalSalesElement.textContent = `₱${(balanceAmount * 56).toFixed(2)}`;
+          totalSalesElement.textContent = `₱${totalSalesData.totalAmount.toFixed(2)}`;
         } catch (error) {
-          console.error('Error fetching balance:', error);
+          console.error('Error fetching total sales:', error);
         }
 
         try {
@@ -450,8 +478,22 @@
           console.error('Error fetching number of successful transactions:', error);
         }
 
+        try {
+          // Fetch the number of successful transactions from the server
+          const successfulTransactionsCountResponse = await fetch('/getSuccessfulTransactionsCount');
+          const successfulTransactionsCountData = await successfulTransactionsCountResponse.json();
+
+          // Update the successful transactions count element in your HTML
+          const successfulTransactionsCountElement = document.getElementById('successfulTransactions');
+          successfulTransactionsCountElement.textContent = successfulTransactionsCountData.numberOfSuccessfulTransactions.toString();
+        } catch (error) {
+          console.error('Error fetching successful transactions count:', error);
+        }
+
         // Fetch transactions initially
         await fetchTransactions();
+        await updateSuccessfulTransactionsCount();
+        await updateTotalSales();
       });
     }
 

@@ -4,7 +4,7 @@ import stripe from "stripe";
 import { v4 as uuidv4 } from "uuid";
 import balance from "stripe";
 import { initializeApp } from "firebase/app";
-import { set, getDatabase, ref, remove, update} from "firebase/database";
+import { get, set, getDatabase, ref, remove, update} from "firebase/database";
 
 dotenv.config();
 
@@ -62,17 +62,7 @@ app.get("/cancel.html", (req, res) => {
     res.sendFile("cancel.html", { root: "public" });
 });
 
-// Fetch Stripe account balance
-app.get("/getBalance", async (req, res) => {
-    try {
-        const balance = await stripeGateway.balance.retrieve();
 
-        res.json({ balance: balance.available[0].amount / 100 }); // Convert to dollars
-    } catch (error) {
-        console.error("Error fetching balance:", error);
-        res.status(500).json({ error: "Error fetching balance" });
-    }
-});
 
 // Update the server-side code
 app.get("/getSuccessfulTransactions", async (req, res) => {
@@ -82,27 +72,46 @@ app.get("/getSuccessfulTransactions", async (req, res) => {
 
         if (transactionsData) {
             // Extract relevant details for each successful transaction
-            const successfulTransactions = Object.values(transactionsData).map(
-                (transaction) => ({
-                    transactionId: transaction.transactionId,
-                    formattedDate: transaction.formattedDate,
-                    items: transaction.items,
-                    totalAmount: transaction.totalAmount,
-                    currency: "php", // Adjust as needed
-                    status: transaction.status, // Default to "pending" if not present
-                })
+            const successfulTransactions = Object.entries(transactionsData).map(
+                ([userId, userTransactions]) => {
+                    const userTransactionsArray = Object.values(userTransactions);
+
+                    // Filter only the approved transactions
+                    const approvedTransactions = userTransactionsArray.filter(
+                        transaction => transaction.status === 'approved'
+                    );
+
+                    return approvedTransactions.map(transaction => ({
+                        transactionId: transaction.transactionId,
+                        formattedDate: transaction.formattedDate,
+                        items: transaction.items,
+                        totalAmount: transaction.totalAmount || 0,
+                        currency: "php", // Adjust as needed
+                        status: 'approved', // Set the status explicitly for approved transactions
+                    }));
+                }
+            ).flat();
+
+            // Calculate the total amount from successful transactions
+            const totalAmount = successfulTransactions.reduce(
+                (accumulator, transaction) => accumulator + transaction.totalAmount,
+                0
             );
 
-            res.json({ successfulTransactions });
+            console.log("Total Amount:", totalAmount); // Log the total amount
+
+            res.json({ successfulTransactions, totalAmount });
         } else {
             console.log("No transaction history found.");
-            res.json({ successfulTransactions: [] });
+            res.json({ successfulTransactions: [], totalAmount: 0 });
         }
     } catch (error) {
         console.error("Error fetching successful transactions:", error);
         res.status(500).json({ error: "Error fetching successful transactions" });
     }
 });
+
+
 
 // Update the server-side code
 // Update the server-side cod
@@ -214,6 +223,36 @@ app.post("/update-transaction-status", async (req, res) => {
     }
 });
 
+
+// Update the server-side code
+app.get("/getSuccessfulTransactionsCount", async (req, res) => {
+    try {
+        const transactionsSnapshot = await get(ref(db, "TransactionHistory"));
+        const transactionsData = transactionsSnapshot.val();
+
+        if (transactionsData) {
+            // Count the number of approved transactions
+            const numberOfSuccessfulTransactions = Object.entries(transactionsData).reduce(
+                (accumulator, [userId, userTransactions]) => {
+                    const userTransactionsArray = Object.values(userTransactions);
+                    const approvedTransactionsCount = userTransactionsArray.filter(
+                        transaction => transaction.status === 'approved'
+                    ).length;
+                    return accumulator + approvedTransactionsCount;
+                },
+                0
+            );
+
+            res.json({ numberOfSuccessfulTransactions });
+        } else {
+            console.log("No transaction history found.");
+            res.json({ numberOfSuccessfulTransactions: 0 });
+        }
+    } catch (error) {
+        console.error("Error fetching successful transactions count:", error);
+        res.status(500).json({ error: "Error fetching successful transactions count" });
+    }
+});
 
 
 

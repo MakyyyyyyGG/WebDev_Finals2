@@ -48,18 +48,20 @@
 
             <div class="collapse navbar-collapse" id="ftco-nav">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item "><a href="admin.html" class="nav-link active ">Admin Dashboard</a></li>
-                    <li class="nav-item active"><a href="product_management.html" class="nav-link">Product
-                            Management</a></li>
+                    <li class="nav-item "><a href="index.html" class="nav-link ">Home</a></li>
+                    <li class="nav-item active"><a href="shop.html" class="nav-link active">Shop</a></li>
+                    <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                    <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
 
-
+                    <li class="nav-item cta cta-colored"><a class="nav-link" data-bs-toggle="offcanvas"
+                            href="#offcanvasExample" role="button" aria-controls="offcanvasExample"><span
+                                class="icon-shopping_cart"></span><span id="cart_count"></span></a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false"><span class="icon-user"></span></a>
-                        <div class="dropdown-menu" aria-labelledby="dropdown04" id="userDropdown">
-                        </div>
+                        <div class="dropdown-menu" aria-labelledby="dropdown04" id="userDropdown"></div>
                     </li>
-                    <li class="nav-item"><a href="contact.html" class="nav-link" id=""></a></li>
+                    <li class="nav-item"><a href="contact.html" class="nav-link" id="greet"></a></li>
 
                 </ul>
             </div>
@@ -79,24 +81,64 @@
 
     <section class="ftco-section contact-section bg-light">
         <div class="container mt-5">
-            <h1 id="greet"></h1>
-            <div class="card h-100">
-                <div class="card-body">
-                    <h5 class="card-title text-center">My Purchases</h5>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Transaction ID</th>
-                                <th scope="col">Amount</th>
-                                <th scope="col">Created At</th>
-                                <th scope="col">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="transactionTableBody"></tbody>
-                    </table>
-                    <button id="loadMoreButton" class="btn btn-primary mx-auto">Load More</button>
+            <h1>Account Overview</h1>
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Email</h5>
+                            <p class="card-text text-center fs-2" id="email"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Username</h5>
+                            <p class="card-text text-center fs-2" id="username"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Address</h5>
+                            <p class="card-text text-center fs-2" id="address"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Phone</h5>
+                            <p class="card-text text-center fs-2" id="phone"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">My Purchases</h5>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Transaction ID</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Created At</th>
+                                    <th scope="col">City</th>
+                                    <th scope="col">Barangay</th>
+                                    <th scope="col">Phone</th>
+                                    <th scope="col">Items</th>
+                                    <th scope="col">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactionTableBody"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
+
+
         </div>
         </div>
     </section>
@@ -234,6 +276,7 @@
             if (userInfo) {
                 greet.innerHTML = `Welcome ${userInfo.username}!`;
                 userDropdown.innerHTML = `
+                    <a class="dropdown-item" href="account.html" id="account_info">Account Info</a>
                     <a class="dropdown-item" href="#" id="sign_out">Sign Out</a>`;
                 userFetchTransactions();
             } else {
@@ -244,13 +287,36 @@
             }
         };
 
-        let userFetchTransactions = (userId) => {
-        // Reference to the user's transaction history in the database
-        const transactionHistoryRef = ref(db, `TransactionHistory/${userCredentials.uid}`);
+        let userFetchTransactions = async (userId) => {
 
-        // Fetch the transaction history from the database
-        get(transactionHistoryRef)
-            .then(snapshot => {
+            
+            try {
+                // Reference to the user's transaction history in the database
+                const transactionHistoryRef = ref(db, `TransactionHistory/${userCredentials.uid}`);
+                const userRef = ref(db, `UserAuthList/${userCredentials.uid}`);
+
+                let email = document.getElementById('email');
+                let username = document.getElementById('username');
+                let address = document.getElementById('address');
+                let phone = document.getElementById('phone');
+
+            
+
+                // Fetch the user's data from the database using await
+                const userSnapshot = await get(userRef);
+                const userData = userSnapshot.val();
+                console.log(userData);
+
+                // Fetch the transaction history from the database
+                const snapshot = await get(transactionHistoryRef);
+                const transactionHistory = snapshot.val();
+
+                email.innerHTML = userCredentials.email;
+                username.innerHTML = userData.username;
+                address.innerHTML = `${userData.barangay}, ${userData.city}`;
+                phone.innerHTML = userData.phone;
+
+
                 if (snapshot.exists()) {
                     const transactionHistory = snapshot.val();
                     const successfulTransactions = Object.values(transactionHistory);
@@ -259,29 +325,37 @@
 
                     successfulTransactions.forEach(transaction => {
                         const row = document.createElement('tr');
+
+                        const productsInfo = transaction.items.map(item => `${item.price_data.product_data.name} <br> Quantity: ${item.quantity}`).join('<br>');
+
                         row.innerHTML = `
-                            <td>${transaction.transactionId}</td>
-                            <td>${transaction.totalAmount}</td>
-                            <td>${transaction.formattedDate}</td>
-                            <td>${transaction.status || 'Pending'}</td> <!-- Display the status -->
-                        `;
+                    <td>${transaction.transactionId}</td>
+                    <td>₱${transaction.totalAmount}</td>
+                    <td>${transaction.formattedDate}</td>
+                    <td>${userData.city}</td>
+                    <td>${userData.barangay}</td>
+                    <td>${userData.phone}</td>
+                    <td>${productsInfo}</td>
+                    <td>${transaction.status || 'Pending'}</td> <!-- Display the status -->
+                `;
                         transactionTableBody.appendChild(row);
                     });
 
                     if (successfulTransactions.length === 0) {
                         const noTransactionsRow = document.createElement('tr');
-                        noTransactionsRow.innerHTML = '<td colspan="4">No transactions found.</td>';
+                        noTransactionsRow.innerHTML = '<td colspan="6">No transactions found.</td>';
                         transactionTableBody.appendChild(noTransactionsRow);
                     }
                 } else {
                     console.log('No transaction history found for the user.');
                 }
-            })
-            .catch(error => {
-                console.error('Error fetching transaction history:', error);
+            } catch (error) {
+                console.error('Error fetching data:', error);
                 // Log the error or handle it as needed
-            });
-    };
+            }
+        };
+
+
 
 
 
