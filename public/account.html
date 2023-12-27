@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>SCDES - Admin</title>
+    <title>SCDES - Account</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" href="./images/logo (3).png">
@@ -130,6 +130,7 @@
                                     <th scope="col">Phone</th>
                                     <th scope="col">Items</th>
                                     <th scope="col">Status</th>
+                                    <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="transactionTableBody"></tbody>
@@ -243,7 +244,7 @@
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
-        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+        import { getDatabase, ref, get, remove } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
         import { getAuth } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
         import { getStorage } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-storage.js";
 
@@ -270,6 +271,7 @@
         let greet = document.getElementById("greet");
         let userDropdown = document.getElementById("userDropdown");
         let transactionTableBody = document.getElementById("transactionTableBody");
+        
 
 
         let updateDropdownMenu = () => {
@@ -287,48 +289,61 @@
             }
         };
 
-        let userFetchTransactions = async (userId) => {
+            // Function to cancel a transaction
+            // Function to cancel a transaction
+            let cancelTransaction = async (userId, transactionId) => {
+                try {
+                    // Reference to the user's transaction in the database
+                    const transactionRef = ref(db, `TransactionHistory/${userId}/${transactionId}`);
 
-            
-            try {
-                // Reference to the user's transaction history in the database
-                const transactionHistoryRef = ref(db, `TransactionHistory/${userCredentials.uid}`);
-                const userRef = ref(db, `UserAuthList/${userCredentials.uid}`);
+                    // Remove the transaction from the database
+                    await remove(transactionRef);
 
-                let email = document.getElementById('email');
-                let username = document.getElementById('username');
-                let address = document.getElementById('address');
-                let phone = document.getElementById('phone');
-
-            
-
-                // Fetch the user's data from the database using await
-                const userSnapshot = await get(userRef);
-                const userData = userSnapshot.val();
-                console.log(userData);
-
-                // Fetch the transaction history from the database
-                const snapshot = await get(transactionHistoryRef);
-                const transactionHistory = snapshot.val();
-
-                email.innerHTML = userCredentials.email;
-                username.innerHTML = userData.username;
-                address.innerHTML = `${userData.barangay}, ${userData.city}`;
-                phone.innerHTML = userData.phone;
+                    // Remove the corresponding row from the UI
+                    const transactionRow = document.getElementById(`transactionRow_${transactionId}`);
+                    if (transactionRow) {
+                        transactionRow.remove();
+                    }
+                } catch (error) {
+                    console.error('Error cancelling transaction:', error);
+                    // Log the error or handle it as needed
+                }
+            };
 
 
-                if (snapshot.exists()) {
-                    const transactionHistory = snapshot.val();
-                    const successfulTransactions = Object.values(transactionHistory);
 
-                    transactionTableBody.innerHTML = '';
+         // Update the userFetchTransactions function to set an ID for each row
+let userFetchTransactions = async (userId) => {
+    try {
+        // Reference to the user's transaction history in the database
+        const transactionHistoryRef = ref(db, `TransactionHistory/${userCredentials.uid}`);
+        const userRef = ref(db, `UserAuthList/${userCredentials.uid}`);
 
-                    successfulTransactions.forEach(transaction => {
-                        const row = document.createElement('tr');
+        // Fetch the user's data from the database using await
+        const userSnapshot = await get(userRef);
+        const userData = userSnapshot.val();
 
-                        const productsInfo = transaction.items.map(item => `${item.price_data.product_data.name} <br> Quantity: ${item.quantity}`).join('<br>');
+        // Fetch the transaction history from the database
+        const snapshot = await get(transactionHistoryRef);
 
-                        row.innerHTML = `
+        email.innerHTML = userCredentials.email;
+        username.innerHTML = userData.username;
+        address.innerHTML = `${userData.barangay}, ${userData.city}`;
+        phone.innerHTML = userData.phone;
+
+        if (snapshot.exists()) {
+            const transactionHistory = snapshot.val();
+            const successfulTransactions = Object.values(transactionHistory);
+
+            transactionTableBody.innerHTML = '';
+
+            successfulTransactions.forEach(transaction => {
+                const row = document.createElement('tr');
+                row.id = `transactionRow_${transaction.transactionId}`; // Set a unique ID for each row
+
+                const productsInfo = transaction.items.map(item => `${item.price_data.product_data.name} <br> Quantity: ${item.quantity}`).join('<br>');
+
+                row.innerHTML = `
                     <td>${transaction.transactionId}</td>
                     <td>₱${transaction.totalAmount}</td>
                     <td>${transaction.formattedDate}</td>
@@ -336,27 +351,34 @@
                     <td>${userData.barangay}</td>
                     <td>${userData.phone}</td>
                     <td>${productsInfo}</td>
-                    <td>${transaction.status || 'Pending'}</td> <!-- Display the status -->
+                    <td>${transaction.status || 'Pending'}</td>
+                    <td><button class="cancelButton" data-transaction-id="${transaction.transactionId}">Cancel</button></td>
                 `;
-                        transactionTableBody.appendChild(row);
-                    });
+                transactionTableBody.appendChild(row);
+            });
 
-                    if (successfulTransactions.length === 0) {
-                        const noTransactionsRow = document.createElement('tr');
-                        noTransactionsRow.innerHTML = '<td colspan="6">No transactions found.</td>';
-                        transactionTableBody.appendChild(noTransactionsRow);
-                    }
-                } else {
-                    console.log('No transaction history found for the user.');
-                }
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                // Log the error or handle it as needed
+            // Add event listeners to the "Cancel" buttons
+            const cancelButtons = document.querySelectorAll('.cancelButton');
+            cancelButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const transactionId = button.getAttribute('data-transaction-id');
+                    cancelTransaction(userCredentials.uid, transactionId);
+                });
+            });
+
+            if (successfulTransactions.length === 0) {
+                const noTransactionsRow = document.createElement('tr');
+                noTransactionsRow.innerHTML = '<td colspan="6">No transactions found.</td>';
+                transactionTableBody.appendChild(noTransactionsRow);
             }
-        };
-
-
-
+        } else {
+            console.log('No transaction history found for the user.');
+        }
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        // Log the error or handle it as needed
+    }
+};
 
 
         // Call the function when needed
