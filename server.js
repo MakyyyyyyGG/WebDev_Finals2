@@ -38,7 +38,7 @@ app.get("/", (req, res) => {
 });
 
 //success
-app.get("/success.html", (req, res) => {
+app.get("/success", (req, res) => {
     // Assuming you have the user ID available
     const userId = req.body.userId; // Access userId from the request body
 
@@ -58,7 +58,7 @@ app.get("/success.html", (req, res) => {
 });
 
 //cancel
-app.get("/cancel.html", (req, res) => {
+app.get("/cancel", (req, res) => {
     res.sendFile("cancel.html", { root: "public" });
 });
 
