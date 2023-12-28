@@ -79,7 +79,7 @@ app.get("/getSuccessfulTransactions", async (req, res) => {
 
                     // Filter only the approved transactions
                     const approvedTransactions = userTransactionsArray.filter(
-                        transaction => transaction.status === 'approved'
+                        transaction => transaction.status === 'Completed'
                     );
 
                     return approvedTransactions.map(transaction => ({
@@ -88,7 +88,7 @@ app.get("/getSuccessfulTransactions", async (req, res) => {
                         items: transaction.items,
                         totalAmount: transaction.totalAmount || 0,
                         currency: "php", // Adjust as needed
-                        status: 'approved', // Set the status explicitly for approved transactions
+                        status: 'Completed', // Set the status explicitly for approved transactions
                     }));
                 }
             ).flat();
@@ -188,7 +188,7 @@ app.post("/stripe-checkout", async (req, res) => {
             formattedDate,
             items: lineItems,
             totalAmount: req.body.totalAmount, // Add this if needed
-            status: 'Pending',
+            status: 'Order Placed',
             // Add more details as needed
         };
         
@@ -237,7 +237,7 @@ app.get("/getSuccessfulTransactionsCount", async (req, res) => {
                 (accumulator, [userId, userTransactions]) => {
                     const userTransactionsArray = Object.values(userTransactions);
                     const approvedTransactionsCount = userTransactionsArray.filter(
-                        transaction => transaction.status === 'approved'
+                        transaction => transaction.status === 'Completed'
                     ).length;
                     return accumulator + approvedTransactionsCount;
                 },

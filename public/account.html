@@ -331,6 +331,7 @@
                 if (snapshot.exists()) {
                     const transactionHistory = snapshot.val();
                     const successfulTransactions = Object.values(transactionHistory);
+                    successfulTransactions.sort((a, b) => new Date(b.formattedDate) - new Date(a.formattedDate));
 
                     transactionTableBody.innerHTML = '';
 
@@ -339,21 +340,21 @@
                         row.id = `transactionRow_${transaction.transactionId}`; // Set a unique ID for each row
 
                         const productsInfo = transaction.items.map(item => `
-                            <div style="border: 1px solid black; padding: 5px; margin: 5px;">
-                                ${item.price_data.product_data.name} Quantity: ${item.quantity}
-                            </div>
-                        `).join('');
+        <div style="border: 1px solid black; padding: 5px; margin: 5px;">
+            ${item.price_data.product_data.name} Quantity: ${item.quantity}
+        </div>
+    `).join('');
                         row.innerHTML = `
-                    <td>${transaction.transactionId}</td>
-                    <td>₱${transaction.totalAmount}</td>
-                    <td>${transaction.formattedDate}</td>
-                    <td>${userData.city}</td>
-                    <td>${userData.barangay}</td>
-                    <td>${userData.phone}</td>
-                    <td>${productsInfo}</td>
-                    <td>${transaction.status || 'Pending'}</td>
-                    <td>${transaction.status === 'approved' ? `<button class="cancelButton" disabled data-transaction-id="${transaction.transactionId}">Cancel</button>` : `<button class="cancelButton" data-transaction-id="${transaction.transactionId}">Cancel</button>`}</td>
-                `;
+        <td>${transaction.transactionId}</td>
+        <td>₱${transaction.totalAmount}</td>
+        <td>${transaction.formattedDate}</td>
+        <td>${userData.city}</td>
+        <td>${userData.barangay}</td>
+        <td>${userData.phone}</td>
+        <td>${productsInfo}</td>
+        <td>${transaction.status}</td>
+        <td>${transaction.status === 'Order Placed' ? `<button class="cancelButton btn btn-danger" data-transaction-id="${transaction.transactionId}">Cancel</button>` : `<button class="cancelButton btn btn-danger" disabled data-transaction-id="${transaction.transactionId}">Cancel</button>`}</td>
+    `;
                         transactionTableBody.appendChild(row);
                     });
 
@@ -363,6 +364,7 @@
                         button.addEventListener('click', () => {
                             const transactionId = button.getAttribute('data-transaction-id');
                             cancelTransaction(userCredentials.uid, transactionId);
+                            alert('Order canceled successfully!');
                         });
                     });
 
