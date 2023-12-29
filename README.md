@@ -14,6 +14,7 @@ In the site you can:
 Here is the link to the site po: https://webdev-finals.onrender.com
 
 admin account: 
+[admin.html](https://webdev-finals.onrender.com/admin.html)
 Email: admin@gmail.com
 pw: admin@gmail.com
 
