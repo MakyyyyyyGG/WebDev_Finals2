@@ -32,6 +32,28 @@ const db = getDatabase(firebaseApp);
 app.use(express.static("public"));
 app.use(express.json());
 
+app.get("/api/products/:productId", async (req, res) => {
+  try {
+    const productId = req.params.productId;
+
+    // Query the Firebase Realtime Database to retrieve product details
+    const productRef = ref(db, `Products/${productId}`);
+    const snapshot = await get(productRef);
+
+    if (snapshot.exists()) {
+      // Product details found, send them in the response
+      const product = snapshot.val();
+      res.json(product);
+    } else {
+      // Product not found, send 404 Not Found status
+      res.status(404).json({ error: "Product not found" });
+    }
+  } catch (error) {
+    console.error("Error fetching product details:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 //home route
 app.get("/", (req, res) => {
   res.sendFile("index.html", { root: "public" });
@@ -119,8 +141,110 @@ const stripeGateway = stripe(process.env.STRIPE_API);
 const DOMAIN = process.env.DOMAIN;
 let cartItems = {};
 
+app.post("/gcash-checkout", async (req, res) => {
+  try {
+    const userId = req.body.userId; // Assuming you have the user ID available
+    const lineItems = req.body.items; // Adjust this based on your data structure
+    const receiptUrl = req.body.receiptUrl; // Assuming you have the total amount
+    const totalAmount = req.body.totalAmount; // Assuming you have the total amount
+
+    const paymentMethod = "GCash"; // Assuming GCash is the payment method
+
+    // Generate a new transaction ID (UUID)
+    const transactionId = uuidv4();
+
+    // Save transaction details in the database with the new transaction ID
+    const transactionRef = ref(
+      db,
+      `TransactionHistory/${userId}/${transactionId}`
+    );
+    const timestamp = new Date().toISOString();
+
+    // Convert the timestamp to a Date object
+    const date = new Date(timestamp);
+
+    // Format the date in the Philippines timezone
+    const options = { timeZone: "Asia/Manila" };
+    const formattedDate = date.toLocaleString("en-US", options);
+
+    const transactionDetails = {
+      transactionId: transactionId,
+      formattedDate,
+      items: lineItems,
+      totalAmount: totalAmount,
+      status: "Order Placed",
+      paymentMethod: paymentMethod,
+      receiptUrl: receiptUrl,
+      // Include the payment method
+      // Add more details as needed
+    };
+
+    await set(transactionRef, transactionDetails);
+
+    // Reset the user's cart in the database
+    const userCartRef = ref(db, `UserAuthList/${userId}/cart`);
+    remove(userCartRef);
+
+    res.json({ success: true, transactionId: transactionId });
+  } catch (error) {
+    console.error("Error during GCash checkout:", error);
+    res.status(500).json({ error: "Error during GCash checkout" });
+  }
+});
+
+app.post("/cod-checkout", async (req, res) => {
+  try {
+    const userId = req.body.userId; // Assuming you have the user ID available
+    const lineItems = req.body.items; // Adjust this based on your data structure
+    const totalAmount = req.body.totalAmount; // Assuming you have the total amount
+
+    const paymentMethod = "Cash on Delivery"; // Assuming GCash is the payment method
+
+    // Generate a new transaction ID (UUID)
+    const transactionId = uuidv4();
+
+    // Save transaction details in the database with the new transaction ID
+    const transactionRef = ref(
+      db,
+      `TransactionHistory/${userId}/${transactionId}`
+    );
+    const timestamp = new Date().toISOString();
+
+    // Convert the timestamp to a Date object
+    const date = new Date(timestamp);
+
+    // Format the date in the Philippines timezone
+    const options = { timeZone: "Asia/Manila" };
+    const formattedDate = date.toLocaleString("en-US", options);
+
+    const transactionDetails = {
+      transactionId: transactionId,
+      formattedDate,
+      items: lineItems,
+      totalAmount: totalAmount,
+      status: "Order Placed",
+      paymentMethod: paymentMethod,
+      // Include the payment method
+      // Add more details as needed
+    };
+
+    await set(transactionRef, transactionDetails);
+
+    // Reset the user's cart in the database
+    const userCartRef = ref(db, `UserAuthList/${userId}/cart`);
+    remove(userCartRef);
+
+    res.json({ success: true, transactionId: transactionId });
+  } catch (error) {
+    console.error("Error during GCash checkout:", error);
+    res.status(500).json({ error: "Error during GCash checkout" });
+  }
+});
+
 app.post("/stripe-checkout", async (req, res) => {
   try {
+    const paymentMethod = "Card"; // Assuming GCash is the payment method
+
     const lineItems = req.body.items.map((item) => {
       const unitAmount = parseInt(
         (item.price || "0").replace(/[^0-9.-]+/g, "") * 100
@@ -186,7 +310,7 @@ app.post("/stripe-checkout", async (req, res) => {
       items: lineItems,
       totalAmount: req.body.totalAmount, // Add this if needed
       status: "Order Placed",
-      // Add more details as needed
+      paymentMethod: paymentMethod,
     };
 
     await set(transactionRef, transactionDetails);
@@ -254,6 +378,28 @@ app.get("/getSuccessfulTransactionsCount", async (req, res) => {
     res
       .status(500)
       .json({ error: "Error fetching successful transactions count" });
+  }
+});
+
+app.get("/api/products/:productId", async (req, res) => {
+  try {
+    const productId = req.params.productId;
+
+    // Query the Firebase Realtime Database to retrieve product details
+    const productRef = ref(db, `Products/${productId}`);
+    const snapshot = await get(productRef);
+
+    if (snapshot.exists()) {
+      // Product details found, send them in the response
+      const product = snapshot.val();
+      res.json(product);
+    } else {
+      // Product not found, send 404 Not Found status
+      res.status(404).json({ error: "Product not found" });
+    }
+  } catch (error) {
+    console.error("Error fetching product details:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 

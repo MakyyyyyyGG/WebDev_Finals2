@@ -6,13 +6,20 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="icon" href="./images/logo (3).png">
+	<script src="https://js.stripe.com/v3/"></script>
 
 	<link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap"
 		rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/uuid@8.3.2/dist/umd/uuidv4.min.js"></script>
 
 	<link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+		crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="css/animate.css">
 
 	<link rel="stylesheet" href="css/owl.carousel.min.css">
@@ -43,22 +50,19 @@
 
 			<div class="collapse navbar-collapse" id="ftco-nav">
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item active"><a href="index.html" class="nav-link ">Home</a></li>
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown"
-							aria-haspopup="true" aria-expanded="false">Shop</a>
-						<div class="dropdown-menu" aria-labelledby="dropdown04">
-							<a class="dropdown-item" href="shop.html">Products</a>
-							<a class="dropdown-item active" href="cart.html">Cart</a>
-							<a class="dropdown-item" href="checkout.html">Checkout</a>
-						</div>
-					</li>
+					<li class="nav-item "><a href="index.html" class="nav-link active">Home</a></li>
+					<li class="nav-item "><a href="shop.html" class="nav-link ">Shop</a></li>
 					<li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
 					<li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-					<li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span
-								class="icon-shopping_cart"></span>[0]</a></li>
-					<li class="nav-item cta cta-colored"><a href="user.html" class="nav-link"><span
-								class="icon-user"></span></a></li>
+
+
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown"
+							aria-haspopup="true" aria-expanded="false"><span class="icon-user"></span></a>
+						<div class="dropdown-menu" aria-labelledby="dropdown04" id="userDropdown">
+						</div>
+					</li>
+					<li class="nav-item"><a href="contact.html" class="nav-link" id="greet"></a></li>
 
 				</ul>
 			</div>
@@ -83,7 +87,7 @@
 				<div class="col-md-12 ftco-animate">
 					<div class="cart-list">
 						<table class="table">
-							<thead class="thead-primary">
+							<thead class="thead">
 								<tr class="text-center">
 									<th>&nbsp;</th>
 									<th>&nbsp;</th>
@@ -93,8 +97,8 @@
 									<th>Total</th>
 								</tr>
 							</thead>
-							<tbody>
-								<tr class="text-center">
+							<tbody id="cart_container">
+								<!-- <tr class="text-center">
 									<td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
 
 									<td class="image-prod">
@@ -115,37 +119,14 @@
 									</td>
 
 									<td class="total">$4.90</td>
-								</tr><!-- END TR-->
-
-								<tr class="text-center">
-									<td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
-
-									<td class="image-prod">
-										<div class="img" style="background-image:url(images/prod1.png);"></div>
-									</td>
-
-									<td class="product-name">
-										<h3>Tall Lamp</h3>
-									</td>
-
-									<td class="price">$15.70</td>
-
-									<td class="quantity">
-										<div class="input-group mb-3">
-											<input type="text" name="quantity"
-												class="quantity form-control input-number" value="1" min="1" max="100">
-										</div>
-									</td>
-
-									<td class="total">$15.70</td>
-								</tr><!-- END TR-->
+								</tr> -->
 							</tbody>
 						</table>
 					</div>
 				</div>
 			</div>
 			<div class="row justify-content-end">
-				<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
+				<!-- <div class="col-lg-4 mt-5 cart-wrap ftco-animate">
 					<div class="cart-total mb-3">
 						<h3>Coupon Code</h3>
 						<p>Enter your coupon code if you have one</p>
@@ -157,56 +138,71 @@
 						</form>
 					</div>
 					<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Apply Coupon</a></p>
-				</div>
-				<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
-					<div class="cart-total mb-3">
-						<h3>Estimate shipping and tax</h3>
-						<p>Enter your destination to get a shipping estimate</p>
-						<form action="#" class="info">
-							<div class="form-group">
-								<label for="">Country</label>
-								<input type="text" class="form-control text-left px-3" placeholder="">
-							</div>
-							<div class="form-group">
-								<label for="country">State/Province</label>
-								<input type="text" class="form-control text-left px-3" placeholder="">
-							</div>
-							<div class="form-group">
-								<label for="country">Zip/Postal Code</label>
-								<input type="text" class="form-control text-left px-3" placeholder="">
-							</div>
-						</form>
-					</div>
-					<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Estimate</a></p>
-				</div>
-				<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
+				</div> -->
+
+				<p>
+
+				<div class="col mt-5 cart-wrap ftco-animate">
 					<div class="cart-total mb-3">
 						<h3>Cart Totals</h3>
-						<p class="d-flex">
-							<span>Subtotal</span>
-							<span>$20.60</span>
-						</p>
-						<p class="d-flex">
-							<span>Delivery</span>
-							<span>$0.00</span>
-						</p>
-						<p class="d-flex">
-							<span>Discount</span>
-							<span>$3.00</span>
-						</p>
-						<hr>
+
 						<p class="d-flex total-price">
 							<span>Total</span>
-							<span>$17.60</span>
+							<span id="totalPrice"></span>
 						</p>
 					</div>
-					<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
+					<p>
+
+
+
+
+					<div class="dropdown dropend">
+						<button class="btn btn-secondary dropdown-toggle p-2" type="button" id="paymentOptionDropdown"
+							data-bs-toggle="dropdown" aria-expanded="false" style="color: white !important;">
+							Choose Payment Option
+						</button>
+						<ul class="dropdown-menu" x>
+							<li><button class="dropdown-item" type="button" id="codPayment">Cash on
+									Delivery</button></li>
+							<li><button class="dropdown-item" type="button" id="cardPayment">Card</button></li>
+							<li><button class="dropdown-item" type="button" id="gcashPayment">Gcash</button>
+
+						</ul>
+						<!-- Modal -->
+
+					</div>
+					</p>
+					<p><button class="btn btn-primary py-2 px-4 text-light" id="checkout_btn"
+							style="color: #a47d58 !important;">Proceed to
+							Checkout</button></p>
 				</div>
 			</div>
 		</div>
 	</section>
 
-	<section class="ftco-section ftco-no-pt ftco-no-pb py-5 bg-light">
+	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="false"
+		aria-hidden="false">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="exampleModalLabel">Gcash Payment</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<img src="images/gcash2.jpg" alt="" width="100%">
+					<h4 class="my-3">Upload receipt here &darr;</h4>
+					<input type="file" accept="image/jpeg, image/png" id="receiptGcash">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+						id="modalClose">Close</button>
+					<button type="button" class="btn btn-primary" id="submitGcash">Submit</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<section class=" ftco-section ftco-no-pt ftco-no-pb py-5 bg-light">
 		<div class="container py-4">
 			<div class="row d-flex justify-content-center py-5">
 				<div class="col-md-6">
@@ -313,7 +309,418 @@
 				stroke="#F96D00" />
 		</svg></div>
 
+	<script type="module">
+		// Import the functions you need from the SDKs you need
+		import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+		import { getDatabase, set, ref, push, update, remove, onValue } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+		import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
+		import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-storage.js";
+		import { Stripe } from "https://cdn.skypack.dev/stripe";
 
+		// TODO: Add SDKs for Firebase products that you want to use
+		// https://firebase.google.com/docs/web/setup#available-libraries
+
+		// Your web app's Firebase configuration
+		const firebaseConfig = {
+			apiKey: "AIzaSyDs1lfKYOB5--BiDaVHBWu9baIM8GHAnlo",
+			authDomain: "sample-42d4a.firebaseapp.com",
+			projectId: "sample-42d4a",
+			storageBucket: "sample-42d4a.appspot.com",
+			messagingSenderId: "508468942956",
+			appId: "1:508468942956:web:65600c02f26dfd1b1f2049"
+		};
+
+		const app = initializeApp(firebaseConfig);
+		const db = getDatabase();
+		const auth = getAuth(app);
+		const storage = getStorage(app); // Initialize Firebase Storage
+		const productsRef = ref(db, 'Products');
+		const stripe = new Stripe('pk_test_51ONeFdCH9Yb9ZLbwyfdqmjQ7sw2NxtL6BtwSzT3b95IZS8W8A9QMhXlK3BpMj99a8oSMrRaWMKap9bg8DeA8aDAj00gxdZjLSS');
+
+
+
+
+		let userCredentials = JSON.parse(sessionStorage.getItem("user-credentials"));
+		let userInfo = JSON.parse(sessionStorage.getItem("user-info"));
+
+		let greet = document.getElementById("greet");
+		let signOutButton = document.getElementById("sign_out");
+
+
+		let signOut = () => {
+			sessionStorage.removeItem("user-info");
+			sessionStorage.removeItem("user-credentials");
+			window.location.href = "login.html";
+		}
+
+		//dynamic sign up, sign in, sign out
+		let userDropdown = document.getElementById("userDropdown");
+
+		let updateDropdownMenu = () => {
+			if (userCredentials) {
+				// User is logged in
+				userDropdown.innerHTML = `
+				<a class="dropdown-item" href="account.html" id="account_info">Account Info</a>
+		    	<a class="dropdown-item" href="#" id="sign_out">Sign Out</a>`;
+				greet.innerHTML = `Welcome ${userInfo.username}!`;
+			} else {
+				// No user is logged in
+				userDropdown.innerHTML = `
+		    <a class="dropdown-item" href="signup.html" id="sign_up">Sign Up</a>
+		    <a class="dropdown-item" href="login.html" id="log_in">Log In</a>`;
+			}
+		};
+
+		let checkCred = () => {
+			updateDropdownMenu();
+		};
+
+
+		window.addEventListener('load', checkCred);
+		userDropdown.addEventListener('click', (event) => {
+			// Handle click events on dropdown items
+			if (event.target.id === 'sign_out') {
+				signOut();
+			} else if (event.target.id === 'sign_up') {
+				window.location.href = 'signup.html'
+				console.log("Sign Up clicked");
+			} else if (event.target.id === 'log_in') {
+				window.location.href = 'Account_As.html'
+				console.log("Log In clicked");
+			}
+		});
+
+		const userCartRef = ref(db, `UserAuthList/${userCredentials.uid}/cart`);
+		const checkoutButton = document.getElementById('checkout_btn');
+		let cartItems = {};
+
+		let totalPrice = 0;
+		const fetchProductData = () => {
+			onValue(userCartRef, (snapshot) => {
+				const products = snapshot.val();
+
+				if (products) {
+					const cartContainer = document.getElementById("cart_container");
+					cartContainer.innerHTML = "";
+
+					totalPrice = 0; // Reset totalPrice before calculating it again
+
+					for (const productId in products) {
+						const product = products[productId];
+						const { productData, quantity } = product;
+						const productTotalPrice = productData.price * quantity;
+						totalPrice += productTotalPrice;
+
+						// Create a new row for the product
+						const productRow = document.createElement("tr");
+						productRow.classList.add("text-center");
+						productRow.id = `${productId}_row`;
+
+						// Fill in the HTML template with product data
+						productRow.innerHTML = `
+                    <td class="product-remove"><div class = "remove-from-cart btn btn-danger delete-btn" data-product-id="${productId}">&times;</div></td> 
+                    <td class="image-prod">
+                        <div class="img" style="background-image:url(${productData.productImg});"></div>
+                    </td>
+                    <td class="product-name">
+                        <h3>${productData.title}</h3>
+                    </td>
+                    <td class="price">₱${productData.price}</td>
+                    <td class="quantity">
+                        <input type="text" name="quantity" class="quantity form-control input-number" value="${quantity}" min="1" max="100" readonly>
+                    </td>
+                    <td class="total">₱${productTotalPrice}</td>
+                `;
+
+						// Append the product row to the cart container
+						cartContainer.appendChild(productRow);
+						// Add event listener to remove button
+						const removeButton = productRow.querySelector('.remove-from-cart');
+						removeButton.addEventListener('click', () => {
+							const productId = removeButton.getAttribute('data-product-id');
+							removeFromCart(productId);
+						});
+						// Add the item to the cartItems object
+						cartItems[productId] = {
+							productData: productData,
+							quantity: quantity
+						};
+					}
+
+					// Set the total price element
+					const totalPriceElement = document.getElementById("totalPrice");
+					totalPriceElement.textContent = `₱${totalPrice.toString()}`;
+
+					// Enable checkout button
+					checkoutButton.disabled = false;
+
+				} else {
+					console.log("No products found.");
+				}
+			});
+		};
+
+		const removeFromCart = async (productId) => {
+			const cartItemId = `${productId}_row`;
+
+			// Remove the item from the UI
+			const cartItemElement = document.getElementById(cartItemId);
+			cartItemElement.remove();
+
+			try {
+				// Remove the item from the database
+				const userCartRef = ref(db, `UserAuthList/${userCredentials.uid}/cart/${productId}`);
+				await remove(userCartRef);
+
+				console.log("Item removed from database successfully.");
+
+				// Remove the item from the cartItems object
+				delete cartItems[productId];
+
+				// Check if the cart is empty after removing the item
+				const cartIsEmpty = Object.keys(cartItems).length === 0;
+
+				// Update the total price
+				if (cartIsEmpty) {
+					totalPrice = 0;
+				} else {
+					// Recalculate the total price if the cart is not empty
+					totalPrice = Object.values(cartItems).reduce((total, item) => {
+						return total + (item.productData.price * item.quantity);
+					}, 0);
+				}
+
+				// Update the total price element
+				const totalPriceElement = document.getElementById("totalPrice");
+				totalPriceElement.textContent = `₱${totalPrice.toFixed(2)}`;
+			} catch (error) {
+				console.error("Error removing item from the database:", error);
+			}
+		};
+
+
+
+
+
+		const selectPaymentOption = (option) => {
+			console.log("fucntion clicked");
+			document.getElementById('paymentOptionDropdown').innerText = option;
+			return option;
+		};
+
+		document.addEventListener('DOMContentLoaded', () => {
+			fetchProductData();
+			const submitButton = document.getElementById('submitGcash');
+			const fileInput = document.getElementById('receiptGcash');
+			const gcashPaymentButton = document.getElementById('gcashPayment');
+			const cardPaymentButton = document.getElementById('cardPayment');
+			const codPaymentButton = document.getElementById('codPayment');
+			const checkoutButton = document.getElementById('checkout_btn');
+
+			gcashPaymentButton.addEventListener('click', () => {
+				selectPaymentOption('Gcash');
+				const select = document.getElementById('paymentOptionDropdown').innerText;
+			});
+
+			cardPaymentButton.addEventListener('click', () => {
+				selectPaymentOption('Card');
+				const select = document.getElementById('paymentOptionDropdown').innerText;
+			});
+
+			codPaymentButton.addEventListener('click', () => {
+				selectPaymentOption('Cash on Delivery');
+				const select = document.getElementById('paymentOptionDropdown').innerText;
+			});
+
+			const checkoutModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+
+			checkoutButton.addEventListener('click', async () => {
+				const selectedOption = document.getElementById('paymentOptionDropdown').innerText;
+
+				if (selectedOption === 'Card') {
+					try {
+						// Convert the cart items into an array of line items
+						const lineItems = Object.values(cartItems).map(item => ({
+							title: item.productData.title,
+							price: item.productData.price,
+							quantity: item.quantity,
+							productImg: item.productData.productImg,
+						}));
+
+						// Add userId and totalAmount to the request body
+						const requestBody = {
+							items: lineItems,
+							userId: userCredentials.uid,
+							totalAmount: totalPrice,
+							paymentMethod: selectedOption // Add the chosen payment method
+						};
+
+						// Send a POST request to the server with the line items, userId, and totalAmount in the request body
+						const response = await fetch('/stripe-checkout', {
+							method: 'POST',
+							headers: new Headers({
+								'Content-Type': 'application/json',
+							}),
+							body: JSON.stringify(requestBody),
+						});
+
+						// Parse the response from the server, which is expected to contain a session URL
+						const sessionUrl = await response.json();
+
+						// Redirect the user to the Stripe checkout session
+						window.location.href = sessionUrl.url;
+					} catch (error) {
+						console.error('Error during checkout:', error);
+					}
+				} else if (selectedOption === 'Gcash') {
+					checkoutModal.show();
+				} else if (selectedOption === 'Cash on Delivery') {
+					try {
+						// Generate a new transaction ID (UUID)
+						const transactionId = uuidv4();
+
+						// Initialize receipt URL
+						let receiptUrl = null;
+
+						// Upload the receipt image to Firebase Storage if available
+						const file = fileInput.files[0];
+						if (file) {
+							const storageRef = sRef(storage, `TransactionHistory/${userCredentials.uid}/${transactionId}/${file.name}`);
+							const uploadTask = uploadBytes(storageRef, file);
+							const snapshot = await uploadTask;
+							receiptUrl = await getDownloadURL(snapshot.ref);
+						}
+
+						const lineItems = Object.values(cartItems).map(item => ({
+							title: item.productData.title,
+							price: item.productData.price,
+							quantity: item.quantity,
+						}));
+
+						// Add userId, receiptUrl, totalAmount, and transactionId to the request body
+						const requestBody = {
+							items: lineItems,
+							userId: userCredentials.uid,
+							totalAmount: totalPrice,
+							transactionId: transactionId, // Include the transaction ID
+						};
+
+						// Add receiptUrl to the request body if available
+						if (receiptUrl) {
+							requestBody.receiptUrl = receiptUrl;
+						}
+
+						// Send a POST request to the server with the request body
+						const response = await fetch('/cod-checkout', {
+							method: 'POST',
+							headers: new Headers({
+								'Content-Type': 'application/json',
+							}),
+							body: JSON.stringify(requestBody),
+						});
+
+						const responseData = await response.json();
+
+						if (responseData.success) {
+							// COD checkout successful, you can show a success message or redirect
+							console.log('COD checkout successful. Transaction ID: ' + responseData.transactionId);
+							alert("Checkout Successfull");
+							// Redirect or do something else as needed
+						} else {
+							// COD checkout failed
+							console.error('COD checkout failed.');
+						}
+
+						// Close the modal
+					} catch (error) {
+						console.error('Error during COD checkout:', error);
+						alert("Error during COD checkout. Please try again.");
+					}
+
+				}
+				// Close modal when the close button inside the modal is clicked
+				const modalCloseButton = document.getElementById('modalClose');
+				if (modalCloseButton) {
+					modalCloseButton.addEventListener('click', () => {
+						checkoutModal.hide();
+					});
+				}
+			});
+
+			submitButton.addEventListener('click', async () => {
+				// Assuming you have the user ID available
+				const userId = userCredentials.uid; // Adjust this based on how you identify users
+
+				// Get the receipt image file
+				const file = fileInput.files[0];
+
+				if (!file) {
+					alert("Please select a receipt image.");
+					return;
+				}
+
+				try {
+					// Generate a new transaction ID (UUID)
+					const transactionId = uuidv4();
+
+					// Upload the receipt image to Firebase Storage
+					const storageRef = sRef(storage, `TransactionHistory/${userId}/${transactionId}/${file.name}`);
+					const uploadTask = uploadBytes(storageRef, file);
+
+					// Wait for the upload to complete
+					const snapshot = await uploadTask;
+
+					// Get the download URL of the uploaded image
+					const downloadURL = await getDownloadURL(snapshot.ref);
+
+					const lineItems = Object.values(cartItems).map(item => ({
+						title: item.productData.title,
+						price: item.productData.price,
+						quantity: item.quantity,
+						productImg: item.productData.productImg,
+					}));
+
+					// Add userId, receiptUrl, totalAmount, and transactionId to the request body
+					const requestBody = {
+						items: lineItems,
+						userId: userCredentials.uid,
+						receiptUrl: downloadURL,
+						totalAmount: totalPrice,
+						transactionId: transactionId, // Include the transaction ID
+					};
+
+					// Send a POST request to the server with the line items, userId, receiptUrl, totalAmount, and transactionId in the request body
+					const response = await fetch('/gcash-checkout', {
+						method: 'POST',
+						headers: new Headers({
+							'Content-Type': 'application/json',
+						}),
+						body: JSON.stringify(requestBody),
+					});
+
+					const responseData = await response.json();
+
+					if (responseData.success) {
+						// GCash checkout successful, you can show a success message or redirect
+						console.log('GCash checkout successful. Transaction ID: ' + responseData.transactionId);
+						alert("Checkout Successfull");
+
+						// Redirect or do something else as needed
+					} else {
+						// GCash checkout failed
+						console.error('GCash checkout failed.');
+					}
+
+					// Close the modal
+					checkoutModal.hide();
+				} catch (error) {
+					console.error('Error uploading receipt:', error);
+					alert("Error uploading receipt. Please try again.");
+				}
+			});
+		});
+
+	</script>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/jquery-migrate-3.0.1.min.js"></script>
 	<script src="js/popper.min.js"></script>
@@ -327,47 +734,10 @@
 	<script src="js/jquery.animateNumber.min.js"></script>
 	<script src="js/bootstrap-datepicker.js"></script>
 	<script src="js/scrollax.min.js"></script>
-	<script
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-	<script src="js/google-map.js"></script>
+
 	<script src="js/main.js"></script>
 
-	<script>
-		$(document).ready(function () {
 
-			var quantitiy = 0;
-			$('.quantity-right-plus').click(function (e) {
-
-				// Stop acting like a button
-				e.preventDefault();
-				// Get the field name
-				var quantity = parseInt($('#quantity').val());
-
-				// If is not undefined
-
-				$('#quantity').val(quantity + 1);
-
-
-				// Increment
-
-			});
-
-			$('.quantity-left-minus').click(function (e) {
-				// Stop acting like a button
-				e.preventDefault();
-				// Get the field name
-				var quantity = parseInt($('#quantity').val());
-
-				// If is not undefined
-
-				// Increment
-				if (quantity > 0) {
-					$('#quantity').val(quantity - 1);
-				}
-			});
-
-		});
-	</script>
 
 </body>
 

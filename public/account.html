@@ -333,11 +333,9 @@
                         const row = document.createElement('tr');
                         row.id = `transactionRow_${transaction.transactionId}`; // Set a unique ID for each row
 
-                        const productsInfo = transaction.items.map(item => `
-        <div style="border: 1px solid black; padding: 5px; margin: 5px;">
-            ${item.price_data.product_data.name} Quantity: ${item.quantity}
-        </div>
-    `).join('');
+                        const productsInfo = transaction.items.map(item => `<div class= "border p-2">${item.title ? item.title : item.price_data.product_data.name} <br> Quantity: ${item.quantity}</div>`).join('<br>');
+
+
                         row.innerHTML = `
         <td>${transaction.transactionId}</td>
         <td>₱${transaction.totalAmount}</td>

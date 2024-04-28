@@ -120,12 +120,15 @@
               <thead>
                 <tr>
                   <th scope="col">Transaction ID</th>
+                  <th scope="col">Payment Method</th>
                   <th scope="col">Amount</th>
                   <th scope="col">Created At</th>
                   <th scope="col">City</th>
                   <th scope="col">Barangay</th>
                   <th scope="col">Phone</th>
                   <th scope="col">Items</th>
+                  <th scope="col">Receipt</th>
+
                   <th scope="col">Status</th>
                 </tr>
               </thead>
@@ -335,53 +338,76 @@
                 // Sort transactions by date in descending order
                 userTransactions.sort((a, b) => new Date(b.formattedDate) - new Date(a.formattedDate));
 
-
-                userTransactions.slice(0, 5).forEach(transaction => {
+                userTransactions.slice(0, 100000).forEach(transaction => {
                   console.log('Transaction details:', transaction);
-                  const productsInfo = transaction.items.map(item => `${item.price_data.product_data.name} <br> Quantity: ${item.quantity}`).join('<br>');
 
-                  
+                  const productsInfo = transaction.items.map(item => `<div class= "border p-2">${item.title ? item.title : item.price_data.product_data.name} <br> Quantity: ${item.quantity}</div>`).join('<br>');
+
                   const row = document.createElement('tr');
                   row.innerHTML = `
-                      <td>${transaction.transactionId}</td>
-                      <td>₱${transaction.totalAmount}</td>
-                      <td>${transaction.formattedDate}</td>
-                      <td>${userData.city}</td>
-                      <td>${userData.barangay}</td>
-                      <td>${userData.phone}</td>
-                      <td>${productsInfo}</td>
-                      <td>
-                        <li class="nav-item dropdown" style="list-style-type: none;">
-                          <button class=" nav-link dropdown-toggle" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-transaction-id="${transaction.transactionId}" data-user-id="${userId}">
-                              ${transaction.status}
-                          </button>
-                          <div class="dropdown-menu" aria-labelledby="dropdown05" id="userDropdown">
-                            <button class="statusButton dropdown-item" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-transaction-id="${transaction.transactionId}" data-user-id="${userId}">
-                              Order Placed
-                            </button>
-                            <button class="statusButton dropdown-item" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-transaction-id="${transaction.transactionId}" data-user-id="${userId}">
-                              Preparing To Ship
-                            </button>
-                            <button class="statusButton dropdown-item" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-transaction-id="${transaction.transactionId}" data-user-id="${userId}">
-                              Shipped
-                            </button>
-                            <button class="statusButton dropdown-item" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-transaction-id="${transaction.transactionId}" data-user-id="${userId}">
-                              Delivered
-                            </button>
-                            <button class="statusButton dropdown-item" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-transaction-id="${transaction.transactionId}" data-user-id="${userId}">
-                              Completed
-                            </button>
-                          </div>
-                        </li>
-                      </td>
-                  `;
+        <td>${transaction.transactionId}</td>
+                <td>${transaction.paymentMethod}</td>
+        <td>₱${transaction.totalAmount}</td>
+        <td>${transaction.formattedDate}</td>
+        <td>${userData.city}</td>
+        <td>${userData.barangay}</td>
+        <td>${userData.phone}</td>
+        <td>${productsInfo}</td>
+<!-- Modal -->
+<div class="modal fade " id="receiptModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Receipt Image</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <img id="receiptImage" class="img-fluid" src="" alt="Receipt Image">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Table Row -->
+<td>
+    ${transaction.receiptUrl ? `<button class="btn btn-primary receipt-link" data-bs-toggle="modal" data-bs-target="#receiptModal" data-receipt-url="${transaction.receiptUrl}" style="text-decoration: none; color: white;">View Receipt</button>` : 'No Receipt'}
+</td>
+
+        <td>
+            <li class="nav-item dropdown" style="list-style-type: none;">
+                <button class=" nav-link dropdown-toggle" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-transaction-id="${transaction.transactionId}" data-user-id="${userId}">
+                    ${transaction.status}
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdown05" id="userDropdown">
+                    <button class="statusButton dropdown-item" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-transaction-id="${transaction.transactionId}" data-user-id="${userId}">
+                        Order Placed
+                    </button>
+                    <button class="statusButton dropdown-item" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-transaction-id="${transaction.transactionId}" data-user-id="${userId}">
+                        Preparing To Ship
+                    </button>
+                    <button class="statusButton dropdown-item" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-transaction-id="${transaction.transactionId}" data-user-id="${userId}">
+                        Shipped
+                    </button>
+                    <button class="statusButton dropdown-item" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-transaction-id="${transaction.transactionId}" data-user-id="${userId}">
+                        Delivered
+                    </button>
+                    <button class="statusButton dropdown-item" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-transaction-id="${transaction.transactionId}" data-user-id="${userId}">
+                        Completed
+                    </button>
+                </div>
+            </li>
+        </td>
+
+    `;
                   tableBody.appendChild(row);
                 });
+
+
                 if (successfulTransactions.length === 0) {
-                const noTransactionsRow = document.createElement('tr');
-                noTransactionsRow.innerHTML = '<td colspan="6">No transactions found.</td>';
-                transactionTableBody.appendChild(noTransactionsRow);
-            }
+                  const noTransactionsRow = document.createElement('tr');
+                  noTransactionsRow.innerHTML = '<td colspan="6">No transactions found.</td>';
+                  transactionTableBody.appendChild(noTransactionsRow);
+                }
               } else {
                 console.log(`No transaction history found for user ${userId}.`);
               }
@@ -518,6 +544,15 @@
         await updateSuccessfulTransactionsCount();
         await updateTotalSales();
       });
+      // Add event listener to dynamically created receipt links
+      document.addEventListener('click', (event) => {
+        if (event.target.classList.contains('receipt-link')) {
+          const receiptUrl = event.target.dataset.receiptUrl;
+          const receiptImage = document.getElementById('receiptImage');
+          receiptImage.src = receiptUrl;
+        }
+      });
+
     }
 
     console.log(userInfo.isAdmin);

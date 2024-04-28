@@ -49,7 +49,8 @@
       <div class="collapse navbar-collapse" id="ftco-nav">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item "><a href="admin.html" class="nav-link">Admin Dashboard</a></li>
-          <li class="nav-item active"><a href="product_management.html" class="nav-link active">Product Management</a></li>
+          <li class="nav-item active"><a href="product_management.html" class="nav-link active">Product Management</a>
+          </li>
 
 
           <li class="nav-item dropdown">
@@ -102,6 +103,19 @@
                     <input type="text" class="form-control" id="inputProdName" style="height: 40px !important;">
                   </div>
                 </div>
+
+                <div class="mb-3 row">
+                  <label for="inputProdDesc" class="col-sm-2 col-form-label">Description</label>
+                  <div class="col-sm-10">
+                    <div class="form-floating">
+                      <textarea class="form-control" placeholder="Leave a comment here" id="inputProdDesc"
+                        style="height: 100px"></textarea>
+                      <label for="floatingTextarea2">About the product</label>
+                    </div>
+                    <!-- <input type="text" class="form-control" id="inputProdDesc" style="height: 40px !important;"> -->
+                  </div>
+                </div>
+
                 <div class="mb-3 row">
                   <label for="inputPrice" class="col-sm-2 col-form-label">Price</label>
                   <div class="col-sm-10">
@@ -152,6 +166,12 @@
                     </div>
                   </div>
                   <div class="mb-3 row">
+                    <label for="editDesc" class="col-sm-2 col-form-label">Description</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="editDesc" style="height: 40px !important;">
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
                     <label for="editImage" class="col-sm-2 col-form-label">Image</label>
                     <div class="col-sm-10">
                       <input type="file" class="form-control" id="editImage" style="height: 40px !important;">
@@ -195,6 +215,8 @@
               <th scope="col">Image</th>
               <th scope="col">Name</th>
               <th scope="col">Price</th>
+              <th scope="col">Description</th>
+
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -219,82 +241,82 @@
 
 
   <footer class="ftco-footer ftco-section">
-		<div class="container">
-			<div class="row">
-				<div class="mouse">
-					<a href="#" class="mouse-icon">
-						<div class="mouse-wheel"><span class="ion-ios-arrow-up"></span></div>
-					</a>
-				</div>
-			</div>
-			<div class="row mb-5">
-				<div class="col-md">
-					<div class="ftco-footer-widget mb-4">
-						<h2 class="ftco-heading-2">SDCES</h2>
-						<p>“Crafting Memories, One Piece at a Time.”</p>
-						<ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
-							<li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
-							<li class="ftco-animate"><a href="https://web.facebook.com/profile.php?id=100064010023532"><span class="icon-facebook"></span></a></li>
-							<li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="col-md">
-					<div class="ftco-footer-widget mb-4 ml-md-5">
-						<h2 class="ftco-heading-2">Menu</h2>
-						<ul class="list-unstyled">
-							<li><a href="index.html" class="py-2 d-block">Home</a></li>
-							<li><a href="shop.html" class="py-2 d-block">Shop</a></li>
-							<li><a href="about.html" class="py-2 d-block">About</a></li>
-							<li><a href="contact.html" class="py-2 d-block">Contact</a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="col-md-4">
-					<div class="ftco-footer-widget mb-4">
-						<h2 class="ftco-heading-2">Help</h2>
-						<div class="d-flex">
-							<ul class="list-unstyled mr-l-5 pr-l-3 mr-4">
-								<li><a href="#" class="py-2 d-block">Shipping Information</a></li>
-								<li><a href="#" class="py-2 d-block">Returns &amp; Exchange</a></li>
-								<li><a href="#" class="py-2 d-block">Terms &amp; Conditions</a></li>
-								<li><a href="#" class="py-2 d-block">Privacy Policy</a></li>
-							</ul>
-							<ul class="list-unstyled">
-								<li><a href="#" class="py-2 d-block">FAQs</a></li>
-								<li><a href="#" class="py-2 d-block">Contact</a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<div class="col-md">
-					<div class="ftco-footer-widget mb-4">
-						<h2 class="ftco-heading-2">Have a Questions?</h2>
-						<div class="block-23 mb-3">
-							<ul>
-								<li><a href=""><span class="icon icon-map-marker"></span><span class="text">Tiwi,
-											Albay</span></a></li>
-								<li><a href="#"><span class="icon icon-phone"></span><span
-											class="text">09669516638</span></a></li>
-								<li><a href="#"><span class="icon icon-envelope"></span><span
-											class="text">ellencorino17@gmail.com</span></a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-12 text-center">
+    <div class="container">
+      <div class="row">
+        <div class="mouse">
+          <a href="#" class="mouse-icon">
+            <div class="mouse-wheel"><span class="ion-ios-arrow-up"></span></div>
+          </a>
+        </div>
+      </div>
+      <div class="row mb-5">
+        <div class="col-md">
+          <div class="ftco-footer-widget mb-4">
+            <h2 class="ftco-heading-2">SDCES</h2>
+            <p>“Crafting Memories, One Piece at a Time.”</p>
+            <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+              <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
+              <li class="ftco-animate"><a href="https://web.facebook.com/profile.php?id=100064010023532"><span
+                    class="icon-facebook"></span></a></li>
+              <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md">
+          <div class="ftco-footer-widget mb-4 ml-md-5">
+            <h2 class="ftco-heading-2">Menu</h2>
+            <ul class="list-unstyled">
+              <li><a href="index.html" class="py-2 d-block">Home</a></li>
+              <li><a href="shop.html" class="py-2 d-block">Shop</a></li>
+              <li><a href="about.html" class="py-2 d-block">About</a></li>
+              <li><a href="contact.html" class="py-2 d-block">Contact</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="ftco-footer-widget mb-4">
+            <h2 class="ftco-heading-2">Help</h2>
+            <div class="d-flex">
+              <ul class="list-unstyled mr-l-5 pr-l-3 mr-4">
+                <li><a href="#" class="py-2 d-block">Shipping Information</a></li>
+                <li><a href="#" class="py-2 d-block">Returns &amp; Exchange</a></li>
+                <li><a href="#" class="py-2 d-block">Terms &amp; Conditions</a></li>
+                <li><a href="#" class="py-2 d-block">Privacy Policy</a></li>
+              </ul>
+              <ul class="list-unstyled">
+                <li><a href="#" class="py-2 d-block">FAQs</a></li>
+                <li><a href="#" class="py-2 d-block">Contact</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md">
+          <div class="ftco-footer-widget mb-4">
+            <h2 class="ftco-heading-2">Have a Questions?</h2>
+            <div class="block-23 mb-3">
+              <ul>
+                <li><a href=""><span class="icon icon-map-marker"></span><span class="text">Tiwi,
+                      Albay</span></a></li>
+                <li><a href="#"><span class="icon icon-phone"></span><span class="text">09669516638</span></a></li>
+                <li><a href="#"><span class="icon icon-envelope"></span><span
+                      class="text">ellencorino17@gmail.com</span></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 text-center">
 
-					<p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-						Copyright &copy;
-						<script>document.write(new Date().getFullYear());</script> All rights reserved | Mark Clerigo & Gantan</a>
-						<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-					</p>
-				</div>
-			</div>
-		</div>
-	</footer>
+          <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            Copyright &copy;
+            <script>document.write(new Date().getFullYear());</script> All rights reserved | Mark Clerigo & Gantan</a>
+            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
 
 
   <!-- loader -->
@@ -392,6 +414,7 @@
       let productName = inputProdName.value;
       let price = inputPrice.value;
       let image = inputImage.files[0]; // Get the selected file
+      let description = document.getElementById('inputProdDesc').value;
 
       // Check if a user is logged in
       const user = auth.currentUser;
@@ -411,6 +434,7 @@
               set(ref(db, 'Products/' + newProductRef.key), {
                 productName: productName,
                 price: price,
+                prodDesc: description,
                 image: downloadURL // Store the download URL in the database
               })
                 .then(() => {
@@ -444,6 +468,7 @@
     <td id="prodImg" class="editable"><img src="${productData.image}" alt="Product Image" style="max-width: 100px;"></td>
     <td class="editable" id="prodName">${productData.productName}</td>
     <td class="editable" id="prodPrice">${productData.price}</td>
+        <td class="editable" id="prodDesc">${productData.prodDesc}</td>
     <td>
       <div class="col">
         <div class="btn btn-primary edit-btn" data-product-id="${productId}" data-bs-toggle="modal" data-bs-target="#updateProduct">Edit</div>
@@ -468,6 +493,8 @@
       const editProdName = document.getElementById('editProdName');
       const editPrice = document.getElementById('editPrice');
       const editImage = document.getElementById('editImage');
+      const editDesc = document.getElementById('editDesc');
+
       const editProductForm = document.getElementById('editProductForm');
 
       // Retrieve existing product data
@@ -477,9 +504,8 @@
 
         // Populate the edit form with existing data
         editProdName.value = productData.productName;
+        editDesc.value = productData.prodDesc;
         editPrice.value = productData.price;
-
-        // Set the product ID as a data attribute for the form
         editProductForm.setAttribute('data-product-id', productId);
 
         // Display the edit form
@@ -535,6 +561,8 @@
           await update(productRef, {
             productName: editProdName.value,
             price: editPrice.value,
+            prodDesc: editDesc.value,
+
             image: downloadURL,
           });
 
@@ -548,8 +576,13 @@
           await update(productRef, {
             productName: editProdName.value,
             price: editPrice.value,
+            prodDesc: editDesc.value,
+
           });
           alert("Edit successful");
+          const editPrice = document.getElementById('editPrice');
+          const editImage = document.getElementById('editImage');
+          const editDesc = document.getElementById('editDesc');
         } catch (error) {
           alert('Error updating product: ' + error.message);
         }

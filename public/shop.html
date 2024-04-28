@@ -54,8 +54,7 @@
 					<li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
 					<li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
 
-					<li class="nav-item cta cta-colored"><a class="nav-link" data-bs-toggle="offcanvas"
-							href="#offcanvasExample" role="button" aria-controls="offcanvasExample"><span
+					<li class="nav-item cta cta-colored"><a class="nav-link" href="cart.html" role="button"><span
 								class="icon-shopping_cart"></span><span id="cart_count"></span></a></li>
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown"
@@ -106,11 +105,35 @@
 					<div class="checkout-container">
 						<div class="checkout">
 							<div class="row">
-								<div class="col">
+								<div class="col text-center">
+									Payment Option
+								</div>
+								<div class="col text-center">
+									<div class="dropdown">
+										<button class="btn btn-secondary dropdown-toggle" type="button"
+											id="paymentOptionDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+											Choose
+										</button>
+										<ul class="dropdown-menu">
+											<li><button class="dropdown-item" type="button" id="codPayment">Cash on
+													Delivery</button></li>
+											<li><button class="dropdown-item" type="button"
+													id="cardPayment">Card</button></li>
+											<li><button class="dropdown-item" type="button"
+													id="gcashPayment">Gcash</button>
+											</li>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col text-center">
 									<span>Total</span>
 									<div id="totalPrice"></div>
 								</div>
-								<div class="col">
+								<div class="col text-center">
 									<div class="btn btn-success" id="checkout_btn">Checkout</div>
 								</div>
 							</div>
@@ -174,11 +197,11 @@
 	<footer class="ftco-footer ftco-section">
 		<div class="container">
 			<div class="row">
-				<div class="mouse">
+				<!-- <div class="mouse">
 					<a href="#" class="mouse-icon">
 						<div class="mouse-wheel"><span class="ion-ios-arrow-up"></span></div>
 					</a>
-				</div>
+				</div> -->
 			</div>
 			<div class="row mb-5">
 				<div class="col-md">
@@ -303,8 +326,8 @@
 			if (userCredentials) {
 				userDropdown.innerHTML = `
 							<a class="dropdown-item" href="account.html" id="account_info">Account Info</a>
-							<a class="dropdown-item" href="#" id="sign_out">Sign Out</a>`;		
-								greet.innerHTML = `Welcome ${userInfo.username}!`;
+							<a class="dropdown-item" href="#" id="sign_out">Sign Out</a>`;
+				greet.innerHTML = `Welcome ${userInfo.username}!`;
 			} else {
 				userDropdown.innerHTML = `
 							<a class="dropdown-item" href="signup.html" id="sign_up">Sign Up</a>
@@ -315,6 +338,8 @@
 		let checkCred = () => {
 			updateDropdownMenu();
 		};
+
+
 
 		window.addEventListener('load', checkCred);
 		userDropdown.addEventListener('click', (event) => {
@@ -419,7 +444,7 @@
 				// New item in the cart, create lineItem
 				const lineItem = {
 					title: productData.productName,
-					price: productData.price,
+					price: productData.price, // Include the price here
 					quantity: 1,
 					productImg: productData.image,
 				};
@@ -448,7 +473,7 @@
 			// Create lineItems after the update
 			const lineItems = Object.values(cartItems).map(item => ({
 				title: item.productData.productName,
-				price: item.productData.price,
+				price: item.productData.price, // Include the price here
 				quantity: item.quantity,
 				productImg: item.productData.image,
 			}));
@@ -456,6 +481,13 @@
 			console.log(lineItems);
 
 			alert('Item Added to Cart');
+		};
+
+
+		const selectPaymentOption = (option) => {
+			console.log("fucntion clicked");
+			document.getElementById('paymentOptionDropdown').innerText = option;
+			return option;
 		};
 
 
@@ -518,46 +550,62 @@
 			const productElement = document.createElement('div');
 			productElement.classList.add('col-md-6', 'col-lg-3');
 			productElement.innerHTML = `
-						<div class="product">
-							<a href="shop.html" class="img-prod"><img class="img-fluid" src="${productData.image}" alt="${productData.productName}">
-								<div class="overlay"></div>
-							</a>
-							<div class="text py-3 pb-4 px-3 text-center">
-								<h3><a href="#" id="${productId}">${productData.productName}</a></h3>
-								<div class="d-flex">
-									<div class="pricing">
-										<p class="price"><span>₱</span><span id="prod_${productId}_price">${productData.price}</span></p>
-									</div>
-								</div>
-								<div class="bottom-area d-flex px-3">
-									<div class="m-auto d-flex">
-										
-										<a role="button"
-											class="add-to-cart d-flex justify-content-center align-items-center text-center "
-											id="${productId}_add_cart">
-											<span><i class="ion-ios-cart"></i></span>
-										</a>
-										
-									</div>
-								</div>
-							</div>
-						</div>
-					`;
+        <div class="product">
+            <a href="product-single.html?id=${productId}" class="img-prod">
+                <img class="img-fluid" src="${productData.image}" alt="${productData.productName}">
+                <div class="overlay"></div>
+            </a>
+            <div class="text py-3 pb-4 px-3 text-center">
+                <h3>
+                    <a href="product-single..html?id=${productId}" id="${productId}">
+                        ${productData.productName}
+                    </a>
+                </h3>
+                <div class="d-flex">
+                    <div class="pricing">
+                        <p class="price">
+                            <span>₱</span>
+                            <span id="prod_${productId}_price">${productData.price}</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="bottom-area d-flex px-3">
+                    <div class="m-auto d-flex">
+                        <a role="button" class="add-to-cart d-flex justify-content-center align-items-center text-center" id="${productId}_add_cart">
+                            <span><i class="ion-ios-cart"></i></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
 
 			prodListContainer.appendChild(productElement);
 
-			const addToCartButton = document.getElementById(`${productId}_add_cart`);
+			// Add event listener for clicking  product name
+			const productNameLink = productElement.querySelector(`#${productId}`);
+			productNameLink.addEventListener('click', (event) => {
+				event.preventDefault();
+				const clickedProductId = event.target.id;
+				window.location.href = `product-single..html?id=${clickedProductId}`;
+			});
 
+			// Add event listener for clicking on add to cart button
+			const addToCartButton = productElement.querySelector(`#${productId}_add_cart`);
 			addToCartButton.addEventListener('click', () => {
-				// Add the necessary information, including the quantity, to the item object
 				const item = {
+					price: productData.price,
 					title: productData.productName,
 					productImg: productData.image,
-					quantity: 1, // Set the initial quantity here
+					quantity: 1,
 				};
 				addToCart(productId, item);
 			});
 		};
+
+
+
+
 
 		const fetchProductData = () => {
 			onValue(productsRef, (snapshot) => {
@@ -595,6 +643,26 @@
 
 
 		document.addEventListener('DOMContentLoaded', () => {
+			const gcashPaymentButton = document.getElementById('gcashPayment');
+			const cardPaymentButton = document.getElementById('cardPayment');
+			const codPaymentButton = document.getElementById('codPayment');
+
+			gcashPaymentButton.addEventListener('click', () => {
+				selectPaymentOption('Gcash');
+				const select = document.getElementById('paymentOptionDropdown').innerText;
+			});
+
+			codPaymentButton.addEventListener('click', () => {
+				selectPaymentOption('Cash on Delivery');
+				const select = document.getElementById('paymentOptionDropdown').innerText;
+			});
+
+			cardPaymentButton.addEventListener('click', () => {
+				selectPaymentOption('Card');
+				const select = document.getElementById('paymentOptionDropdown').innerText;
+			});
+
+
 			fetchProductData();
 
 			cartContainer.addEventListener('click', (event) => {
@@ -606,43 +674,48 @@
 				}
 			});
 
+
 			checkoutButton.addEventListener('click', async () => {
-				// Convert the cart items into an array of line items
-				const lineItems = Object.values(cartItems).map(item => ({
-					title: item.productData.productName,
-					price: item.productData.price,
-					quantity: item.quantity,
-					productImg: item.productData.image,
-				}));
+				const selectedOption = document.getElementById('paymentOptionDropdown').innerText;
 
-				try {
-					// Add userId and totalAmount to the request body
-					const requestBody = {
-						items: lineItems,
-						userId: userCredentials.uid,
-						totalAmount: totalPrice, // Use the correct variable here
-					};
+				if (selectedOption === 'Card') {
+					// Convert the cart items into an array of line items
+					const lineItems = Object.values(cartItems).map(item => ({
+						title: item.productData.productName,
+						price: item.productData.price,
+						quantity: item.quantity,
+						productImg: item.productData.image,
+					}));
 
-					// Send a POST request to the server with the line items, userId, and totalAmount in the request body
-					const response = await fetch('/stripe-checkout', {
-						method: 'POST',
-						headers: new Headers({
-							'Content-Type': 'application/json',
-						}),
-						body: JSON.stringify(requestBody),
-					});
+					try {
+						// Add userId and totalAmount to the request body
+						const requestBody = {
+							items: lineItems,
+							userId: userCredentials.uid,
+							totalAmount: totalPrice,
+						};
 
-					// Parse the response from the server, which is expected to contain a session URL
-					const sessionUrl = await response.json();
+						// Send a POST request to the server with the line items, userId, and totalAmount in the request body
+						const response = await fetch('/stripe-checkout', {
+							method: 'POST',
+							headers: new Headers({
+								'Content-Type': 'application/json',
+							}),
+							body: JSON.stringify(requestBody),
+						});
 
-					// Redirect the user to the Stripe checkout session
-					window.location.href = sessionUrl.url;
+						// Parse the response from the server, which is expected to contain a session URL
+						const sessionUrl = await response.json();
 
-				} catch (error) {
-					console.error('Error during checkout:', error);
+						// Redirect the user to the Stripe checkout session
+						window.location.href = sessionUrl.url;
+					} catch (error) {
+						console.error('Error during checkout:', error);
+					}
+				} else {
+					alert(`Please choose "Card" payment option to proceed.`);
 				}
 			});
-
 		});
 
 
@@ -667,7 +740,6 @@
 	<script src="js/jquery.animateNumber.min.js"></script>
 	<script src="js/bootstrap-datepicker.js"></script>
 	<script src="js/scrollax.min.js"></script>
-
 	<script src="js/main.js"></script>
 
 </body>
