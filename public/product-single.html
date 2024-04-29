@@ -2,11 +2,38 @@
 <html lang="en">
 
 <head>
-	<title>SCDES - Single Product</title>
+	<title>POTTERYA - Single Product</title>
+	<script>
+		"use strict";
+
+		!function () {
+			var t = window.driftt = window.drift = window.driftt || [];
+			if (!t.init) {
+				if (t.invoked) return void (window.console && console.error && console.error("Drift snippet included twice."));
+				t.invoked = !0, t.methods = ["identify", "config", "track", "reset", "debug", "show", "ping", "page", "hide", "off", "on"],
+					t.factory = function (e) {
+						return function () {
+							var n = Array.prototype.slice.call(arguments);
+							return n.unshift(e), t.push(n), t;
+						};
+					}, t.methods.forEach(function (e) {
+						t[e] = t.factory(e);
+					}), t.load = function (t) {
+						var e = 3e5, n = Math.ceil(new Date() / e) * e, o = document.createElement("script");
+						o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/include/" + n + "/" + t + ".js";
+						var i = document.getElementsByTagName("script")[0];
+						i.parentNode.insertBefore(o, i);
+					};
+			}
+		}();
+		drift.SNIPPET_VERSION = '0.3.1';
+		drift.load('zugksr2d73rh');
+	</script>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<link rel="icon" href="./images/logo (3).png">
+	<link rel="icon" href="./images/logo.png">
 	<script src="https://js.stripe.com/v3/"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 	<link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap"
 		rel="stylesheet">
@@ -33,7 +60,6 @@
 	<link rel="stylesheet" href="css/bootstrap-datepicker.css">
 	<link rel="stylesheet" href="css/jquery.timepicker.css">
 
-
 	<link rel="stylesheet" href="css/flaticon.css">
 	<link rel="stylesheet" href="css/icomoon.css">
 	<link rel="stylesheet" href="css/style.css">
@@ -43,7 +69,7 @@
 
 	<nav class="navbar navbar-expand-lg  ftco_navbar  ftco-navbar-light" id="ftco-navbar">
 		<div class="container">
-			<a class="navbar-brand" href="index.html">SCDES</a>
+			<a class="navbar-brand" href="index.html">POTTERYA</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
 				aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="oi oi-menu"></span> Menu
@@ -71,7 +97,7 @@
 	</nav>
 	<!-- END nav -->
 
-	<div class="hero-wrap hero-bread" style="background-image: url('images/bg_1.jpg');">
+	<div class="hero-wrap hero-bread" style="background-image: url('images/img9.jpg');">
 		<div class="container">
 			<div class="row no-gutters slider-text align-items-center justify-content-center">
 				<div class="col-md-9 ftco-animate text-center">
@@ -340,8 +366,12 @@
 			</div>
 		</div>
 	</footer>
-
+	<script src="https://unpkg.com/lucide@latest"></script>
+	<script>
+		lucide.createIcons();
+	</script>
 	<script type="module">
+
 		import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
 		import { getDatabase, ref, onValue, set, get } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
 		import { getStorage } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-storage.js";
@@ -478,6 +508,8 @@
 		};
 
 		document.addEventListener('DOMContentLoaded', () => {
+			// lucide.createIcons();
+
 			// Retrieve product ID from URL
 			const urlParams = new URLSearchParams(window.location.search);
 			const productId = urlParams.get('id');
@@ -518,7 +550,20 @@
             <h3>${productData.productName}</h3>
             <h5 class="text-secondary">Price</h5>
             <p class="price"><span>₱${productData.price}</span></p>
-            <p>${productData.description}</p>
+            <p>${productData.prodDesc}</p>
+			 					<span>Measurement: Height x Width</span>
+
+			<div class="row w-100">
+				<div class="col d-flex fs-1 align-items-center">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ruler" color="black"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z"/><path d="m14.5 12.5 2-2"/><path d="m11.5 9.5 2-2"/><path d="m8.5 6.5 2-2"/><path d="m17.5 15.5 2-2"/></svg>
+						<h1 class="ml-2">${productData.height}</h1><h1>x</h1><h1>${productData.width}</h1>
+					</div>
+					<div class="col d-flex fs-1 align-items-center">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-weight" color="black"><circle cx="12" cy="5" r="3"/><path d="M6.5 8a2 2 0 0 0-1.905 1.46L2.1 18.5A2 2 0 0 0 4 21h16a2 2 0 0 0 1.925-2.54L19.4 9.5A2 2 0 0 0 17.48 8Z"/></svg>
+					 <h1 class="ml-2">${productData.weight}kg</h1>
+					</div>
+				</div>
+			</div>
             <p><div class="btn btn-primary" id="${productId}_add_cart">Add to Cart</div></p>`;
 				productDetailsRow.appendChild(productDetails);
 
@@ -541,7 +586,6 @@
 			// Fetch user's cart data
 			fetchUserCartData();
 		});
-
 	</script>
 
 
@@ -558,7 +602,6 @@
 			<circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
 				stroke="#F96D00" />
 		</svg></div>
-
 
 	<script src="js/jquery.min.js"></script>
 	<script src="js/jquery-migrate-3.0.1.min.js"></script>

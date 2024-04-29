@@ -2,10 +2,36 @@
 <html lang="en">
 
 <head>
-	<title>SDCES - Products</title>
+	<title>POTTERYA - Products</title>
+	<script>
+		"use strict";
+
+		!function () {
+			var t = window.driftt = window.drift = window.driftt || [];
+			if (!t.init) {
+				if (t.invoked) return void (window.console && console.error && console.error("Drift snippet included twice."));
+				t.invoked = !0, t.methods = ["identify", "config", "track", "reset", "debug", "show", "ping", "page", "hide", "off", "on"],
+					t.factory = function (e) {
+						return function () {
+							var n = Array.prototype.slice.call(arguments);
+							return n.unshift(e), t.push(n), t;
+						};
+					}, t.methods.forEach(function (e) {
+						t[e] = t.factory(e);
+					}), t.load = function (t) {
+						var e = 3e5, n = Math.ceil(new Date() / e) * e, o = document.createElement("script");
+						o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/include/" + n + "/" + t + ".js";
+						var i = document.getElementsByTagName("script")[0];
+						i.parentNode.insertBefore(o, i);
+					};
+			}
+		}();
+		drift.SNIPPET_VERSION = '0.3.1';
+		drift.load('zugksr2d73rh');
+	</script>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<link rel="icon" href="./images/logo (3).png">
+	<link rel="icon" href="./images/logo.png">
 	<script src="https://js.stripe.com/v3/"></script>
 
 	<link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap"
@@ -41,7 +67,7 @@
 
 	<nav class="navbar navbar-expand-lg  ftco_navbar  ftco-navbar-light" id="ftco-navbar">
 		<div class="container">
-			<a class="navbar-brand" href="index.html">SCDES</a>
+			<a class="navbar-brand" href="index.html">POTTERYA</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
 				aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="oi oi-menu"></span> Menu
@@ -54,12 +80,18 @@
 					<li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
 					<li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
 
-					<li class="nav-item cta cta-colored"><a class="nav-link" href="cart.html" role="button"><span
-								class="icon-shopping_cart"></span><span id="cart_count"></span></a></li>
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown"
-							aria-haspopup="true" aria-expanded="false"><span class="icon-user"></span></a>
-						<div class="dropdown-menu" aria-labelledby="dropdown04" id="userDropdown"></div>
+							aria-haspopup="true" aria-expanded="false">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+								fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+								stroke-linejoin="round" class="lucide lucide-user">
+								<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+								<circle cx="12" cy="7" r="4" />
+							</svg>
+						</a>
+						<div class="dropdown-menu" aria-labelledby="dropdown04" id="userDropdown">
+						</div>
 					</li>
 					<li class="nav-item"><a href="contact.html" class="nav-link" id="greet"></a></li>
 
@@ -197,16 +229,16 @@
 	<footer class="ftco-footer ftco-section">
 		<div class="container">
 			<div class="row">
-				<!-- <div class="mouse">
+				<div class="mouse">
 					<a href="#" class="mouse-icon">
 						<div class="mouse-wheel"><span class="ion-ios-arrow-up"></span></div>
 					</a>
-				</div> -->
+				</div>
 			</div>
 			<div class="row mb-5">
 				<div class="col-md">
 					<div class="ftco-footer-widget mb-4">
-						<h2 class="ftco-heading-2">SDCES</h2>
+						<h2 class="ftco-heading-2">POTTERYA</h2>
 						<p>“Crafting Memories, One Piece at a Time.”</p>
 						<ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
 							<li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
@@ -250,12 +282,13 @@
 						<h2 class="ftco-heading-2">Have a Questions?</h2>
 						<div class="block-23 mb-3">
 							<ul>
-								<li><a href=""><span class="icon icon-map-marker"></span><span class="text">Tiwi,
-											Albay</span></a></li>
-								<li><a href="#"><span class="icon icon-phone"></span><span
-											class="text">09669516638</span></a></li>
-								<li><a href="#"><span class="icon icon-envelope"></span><span
-											class="text">ellencorino17@gmail.com</span></a></li>
+								<li class="mb-3"><span class="icon icon-map-marker"></span><span class="text">Tiwi,
+										Albay</span></li>
+								<li class="mb-3"><span class="icon icon-phone"></span><span
+										class="text">09122776454</span>
+								</li>
+								<li class="mb-3"><span class="icon icon-envelope"></span><span
+										class="text">potteryaph@gmail.com</span></li>
 							</ul>
 						</div>
 					</div>
@@ -263,18 +296,15 @@
 			</div>
 			<div class="row">
 				<div class="col-md-12 text-center">
-
-					<p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+					<p>
 						Copyright &copy;
-						<script>document.write(new Date().getFullYear());</script> All rights reserved | Mark Clerigo &
-						Gantan</a>
-
-						<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+						</script> All rights reserved | POTTERYA
 					</p>
 				</div>
 			</div>
 		</div>
 	</footer>
+
 
 
 	<!-- loader -->
@@ -570,11 +600,9 @@
                     </div>
                 </div>
                 <div class="bottom-area d-flex px-3">
-                    <div class="m-auto d-flex">
                         <a role="button" class="add-to-cart d-flex justify-content-center align-items-center text-center" id="${productId}_add_cart">
                             <span><i class="ion-ios-cart"></i></span>
                         </a>
-                    </div>
                 </div>
             </div>
         </div>

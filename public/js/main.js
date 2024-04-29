@@ -330,7 +330,7 @@ AOS.init({
   goHere();
 
   function makeTimer() {
-    var endTime = new Date("21 February 2024 9:56:00 GMT+01:00");
+    var endTime = new Date("21 December 2024 9:56:00 GMT+08:00");
     endTime = Date.parse(endTime) / 1000;
 
     var now = new Date();
@@ -355,10 +355,14 @@ AOS.init({
       seconds = "0" + seconds;
     }
 
-    $("#days").html(days + "<span>Days</span>");
-    $("#hours").html(hours + "<span>Hours</span>");
-    $("#minutes").html(minutes + "<span>Minutes</span>");
-    $("#seconds").html(seconds + "<span>Seconds</span>");
+    $("#days").html(days + '<span style="color: #f3f3f3f3;">Days</span>');
+    $("#hours").html(hours + '<span style="color: #f3f3f3f3;">Hours</span>');
+    $("#minutes").html(
+      minutes + '<span style="color: #f3f3f3f3;">Minutes</span>'
+    );
+    $("#seconds").html(
+      seconds + '<span style="color: #f3f3f3f3;">Seconds</span>'
+    );
   }
 
   setInterval(function () {

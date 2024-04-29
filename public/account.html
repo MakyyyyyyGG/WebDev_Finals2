@@ -2,10 +2,36 @@
 <html lang="en">
 
 <head>
-    <title>SCDES - Account</title>
+    <title>POTTERYA - Account</title>
+    <script>
+        "use strict";
+
+        !function () {
+            var t = window.driftt = window.drift = window.driftt || [];
+            if (!t.init) {
+                if (t.invoked) return void (window.console && console.error && console.error("Drift snippet included twice."));
+                t.invoked = !0, t.methods = ["identify", "config", "track", "reset", "debug", "show", "ping", "page", "hide", "off", "on"],
+                    t.factory = function (e) {
+                        return function () {
+                            var n = Array.prototype.slice.call(arguments);
+                            return n.unshift(e), t.push(n), t;
+                        };
+                    }, t.methods.forEach(function (e) {
+                        t[e] = t.factory(e);
+                    }), t.load = function (t) {
+                        var e = 3e5, n = Math.ceil(new Date() / e) * e, o = document.createElement("script");
+                        o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/include/" + n + "/" + t + ".js";
+                        var i = document.getElementsByTagName("script")[0];
+                        i.parentNode.insertBefore(o, i);
+                    };
+            }
+        }();
+        drift.SNIPPET_VERSION = '0.3.1';
+        drift.load('zugksr2d73rh');
+    </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="icon" href="./images/logo (3).png">
+    <link rel="icon" href="./images/logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
@@ -40,7 +66,7 @@
 <body class="goto-here">
     <nav class="navbar navbar-expand-lg  ftco_navbar  ftco-navbar-light" id="ftco-navbar">
         <div class="container">
-            <a class="navbar-brand" href="index.html">SCDES</a>
+            <a class="navbar-brand" href="index.html">POTTERYA</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
                 aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="oi oi-menu"></span> Menu
@@ -49,10 +75,12 @@
             <div class="collapse navbar-collapse" id="ftco-nav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item "><a href="index.html" class="nav-link ">Home</a></li>
-                    <li class="nav-item "><a href="shop.html" class="nav-link ">Shop</a></li>
-                    <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                    <li class="nav-item"><a href="shop.html" class="nav-link ">Shop</a></li>
+                    <li class="nav-item"><a href="about.html" class="nav-link ">About</a></li>
                     <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
 
+                    <li class="nav-item cta cta-colored"><a class="nav-link" href="cart.html" role="button"><span
+                                class="icon-shopping_cart"></span><span id="cart_count"></span></a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false"><span class="icon-user"></span></a>
@@ -120,14 +148,15 @@
                             <thead>
                                 <tr>
                                     <th scope="col">Transaction ID</th>
+                                    <th scope="col">Payment Method</th>
                                     <th scope="col">Amount</th>
                                     <th scope="col">Created At</th>
                                     <th scope="col">City</th>
                                     <th scope="col">Barangay</th>
                                     <th scope="col">Phone</th>
                                     <th scope="col">Items</th>
+                                    <th scope="col">Receipt</th>
                                     <th scope="col">Status</th>
-                                    <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="transactionTableBody"></tbody>
@@ -154,7 +183,7 @@
             <div class="row mb-5">
                 <div class="col-md">
                     <div class="ftco-footer-widget mb-4">
-                        <h2 class="ftco-heading-2">SDCES</h2>
+                        <h2 class="ftco-heading-2">POTTERYA</h2>
                         <p>“Crafting Memories, One Piece at a Time.”</p>
                         <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
                             <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
@@ -198,12 +227,13 @@
                         <h2 class="ftco-heading-2">Have a Questions?</h2>
                         <div class="block-23 mb-3">
                             <ul>
-                                <li><a href=""><span class="icon icon-map-marker"></span><span class="text">Tiwi,
-                                            Albay</span></a></li>
-                                <li><a href="#"><span class="icon icon-phone"></span><span
-                                            class="text">09669516638</span></a></li>
-                                <li><a href="#"><span class="icon icon-envelope"></span><span
-                                            class="text">ellencorino17@gmail.com</span></a></li>
+                                <li class="mb-3"><span class="icon icon-map-marker"></span><span class="text">Tiwi,
+                                        Albay</span></li>
+                                <li class="mb-3"><span class="icon icon-phone"></span><span
+                                        class="text">09122776454</span>
+                                </li>
+                                <li class="mb-3"><span class="icon icon-envelope"></span><span
+                                        class="text">potteryaph@gmail.com</span></li>
                             </ul>
                         </div>
                     </div>
@@ -211,17 +241,15 @@
             </div>
             <div class="row">
                 <div class="col-md-12 text-center">
-
-                    <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    <p>
                         Copyright &copy;
-                        <script>document.write(new Date().getFullYear());</script> All rights reserved | Mark Clerigo &
-                        Gantan</a>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        </script> All rights reserved | POTTERYA
                     </p>
                 </div>
             </div>
         </div>
     </footer>
+
 
 
     <!-- loader -->
@@ -338,12 +366,32 @@
 
                         row.innerHTML = `
         <td>${transaction.transactionId}</td>
+        <td>${transaction.paymentMethod}</td>
         <td>₱${transaction.totalAmount}</td>
         <td>${transaction.formattedDate}</td>
         <td>${userData.city}</td>
         <td>${userData.barangay}</td>
         <td>${userData.phone}</td>
         <td>${productsInfo}</td>
+        <!-- Modal -->
+<div class="modal fade " id="receiptModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Receipt Image</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <img id="receiptImage" class="img-fluid" src="" alt="Receipt Image">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Table Row -->
+<td>
+    ${transaction.receiptUrl ? `<button class="btn btn-primary receipt-link" data-bs-toggle="modal" data-bs-target="#receiptModal" data-receipt-url="${transaction.receiptUrl}" style="text-decoration: none; color: white;">View Receipt</button>` : 'No Receipt'}
+</td>
         <td>${transaction.status}</td>
         <td>${transaction.status === 'Order Placed' ? `<button class="cancelButton btn btn-danger" data-transaction-id="${transaction.transactionId}">Cancel</button>` : `<button class="cancelButton btn btn-danger" disabled data-transaction-id="${transaction.transactionId}">Cancel</button>`}</td>
     `;
@@ -373,7 +421,13 @@
                 // Log the error or handle it as needed
             }
         };
-
+        document.addEventListener('click', (event) => {
+            if (event.target.classList.contains('receipt-link')) {
+                const receiptUrl = event.target.dataset.receiptUrl;
+                const receiptImage = document.getElementById('receiptImage');
+                receiptImage.src = receiptUrl;
+            }
+        });
 
         // Call the function when needed
         window.addEventListener('load', updateDropdownMenu);
