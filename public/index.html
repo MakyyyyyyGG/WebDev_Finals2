@@ -69,25 +69,19 @@
 			<div class="collapse navbar-collapse" id="ftco-nav">
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item "><a href="index.html" class="nav-link active">Home</a></li>
-					<li class="nav-item "><a href="shop.html" class="nav-link ">Shop</a></li>
+					<li class="nav-item active"><a href="shop.html" class="nav-link ">Shop</a></li>
 					<li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
 					<li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
 
-
+					<li class="nav-item cta cta-colored"><a class="nav-link" href="cart.html" role="button"><span
+								class="icon-shopping_cart"></span><span id="cart_count"></span></a></li>
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown"
-							aria-haspopup="true" aria-expanded="false">
-							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-								fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-								stroke-linejoin="round" class="lucide lucide-user">
-								<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-								<circle cx="12" cy="7" r="4" />
-							</svg>
-						</a>
-						<div class="dropdown-menu" aria-labelledby="dropdown04" id="userDropdown">
-						</div>
+							aria-haspopup="true" aria-expanded="false"><span class="icon-user"></span></a>
+						<div class="dropdown-menu" aria-labelledby="dropdown04" id="userDropdown"></div>
 					</li>
 					<li class="nav-item"><a href="contact.html" class="nav-link" id="greet"></a></li>
+
 				</ul>
 			</div>
 		</div>
@@ -516,6 +510,7 @@
 		const storage = getStorage(app); // Initialize Firebase Storage
 		const productsRef = ref(db, 'Products');
 
+		let cartItems = {}; // Initialize cartItems
 
 
 		let userCredentials = JSON.parse(sessionStorage.getItem("user-credentials"));
@@ -622,8 +617,37 @@
 			});
 		};
 
+		const updateCartCounter = () => {
+			let itemCount = Object.values(cartItems).reduce((total, item) => total + item.quantity, 0);
+			itemCount = Math.max(itemCount, 0);
+			document.getElementById('cart_count').innerText = `[${itemCount}]`; // Update cart count
+			console.log(itemCount);
+		};
+
+		// Function to fetch user's cart data
+		const fetchUserCartData = () => {
+			if (userCredentials) {
+				const userCartRef = ref(db, `UserAuthList/${userCredentials.uid}/cart`);
+
+				onValue(userCartRef, (cartSnapshot) => {
+					try {
+						const userCart = cartSnapshot.val();
+						console.log("User's Cart Items:", userCart); // Log user's cart data
+						cartItems = userCart || {}; // Update cartItems, handle null case
+						updateCartCounter();
+					} catch (error) {
+						console.error("Error fetching user's cart data:", error);
+					}
+				}, (error) => {
+					console.error("Error fetching user's cart data from database:", error);
+				});
+			}
+		};
+
 		document.addEventListener('DOMContentLoaded', () => {
 			fetchProductData();
+			fetchUserCartData();
+
 		});
 
 	</script>
@@ -640,9 +664,7 @@
 	<script src="js/jquery.animateNumber.min.js"></script>
 	<script src="js/bootstrap-datepicker.js"></script>
 	<script src="js/scrollax.min.js"></script>
-	<script
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-	<script src="js/google-map.js"></script>
+
 	<script src="js/main.js"></script>
 
 
