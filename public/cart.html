@@ -651,6 +651,7 @@
 							// COD checkout successful, you can show a success message or redirect
 							console.log('COD checkout successful. Transaction ID: ' + responseData.transactionId);
 							alert("Checkout Successfull");
+							window.location.href = "account.html";
 							// Redirect or do something else as needed
 						} else {
 							// COD checkout failed
@@ -730,6 +731,7 @@
 						// GCash checkout successful, you can show a success message or redirect
 						console.log('GCash checkout successful. Transaction ID: ' + responseData.transactionId);
 						alert("Checkout Successfull");
+						window.location.href = "account.html";
 
 						// Redirect or do something else as needed
 					} else {
