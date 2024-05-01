@@ -292,6 +292,11 @@
         let transactionTableBody = document.getElementById("transactionTableBody");
 
 
+        let signOut = () => {
+            sessionStorage.removeItem("user-info");
+            sessionStorage.removeItem("user-credentials");
+            window.location.href = "login.html";
+        };
 
         let updateDropdownMenu = () => {
             if (userInfo) {
@@ -307,6 +312,19 @@
                     <a class="dropdown-item" href="login.html" id="log_in">Log In</a>`;
             }
         };
+        window.addEventListener('load', checkCred);
+        userDropdown.addEventListener('click', (event) => {
+            // Handle click events on dropdown items
+            if (event.target.id === 'sign_out') {
+                signOut();
+            } else if (event.target.id === 'sign_up') {
+                window.location.href = 'signup.html'
+                console.log("Sign Up clicked");
+            } else if (event.target.id === 'log_in') {
+                window.location.href = 'Account_As.html'
+                console.log("Log In clicked");
+            }
+        });
 
         // Function to cancel a transaction
         // Function to cancel a transaction
