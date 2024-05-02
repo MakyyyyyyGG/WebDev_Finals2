@@ -312,6 +312,10 @@
                     <a class="dropdown-item" href="login.html" id="log_in">Log In</a>`;
             }
         };
+
+        let checkCred = () => {
+            updateDropdownMenu();
+        };
         window.addEventListener('load', checkCred);
         userDropdown.addEventListener('click', (event) => {
             // Handle click events on dropdown items
