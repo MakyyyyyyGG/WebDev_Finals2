@@ -12162,7 +12162,7 @@ h5,
 
 .owl-carousel.home-slider {
   position: relative;
-  height: 650px;
+  height: 500px;
   z-index: 0;
 }
 
@@ -12170,7 +12170,7 @@ h5,
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
-  height: 650px;
+  height: 500px;
   position: relative;
   z-index: 0;
 }
@@ -12192,7 +12192,7 @@ h5,
 }
 
 .owl-carousel.home-slider .slider-item .slider-text {
-  height: 650px;
+  height: 500px;
   z-index: 0;
 }
 
