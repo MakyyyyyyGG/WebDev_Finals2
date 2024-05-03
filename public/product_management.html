@@ -122,6 +122,12 @@
                   </div>
                 </div>
                 <div class="mb-3 row">
+                  <label for="inputPrice" class="col-sm-2 col-form-label">Stocks</label>
+                  <div class="col-sm-10">
+                    <input type="number" class="form-control" id="inputStocks" style="height: 40px !important;">
+                  </div>
+                </div>
+                <div class="mb-3 row">
                   <div class="col">
                     <label for="editImage" class="col-sm-2 col-form-label">Height</label>
                     <div class="col-sm-10">
@@ -182,6 +188,12 @@
                     <label for="editPrice" class="col-sm-2 col-form-label">Price</label>
                     <div class="col-sm-10">
                       <input type="number" class="form-control" id="editPrice" style="height: 40px !important;">
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
+                    <label for="editStocks" class="col-sm-2 col-form-label">Stocks</label>
+                    <div class="col-sm-10">
+                      <input type="number" class="form-control" id="editStocks" style="height: 40px !important;">
                     </div>
                   </div>
                   <div class="mb-3 row">
@@ -258,6 +270,7 @@
               <th scope="col">Width</th>
               <th scope="col">Weight</th>
               <th scope="col">Price</th>
+              <th scope="col">Stocks</th>
               <th scope="col">Description</th>
               <th scope="col">Action</th>
             </tr>
@@ -458,7 +471,7 @@
       let height = document.getElementById('inputHeight').value;
       let width = document.getElementById('inputWidth').value;
       let weight = document.getElementById('inputWeight').value;
-
+      let stocks = document.getElementById('inputStocks').value;
 
       // Check if a user is logged in
       const user = auth.currentUser;
@@ -478,6 +491,7 @@
               set(ref(db, 'Products/' + newProductRef.key), {
                 productName: productName,
                 price: price,
+                stocks: stocks,
                 prodDesc: description,
                 height: height,
                 weight: weight,
@@ -518,6 +532,7 @@
     <td class="editable" id="prodWidth">${productData.width}</td>
     <td class="editable" id="prodWeight">${productData.weight}</td>
     <td class="editable" id="prodPrice">${productData.price}</td>
+        <td class="editable" id="prodPrice">${productData.stocks}</td>
     <td class="editable" id="prodDesc">${productData.prodDesc}</td>
     <td>
       <div class="col">
@@ -547,6 +562,8 @@
       const editHeight = document.getElementById('editHeight');
       const editWidth = document.getElementById('editWidth');
       const editWeight = document.getElementById('editWeight');
+      const editStocks = document.getElementById('editStocks');
+
 
 
       const editProductForm = document.getElementById('editProductForm');
@@ -563,6 +580,8 @@
         editHeight.value = productData.height;
         editWidth.value = productData.width;
         editWeight.value = productData.weight;
+        editStocks.value = productData.stocks;
+
 
         editProductForm.setAttribute('data-product-id', productId);
 
@@ -623,6 +642,8 @@
             height: editHeight.value,
             width: editWidth.value,
             weight: editWeight.value,
+            stocks: editStocks.value,
+
             image: downloadURL,
           });
 
@@ -640,6 +661,8 @@
             height: editHeight.value,
             width: editWidth.value,
             weight: editWeight.value,
+            stocks: editStocks.value,
+
           });
           alert("Edit successful");
 

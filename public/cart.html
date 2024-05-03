@@ -338,7 +338,7 @@
 	<script type="module">
 		// Import the functions you need from the SDKs you need
 		import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
-		import { getDatabase, set, ref, push, update, remove, onValue } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+		import { getDatabase, set, get, ref, push, update, remove, onValue } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
 		import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
 		import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-storage.js";
 		import { Stripe } from "https://cdn.skypack.dev/stripe";
@@ -524,6 +524,38 @@
 			}
 		};
 
+		const updateProductStock = async (productId, quantity) => {
+			try {
+				console.log("Updating product stock for productId:", productId);
+				console.log("Quantity:", quantity);
+
+				const productRef = ref(db, `Products/${productId}`);
+				const snapshot = await get(productRef);
+				const productData = snapshot.val();
+
+				if (productData) {
+					const currentStock = productData.stocks;
+
+					if (currentStock >= quantity) {
+						const updatedStock = currentStock - quantity;
+						await set(ref(db, `Products/${productId}/stocks`), updatedStock);
+						console.log(`Product stock for ${productId} updated successfully.`);
+						return true; // Return true if stock is updated successfully
+					} else {
+						alert(`Insufficient stock for product "${productData.productName}".`);
+						return false; // Return false if there's insufficient stock
+					}
+				} else {
+					console.error(`Product with ID ${productId} not found.`);
+					return false; // Return false if product data is not found
+				}
+			} catch (error) {
+				console.error(`Error updating product stock for ${productId}:`, error);
+				return false; // Return false if there's an error
+			}
+		};
+
+
 
 
 
@@ -562,6 +594,26 @@
 
 			checkoutButton.addEventListener('click', async () => {
 				const selectedOption = document.getElementById('paymentOptionDropdown').innerText;
+
+				let quantityExceedsStock = false;
+
+				for (const productId in cartItems) {
+					const item = cartItems[productId];
+					const stockUpdated = await updateProductStock(productId, item.quantity);
+
+					if (!stockUpdated) {
+						// If stock update fails for any product, set quantityExceedsStock to true
+						quantityExceedsStock = true;
+						break; // Stop further processing
+					}
+				}
+
+				if (quantityExceedsStock) {
+					// If any product quantity exceeds stock, stop the checkout process
+					return;
+				}
+
+				// If any product is out of stock, stop the checkout proce
 
 				if (selectedOption === 'Card') {
 					try {
